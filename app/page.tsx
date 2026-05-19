@@ -25,11 +25,18 @@ export default function HomePage() {
             <span style={{ color: "#111827" }}>BYTES</span>
             <span style={{ color: "#FFA500" }}>CARE</span>
           </div>
-          <a href="https://bytescare.com" target="_blank" rel="noopener noreferrer"
-            className="text-sm font-medium hidden sm:block transition-colors"
-            style={{ color: "#9ca3af" }}>
-            ← Back to main site
-          </a>
+          <div className="flex items-center gap-4">
+            <a href="https://bytescare.com" target="_blank" rel="noopener noreferrer"
+              className="text-sm font-medium hidden sm:block transition-colors"
+              style={{ color: "#9ca3af" }}>
+              ← Back to main site
+            </a>
+            <Link href="/onboarding"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95"
+              style={{ background: "#FFA500", color: "#111827" }}>
+              Start Onboarding →
+            </Link>
+          </div>
         </div>
       </nav>
 
@@ -52,11 +59,17 @@ export default function HomePage() {
               <br />Onboarding
             </h1>
 
-            <p className="text-base sm:text-lg mb-8 leading-relaxed" style={{ color: "#6b7280", maxWidth: 420 }}>
+            <p className="text-base sm:text-lg mb-7 leading-relaxed" style={{ color: "#6b7280", maxWidth: 420 }}>
               Complete your onboarding to access Bytescare&apos;s full suite of digital protection services. We&apos;ll prepare your legal documents for signing.
             </p>
 
-            <div className="mb-8" style={{ borderTop: "1px solid #f3f4f6" }}>
+            <Link href="/onboarding"
+              className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-2xl font-extrabold text-base transition-all hover:opacity-90 active:scale-95 w-full sm:w-auto mb-8"
+              style={{ background: "#FFA500", color: "#111827", boxShadow: "0 8px 24px rgba(255,165,0,0.35)" }}>
+              Start Onboarding →
+            </Link>
+
+            <div style={{ borderTop: "1px solid #f3f4f6" }}>
               {CHECKLIST.map((item) => (
                 <div key={item} className="flex items-center gap-3 py-3" style={{ borderBottom: "1px solid #f3f4f6" }}>
                   <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "#FFA500" }}>
@@ -68,12 +81,6 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-
-            <Link href="/onboarding"
-              className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-2xl font-extrabold text-base transition-all hover:opacity-90 active:scale-95 w-full sm:w-auto"
-              style={{ background: "#FFA500", color: "#111827", boxShadow: "0 8px 24px rgba(255,165,0,0.35)" }}>
-              Start Onboarding →
-            </Link>
           </div>
 
           {/* Right – step timeline card */}
