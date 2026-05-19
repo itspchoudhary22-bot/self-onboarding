@@ -1,41 +1,30 @@
 import mongoose from 'mongoose';
 
 const ApplicationSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
-  },
-  type: {
-    type: String,
-    required: true,
-    enum: ['individual', 'company'],
-  },
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  phone: {
-    type: String,
-    trim: true,
-    default: '',
-  },
-  services: {
-    type: [String],
-    required: true,
-    validate: {
-      validator: (v) => v.length > 0,
-      message: 'At least one service must be selected',
-    },
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  type: { type: String, required: true, enum: ['individual', 'company'] },
+  country: { type: String, default: '' },
+  individualName: { type: String, default: '' },
+  nationalIdNumber: { type: String, default: '' },
+  contactNumber: { type: String, default: '' },
+  officialEmail: { type: String, default: '' },
+  designation: { type: String, default: '' },
+  workDescription: { type: String, default: '' },
+  socialMediaHandles: { type: String, default: '' },
+  companyName: { type: String, default: '' },
+  companyRegNumber: { type: String, default: '' },
+  gstin: { type: String, default: '' },
+  companyContact: { type: String, default: '' },
+  companyDescription: { type: String, default: '' },
+  signatoryName: { type: String, default: '' },
+  signatoryDesignation: { type: String, default: '' },
+  signatoryEmail: { type: String, default: '' },
+  companySocialMedia: { type: String, default: '' },
+  registeredAddress: { type: String, default: '' },
+  pincode: { type: String, default: '' },
+  mailingAddress: { type: String, default: '' },
+  services: { type: [String], required: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.models.Application ||
-  mongoose.model('Application', ApplicationSchema);
+export default mongoose.models.Application || mongoose.model('Application', ApplicationSchema);
