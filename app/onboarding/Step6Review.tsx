@@ -14,7 +14,7 @@ function SectionCard({ title, step, goToStep, rows }: { title: string; step: num
   return (
     <div className="rounded-xl border border-slate-200 overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3" style={{ background: "#f8fafc" }}>
-        <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "#001F3F" }}>{title}</span>
+        <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "#111827" }}>{title}</span>
         <button onClick={() => goToStep(step)} className="text-xs font-semibold px-3 py-1 rounded-lg transition-colors hover:underline" style={{ color: "#FFA500" }}>Edit</button>
       </div>
       <div className="px-4 py-3 space-y-2">
@@ -35,7 +35,7 @@ export default function Step6Review({ formData, onBack, onSubmit, isSubmitting, 
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-extrabold" style={{ color: "#001F3F" }}>Review &amp; Submit</h2>
+        <h2 className="text-2xl font-extrabold" style={{ color: "#111827" }}>Review &amp; Submit</h2>
         <p className="text-slate-500 mt-1 text-sm">Please verify all information before submitting</p>
       </div>
 
@@ -92,7 +92,7 @@ export default function Step6Review({ formData, onBack, onSubmit, isSubmitting, 
 
         <div className="rounded-xl border border-slate-200 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3" style={{ background: "#f8fafc" }}>
-            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "#001F3F" }}>
+            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "#111827" }}>
               Services Selected ({formData.services.length})
             </span>
             <button onClick={() => goToStep(5)} className="text-xs font-semibold px-3 py-1 rounded-lg hover:underline" style={{ color: "#FFA500" }}>Edit</button>
@@ -108,7 +108,7 @@ export default function Step6Review({ formData, onBack, onSubmit, isSubmitting, 
       </div>
 
       <p className="text-xs text-slate-400 mb-5 text-center">
-        By submitting, you agree to our <span className="underline cursor-pointer" style={{ color: "#001F3F" }}>Terms of Service</span> and <span className="underline cursor-pointer" style={{ color: "#001F3F" }}>Privacy Policy</span>.
+        By submitting, you agree to our <span className="underline cursor-pointer" style={{ color: "#111827" }}>Terms of Service</span> and <span className="underline cursor-pointer" style={{ color: "#111827" }}>Privacy Policy</span>.
       </p>
 
       <div className="flex gap-3">
@@ -119,7 +119,7 @@ export default function Step6Review({ formData, onBack, onSubmit, isSubmitting, 
         </button>
         <button onClick={onSubmit} disabled={isSubmitting}
           className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95 disabled:opacity-70 flex items-center justify-center gap-2"
-          style={{ background: "#001F3F", color: "#fff" }}>
+          style={{ background: "#FFA500", color: "#111827" }}>
           {isSubmitting ? (
             <><svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Submitting…</>
           ) : "Submit Application ✓"}

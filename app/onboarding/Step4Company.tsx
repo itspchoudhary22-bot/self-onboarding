@@ -37,20 +37,20 @@ export default function Step4Company({ formData, update, onNext, onBack }: Props
 
   const bs = (key: string) => ({
     style: { borderColor: errors[key] ? "#ef4444" : "#e2e8f0" },
-    onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => (e.target.style.borderColor = errors[key] ? "#ef4444" : "#001F3F"),
+    onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => (e.target.style.borderColor = errors[key] ? "#ef4444" : "#FFA500"),
     onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => (e.target.style.borderColor = errors[key] ? "#ef4444" : "#e2e8f0"),
   });
 
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-extrabold" style={{ color: "#001F3F" }}>Authorized Signatory</h2>
+        <h2 className="text-2xl font-extrabold" style={{ color: "#111827" }}>Authorized Signatory</h2>
         <p className="text-slate-500 mt-1 text-sm">Person authorized to sign official documents on behalf of the company</p>
       </div>
 
       <div className="space-y-5">
         <div>
-          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#001F3F" }}>Name of Authorized Signatory <span style={{ color: "#FFA500" }}>*</span></label>
+          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#111827" }}>Name of Authorized Signatory <span style={{ color: "#FFA500" }}>*</span></label>
           <input type="text" placeholder="Full name of the person who will sign" value={formData.signatoryName}
             onChange={e => { update({ signatoryName: e.target.value }); setErrors(p => ({ ...p, signatoryName: "" })); }}
             className={inputCls} {...bs("signatoryName")} />
@@ -59,7 +59,7 @@ export default function Step4Company({ formData, update, onNext, onBack }: Props
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#001F3F" }}>Designation <span style={{ color: "#FFA500" }}>*</span></label>
+          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#111827" }}>Designation <span style={{ color: "#FFA500" }}>*</span></label>
           <input type="text" placeholder="e.g. CEO, Director, Managing Director" value={formData.signatoryDesignation}
             onChange={e => { update({ signatoryDesignation: e.target.value }); setErrors(p => ({ ...p, signatoryDesignation: "" })); }}
             className={inputCls} {...bs("signatoryDesignation")} />
@@ -67,7 +67,7 @@ export default function Step4Company({ formData, update, onNext, onBack }: Props
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#001F3F" }}>Official Email Address <span style={{ color: "#FFA500" }}>*</span></label>
+          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#111827" }}>Official Email Address <span style={{ color: "#FFA500" }}>*</span></label>
           <input type="email" placeholder="signatory@company.com" value={formData.signatoryEmail}
             onChange={e => { update({ signatoryEmail: e.target.value }); setErrors(p => ({ ...p, signatoryEmail: "" })); }}
             className={inputCls} {...bs("signatoryEmail")} />
@@ -75,7 +75,7 @@ export default function Step4Company({ formData, update, onNext, onBack }: Props
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#001F3F" }}>Social Media / Website <span style={{ color: "#FFA500" }}>*</span></label>
+          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#111827" }}>Social Media / Website <span style={{ color: "#FFA500" }}>*</span></label>
           <textarea rows={4}
             placeholder={`Instagram Handle: @yourcompany\nLink: https://instagram.com/yourcompany\n\nWebsite: https://yourcompany.com`}
             value={formData.companySocialMedia}
@@ -87,7 +87,7 @@ export default function Step4Company({ formData, update, onNext, onBack }: Props
 
       <div className="flex gap-3 mt-7">
         <button onClick={onBack} className="flex-1 py-3.5 rounded-xl font-semibold text-sm border-2 transition-all hover:bg-slate-50" style={{ borderColor: "#e2e8f0", color: "#64748b" }}>← Back</button>
-        <button onClick={handleNext} className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95" style={{ background: "#001F3F", color: "#fff" }}>Continue →</button>
+        <button onClick={handleNext} className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95" style={{ background: "#FFA500", color: "#111827" }}>Continue →</button>
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ export default function Step5Services({ formData, update, onNext, onBack }: Prop
   return (
     <div>
       <div className="mb-5">
-        <h2 className="text-2xl font-extrabold" style={{ color: "#001F3F" }}>Select Services</h2>
+        <h2 className="text-2xl font-extrabold" style={{ color: "#111827" }}>Select Services</h2>
         <p className="text-slate-500 mt-1 text-sm">Choose the protection services you need. <span style={{ color: "#FFA500" }} className="font-medium">Select at least one.</span></p>
       </div>
 
@@ -88,7 +88,7 @@ export default function Step5Services({ formData, update, onNext, onBack }: Prop
 
       <div className="flex gap-3">
         <button onClick={onBack} className="flex-1 py-3.5 rounded-xl font-semibold text-sm border-2 transition-all hover:bg-slate-50" style={{ borderColor: "#e2e8f0", color: "#64748b" }}>← Back</button>
-        <button onClick={handleNext} className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95" style={{ background: "#001F3F", color: "#fff" }}>Review & Submit →</button>
+        <button onClick={handleNext} className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95" style={{ background: "#FFA500", color: "#111827" }}>Review & Submit →</button>
       </div>
     </div>
   );

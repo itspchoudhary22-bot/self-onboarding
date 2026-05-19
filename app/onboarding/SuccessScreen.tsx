@@ -51,7 +51,7 @@ export default function SuccessScreen({ formData }: Props) {
               </div>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-extrabold mb-2" style={{ color: "#001F3F" }}>
+            <h2 className="text-2xl sm:text-3xl font-extrabold mb-2" style={{ color: "#111827" }}>
               Application Submitted!
             </h2>
             <p className="text-slate-500 mb-6">
@@ -67,7 +67,7 @@ export default function SuccessScreen({ formData }: Props) {
             >
               <div className="flex gap-3 text-sm">
                 <span className="text-slate-400 font-medium min-w-[80px]">Email</span>
-                <span className="text-slate-700 font-semibold" style={{ color: "#001F3F" }}>
+                <span className="text-slate-700 font-semibold" style={{ color: "#111827" }}>
                   {formData.email}
                 </span>
               </div>
@@ -88,7 +88,7 @@ export default function SuccessScreen({ formData }: Props) {
             >
               <p
                 className="text-xs font-bold uppercase tracking-wider mb-3"
-                style={{ color: "#001F3F" }}
+                style={{ color: "#111827" }}
               >
                 Services You Selected
               </p>

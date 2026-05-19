@@ -34,14 +34,14 @@ export default function Step3Address({ formData, update, onNext, onBack }: Props
 
   const borderStyle = (key: string) => ({
     style: { borderColor: errors[key] ? "#ef4444" : "#e2e8f0" },
-    onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => (e.target.style.borderColor = errors[key] ? "#ef4444" : "#001F3F"),
+    onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => (e.target.style.borderColor = errors[key] ? "#ef4444" : "#FFA500"),
     onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => (e.target.style.borderColor = errors[key] ? "#ef4444" : "#e2e8f0"),
   });
 
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-extrabold" style={{ color: "#001F3F" }}>
+        <h2 className="text-2xl font-extrabold" style={{ color: "#111827" }}>
           {isCompany ? "Company Address" : "Your Address"}
         </h2>
         <p className="text-slate-500 mt-1 text-sm">
@@ -53,7 +53,7 @@ export default function Step3Address({ formData, update, onNext, onBack }: Props
 
       <div className="space-y-5">
         <div>
-          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#001F3F" }}>
+          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#111827" }}>
             Registered Address <span style={{ color: "#FFA500" }}>*</span>
           </label>
           <textarea
@@ -69,7 +69,7 @@ export default function Step3Address({ formData, update, onNext, onBack }: Props
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#001F3F" }}>
+          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#111827" }}>
             Pincode / ZIP Code <span style={{ color: "#FFA500" }}>*</span>
           </label>
           <input
@@ -84,7 +84,7 @@ export default function Step3Address({ formData, update, onNext, onBack }: Props
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#001F3F" }}>
+          <label className="block text-sm font-semibold mb-1.5" style={{ color: "#111827" }}>
             Mailing Address <span style={{ color: "#FFA500" }}>*</span>
           </label>
           <textarea
@@ -102,7 +102,7 @@ export default function Step3Address({ formData, update, onNext, onBack }: Props
 
       <div className="flex gap-3 mt-7">
         <button onClick={onBack} className="flex-1 py-3.5 rounded-xl font-semibold text-sm border-2 transition-all hover:bg-slate-50" style={{ borderColor: "#e2e8f0", color: "#64748b" }}>← Back</button>
-        <button onClick={handleNext} className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95" style={{ background: "#001F3F", color: "#fff" }}>Continue →</button>
+        <button onClick={handleNext} className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95" style={{ background: "#FFA500", color: "#111827" }}>Continue →</button>
       </div>
     </div>
   );

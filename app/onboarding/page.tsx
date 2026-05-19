@@ -6,17 +6,29 @@ import Step1Basic from "./Step1Basic";
 import Step2Individual from "./Step2Individual";
 import Step2Company from "./Step2Company";
 import Step3Address from "./Step3Address";
-import Step4Individual from "./Step4Individual";
 import Step4Company from "./Step4Company";
 import Step5Services from "./Step5Services";
 import Step6Review from "./Step6Review";
 import SuccessScreen from "./SuccessScreen";
 
-const getStepLabels = (type: string) => {
-  if (type === "company")
-    return ["Basic Info", "Company Details", "Address", "Signatory", "Services", "Review"];
-  return ["Basic Info", "Personal Details", "Address", "Work & Social", "Services", "Review"];
-};
+// Individual: 5 steps (no signatory step)
+// Company:    6 steps
+const IND_STEPS = [
+  { key: 1, label: "Basic Info" },
+  { key: 2, label: "Personal Details" },
+  { key: 3, label: "Address" },
+  { key: 5, label: "Services" },
+  { key: 6, label: "Review" },
+];
+
+const CO_STEPS = [
+  { key: 1, label: "Basic Info" },
+  { key: 2, label: "Company Details" },
+  { key: 3, label: "Address" },
+  { key: 4, label: "Signatory" },
+  { key: 5, label: "Services" },
+  { key: 6, label: "Review" },
+];
 
 export default function OnboardingPage() {
   const [step, setStep] = useState(1);
@@ -27,9 +39,21 @@ export default function OnboardingPage() {
 
   const update = (fields: Partial<FormData>) =>
     setFormData((prev) => ({ ...prev, ...fields }));
-  const goNext = () => { setStep((s) => s + 1); };
-  const goBack = () => { setStep((s) => s - 1); };
-  const goToStep = (s: number) => { setStep(s); };
+
+  const steps = formData.type === "company" ? CO_STEPS : IND_STEPS;
+  const currentIdx = steps.findIndex((s) => s.key === step);
+
+  const goNext = () => {
+    const next = steps[currentIdx + 1];
+    if (next) setStep(next.key);
+  };
+
+  const goBack = () => {
+    const prev = steps[currentIdx - 1];
+    if (prev) setStep(prev.key);
+  };
+
+  const goToStep = (key: number) => setStep(key);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -55,8 +79,8 @@ export default function OnboardingPage() {
 
   if (submitted) return <SuccessScreen formData={formData} />;
 
-  const TOTAL_STEPS = 6;
-  const stepLabels = getStepLabels(formData.type);
+  const totalSteps = steps.length;
+  const stepPosition = currentIdx + 1; // 1-based position in current path
 
   const renderStep = () => {
     const common = { formData, update, onNext: goNext, onBack: goBack };
@@ -64,7 +88,7 @@ export default function OnboardingPage() {
       case 1: return <Step1Basic {...common} />;
       case 2: return formData.type === "company" ? <Step2Company {...common} /> : <Step2Individual {...common} />;
       case 3: return <Step3Address {...common} />;
-      case 4: return formData.type === "company" ? <Step4Company {...common} /> : <Step4Individual {...common} />;
+      case 4: return <Step4Company {...common} />;
       case 5: return <Step5Services {...common} />;
       case 6: return <Step6Review formData={formData} onBack={goBack} onSubmit={handleSubmit} isSubmitting={isSubmitting} submitError={submitError} goToStep={goToStep} />;
       default: return null;
@@ -72,88 +96,81 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
-      {/* Header */}
-      <header style={{ background: "#001F3F" }} className="shadow-md sticky top-0 z-50">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm"
-              style={{ background: "#FFA500", color: "#001F3F" }}
-            >
-              B
-            </div>
-            <span className="text-white font-bold text-lg">Bytescare</span>
+    <div className="min-h-screen flex flex-col" style={{ background: "#f9fafb" }}>
+      {/* Header - white, matching bytescare.com */}
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-1 font-black text-xl tracking-tight">
+            <span style={{ color: "#111827" }}>BYTES</span>
+            <span style={{ color: "#FFA500" }}>CARE</span>
           </Link>
-          <div className="text-slate-400 text-sm hidden sm:block">Customer Onboarding</div>
+          <span className="text-gray-400 text-sm">Customer Onboarding</span>
         </div>
       </header>
 
       <main className="flex-1 py-8 px-4">
         <div className="max-w-2xl mx-auto">
           {/* Step Progress */}
-          <div className="mb-8">
-            <div className="flex items-center mb-4">
-              {stepLabels.map((label, i) => {
-                const num = i + 1;
-                const done = step > num;
-                const active = step === num;
+          <div className="mb-6">
+            <div className="flex items-center mb-3">
+              {steps.map((s, i) => {
+                const done = stepPosition > i + 1;
+                const active = stepPosition === i + 1;
                 return (
-                  <div key={label} className="flex-1 flex items-center">
+                  <div key={s.key} className="flex-1 flex items-center">
                     <div className="flex flex-col items-center flex-shrink-0">
                       <div
                         className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300"
                         style={{
-                          background: done ? "#FFA500" : active ? "#001F3F" : "#e2e8f0",
-                          color: done || active ? "#fff" : "#94a3b8",
-                          boxShadow: active
-                            ? "0 0 0 4px rgba(0,31,63,0.15)"
-                            : done
-                            ? "0 0 0 4px rgba(255,165,0,0.2)"
-                            : "none",
+                          background: done || active ? "#FFA500" : "#e5e7eb",
+                          color: done || active ? "#111827" : "#9ca3af",
+                          boxShadow: active ? "0 0 0 4px rgba(255,165,0,0.2)" : "none",
                         }}
                       >
-                        {done ? "✓" : num}
+                        {done ? "✓" : i + 1}
                       </div>
                       <span
                         className="text-xs mt-1 font-medium hidden sm:block whitespace-nowrap"
-                        style={{ color: active ? "#001F3F" : done ? "#FFA500" : "#94a3b8" }}
+                        style={{ color: active || done ? "#111827" : "#9ca3af" }}
                       >
-                        {label}
+                        {s.label}
                       </span>
                     </div>
-                    {i < stepLabels.length - 1 && (
+                    {i < steps.length - 1 && (
                       <div
                         className="flex-1 h-0.5 mx-1 rounded transition-all duration-500"
-                        style={{ background: done ? "#FFA500" : "#e2e8f0" }}
+                        style={{ background: done ? "#FFA500" : "#e5e7eb" }}
                       />
                     )}
                   </div>
                 );
               })}
             </div>
+
             {/* Progress bar */}
-            <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+            <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-500"
                 style={{
-                  background: "linear-gradient(90deg, #001F3F, #FFA500)",
-                  width: `${((step - 1) / (TOTAL_STEPS - 1)) * 100}%`,
+                  background: "linear-gradient(90deg, #FFA500, #7C3AED)",
+                  width: `${((stepPosition - 1) / (totalSteps - 1)) * 100}%`,
                 }}
               />
             </div>
-            <div className="flex justify-between mt-1.5 text-xs text-slate-400">
-              <span>Step {step} of {TOTAL_STEPS}</span>
-              <span>{Math.round(((step - 1) / (TOTAL_STEPS - 1)) * 100)}% complete</span>
+            <div className="flex justify-between mt-1.5 text-xs text-gray-400">
+              <span>Step {stepPosition} of {totalSteps}</span>
+              <span>{Math.round(((stepPosition - 1) / (totalSteps - 1)) * 100)}% complete</span>
             </div>
           </div>
 
           {/* Form Card */}
-          <div key={step} className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sm:p-8">
+          <div key={step} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 animate-fade-in">
             {renderStep()}
           </div>
         </div>
       </main>
+
+      <div className="h-1.5" style={{ background: "linear-gradient(90deg, #FFA500, #7C3AED)" }} />
     </div>
   );
 }

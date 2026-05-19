@@ -25,7 +25,7 @@ function InputField({
 }) {
   return (
     <div>
-      <label className="block text-sm font-semibold mb-1.5" style={{ color: "#001F3F" }}>
+      <label className="block text-sm font-semibold mb-1.5" style={{ color: "#111827" }}>
         {label} {required && <span style={{ color: "#FFA500" }}>*</span>}
       </label>
       {children}
@@ -76,7 +76,7 @@ export default function Step2Company({ formData, update, onNext, onBack }: Props
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-extrabold" style={{ color: "#001F3F" }}>
+        <h2 className="text-2xl font-extrabold" style={{ color: "#111827" }}>
           Company Details
         </h2>
         <p className="text-slate-500 mt-1">Your company&apos;s official information</p>
@@ -170,7 +170,7 @@ export default function Step2Company({ formData, update, onNext, onBack }: Props
         <button
           onClick={handleNext}
           className="flex-[2] py-3.5 rounded-xl font-bold text-base transition-all duration-200 hover:opacity-90 active:scale-95"
-          style={{ background: "#001F3F", color: "#fff" }}
+          style={{ background: "#FFA500", color: "#111827" }}
         >
           Continue →
         </button>

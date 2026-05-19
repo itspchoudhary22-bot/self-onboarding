@@ -30,7 +30,7 @@ function InputField({
 }) {
   return (
     <div>
-      <label className="block text-sm font-semibold mb-1.5" style={{ color: "#001F3F" }}>
+      <label className="block text-sm font-semibold mb-1.5" style={{ color: "#111827" }}>
         {label} {required && <span style={{ color: "#FFA500" }}>*</span>}
       </label>
       {children}
@@ -74,7 +74,7 @@ export default function Step1Basic({ formData, update, onNext }: Props) {
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-extrabold" style={{ color: "#001F3F" }}>
+        <h2 className="text-2xl font-extrabold" style={{ color: "#111827" }}>
           Let&apos;s get started
         </h2>
         <p className="text-slate-500 mt-1">Basic information to set up your account</p>
@@ -103,7 +103,7 @@ export default function Step1Basic({ formData, update, onNext }: Props) {
 
         {/* Registration Type */}
         <div>
-          <label className="block text-sm font-semibold mb-2" style={{ color: "#001F3F" }}>
+          <label className="block text-sm font-semibold mb-2" style={{ color: "#111827" }}>
             Registration Type <span style={{ color: "#FFA500" }}>*</span>
           </label>
           <div className="grid grid-cols-2 gap-3">
@@ -179,7 +179,7 @@ export default function Step1Basic({ formData, update, onNext }: Props) {
       <button
         onClick={handleNext}
         className="w-full py-3.5 rounded-xl font-bold text-base transition-all duration-200 hover:opacity-90 active:scale-95"
-        style={{ background: "#001F3F", color: "#fff" }}
+        style={{ background: "#FFA500", color: "#111827" }}
       >
         Continue →
       </button>
