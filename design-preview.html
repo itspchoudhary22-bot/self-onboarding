@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bytescare Onboarding – Design Preview</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
+
+  /* Screen switcher tabs */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #f1f1f1; }
+  ::-webkit-scrollbar-thumb { background: #FFA500; border-radius: 3px; }
+
+  /* Input focus */
+  .field-input:focus { outline: none; border-color: #FFA500; box-shadow: 0 0 0 4px rgba(255,165,0,0.12); }
+  .field-input { border: 2px solid #e5e7eb; border-radius: 12px; padding: 14px 16px; width: 100%; font-size: 15px; color: #111827; background: #fff; transition: all 0.2s; }
+  .field-input::placeholder { color: #9ca3af; }
+  .field-label { display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+  .field-hint { font-size: 12px; color: #9ca3af; margin-top: 5px; }
+
+  /* Section divider */
+  .section-divider { display: flex; align-items: center; gap: 12px; margin: 28px 0 20px; }
+  .section-divider span { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #9ca3af; white-space: nowrap; }
+  .section-divider::before, .section-divider::after { content:''; flex:1; height:1px; background:#f0f0f0; }
+  .section-divider::before { display:none; }
+
+  /* Btn primary */
+  .btn-primary { background: #FFA500; color: #111827; border: none; border-radius: 14px; padding: 16px 24px; font-weight: 800; font-size: 15px; cursor: pointer; width: 100%; transition: all 0.2s; letter-spacing: -0.01em; }
+  .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(255,165,0,0.3); }
+  .btn-secondary { background: #fff; color: #6b7280; border: 2px solid #e5e7eb; border-radius: 14px; padding: 16px 24px; font-weight: 600; font-size: 15px; cursor: pointer; width: 100%; transition: all 0.2s; }
+  .btn-secondary:hover { background: #f9fafb; }
+
+  /* Card */
+  .card { background: #fff; border-radius: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.04); padding: 36px; }
+
+  /* Step dot */
+  .step-dot { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+
+  /* Service card */
+  .svc-card { border: 2px solid #e5e7eb; border-radius: 16px; padding: 18px; cursor: pointer; transition: all 0.2s; background: #fff; text-align: left; width: 100%; }
+  .svc-card:hover { border-color: #ffd166; background: #fffdf7; }
+  .svc-card.selected { border-color: #FFA500; background: #fffbeb; box-shadow: 0 0 0 4px rgba(255,165,0,0.1); }
+
+  /* Review row */
+  .rev-row { display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+  .rev-row:last-child { border-bottom: none; }
+  .rev-label { font-size: 12px; color: #9ca3af; width: 140px; flex-shrink: 0; padding-top: 1px; }
+  .rev-value { font-size: 14px; color: #111827; flex: 1; }
+
+  /* File upload */
+  .upload-area { border: 2px dashed #e5e7eb; border-radius: 14px; padding: 28px; text-align: center; cursor: pointer; transition: all 0.2s; }
+  .upload-area:hover { border-color: #FFA500; background: #fffbeb; }
+
+  /* Tag */
+  .tag { display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 600; background: #fff8e6; color: #92400e; border: 1px solid rgba(255,165,0,0.3); }
+
+  /* Progress */
+  .progress-bar { height: 4px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #FFA500, #7C3AED); transition: width 0.5s ease; }
+
+  /* Gradient text */
+  .gradient-text { background: linear-gradient(135deg, #FFA500, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  /* Home hero */
+  .hero-gradient { background: linear-gradient(135deg, #fff8e6 0%, #fff 50%, #f5f3ff 100%); }
+  .icon-badge { width: 72px; height: 72px; border-radius: 20px; background: #FFA500; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 8px 24px rgba(255,165,0,0.35); }
+
+  /* Floating label effect */
+  .info-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 100px; background: #fff; border: 1px solid #e5e7eb; font-size: 13px; color: #374151; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+  /* Checklist item */
+  .check-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
+  .check-item:last-child { border-bottom: none; }
+  .check-icon { width: 24px; height: 24px; border-radius: 50%; background: #FFA500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  /* Type selector */
+  .type-card { border: 2px solid #e5e7eb; border-radius: 20px; padding: 24px 20px; cursor: pointer; transition: all 0.2s; text-align: center; flex: 1; }
+  .type-card:hover { border-color: #ffd166; }
+  .type-card.selected { border-color: #FFA500; background: linear-gradient(135deg, #fffbeb, #fff8e6); box-shadow: 0 0 0 4px rgba(255,165,0,0.12); }
+
+  /* Success */
+  .success-glow { box-shadow: 0 0 0 8px rgba(255,165,0,0.1), 0 0 0 16px rgba(255,165,0,0.05); }
+
+  /* Nav switcher */
+  #nav-tabs { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #1f2937; padding: 10px 16px; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+  #nav-tabs::-webkit-scrollbar { display: none; }
+  #nav-tabs button { padding: 6px 14px; border-radius: 8px; border: none; background: rgba(255,255,255,0.08); color: #d1d5db; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+  #nav-tabs button.active { background: #FFA500; color: #111827; }
+
+  body { padding-top: 52px; background: #f3f4f6; }
+</style>
+</head>
+<body>
+
+<!-- Navigation Tabs -->
+<div id="nav-tabs">
+  <button class="active" onclick="show('home')">🏠 Homepage</button>
+  <button onclick="show('step1')">Step 1 – Basic Info</button>
+  <button onclick="show('step2')">Step 2 – Individual</button>
+  <button onclick="show('step2b')">Step 2 – Company</button>
+  <button onclick="show('step3')">Step 3 – Services</button>
+  <button onclick="show('step4')">Step 4 – Review</button>
+  <button onclick="show('step5')">Step 5 – Sign</button>
+  <button onclick="show('success')">✅ Success</button>
+  <button onclick="show('mobile')">📱 Mobile View</button>
+</div>
+
+<!-- ===== HOME ===== -->
+<div id="home" class="screen active">
+  <div class="min-h-screen hero-gradient">
+    <!-- Nav -->
+    <nav style="background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.06);position:sticky;top:52px;z-index:40;">
+      <div style="max-width:1100px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:2px;font-size:24px;font-weight:900;letter-spacing:-0.03em;">
+          <span style="color:#111827;">BYTES</span><span style="color:#FFA500;">CARE</span>
+        </div>
+        <a href="#" style="font-size:13px;color:#6b7280;font-weight:500;">← Back to main site</a>
+      </div>
+    </nav>
+
+    <main style="max-width:1100px;margin:0 auto;padding:72px 24px 80px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
+        <!-- Left -->
+        <div>
+          <div class="info-pill" style="margin-bottom:24px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
+            Takes 5–10 minutes to complete
+          </div>
+          <h1 style="font-size:52px;font-weight:900;line-height:1.1;letter-spacing:-0.03em;color:#111827;margin-bottom:20px;">
+            Start Your<br/><span class="gradient-text">Bytescare</span><br/>Onboarding
+          </h1>
+          <p style="font-size:17px;color:#6b7280;line-height:1.7;margin-bottom:36px;max-width:420px;">
+            Complete your onboarding to access Bytescare's full suite of digital protection services. We'll prepare your legal documents for signing.
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:36px;">
+            <div class="check-item">
+              <div class="check-icon"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+              <span style="font-size:15px;color:#374151;font-weight:500;">Government-issued identity verification</span>
+            </div>
+            <div class="check-item">
+              <div class="check-icon"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+              <span style="font-size:15px;color:#374151;font-weight:500;">Registered business or personal address</span>
+            </div>
+            <div class="check-item">
+              <div class="check-icon"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+              <span style="font-size:15px;color:#374151;font-weight:500;">Social media handles or website</span>
+            </div>
+            <div class="check-item">
+              <div class="check-icon"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+              <span style="font-size:15px;color:#374151;font-weight:500;">Digital signature on Service Agreement & LOA</span>
+            </div>
+          </div>
+
+          <button class="btn-primary" style="width:auto;padding:18px 40px;font-size:16px;border-radius:16px;">
+            Start Onboarding →
+          </button>
+        </div>
+
+        <!-- Right – visual card -->
+        <div>
+          <div style="background:#fff;border-radius:28px;padding:32px;box-shadow:0 24px 64px rgba(0,0,0,0.08),0 0 0 1px rgba(0,0,0,0.04);">
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px;">
+              <div class="icon-badge">📋</div>
+              <div>
+                <p style="font-weight:800;font-size:18px;color:#111827;margin:0;">Customer Onboarding</p>
+                <p style="color:#9ca3af;font-size:14px;margin:4px 0 0;">5 simple steps</p>
+              </div>
+            </div>
+
+            <!-- Steps preview -->
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div class="step-dot" style="background:#FFA500;color:#111827;">1</div>
+                <div>
+                  <p style="font-weight:600;font-size:14px;color:#111827;margin:0;">Basic Information</p>
+                  <p style="font-size:12px;color:#9ca3af;margin:2px 0 0;">Email, type, country</p>
+                </div>
+                <span style="margin-left:auto;font-size:11px;color:#9ca3af;background:#f3f4f6;padding:3px 10px;border-radius:100px;">~1 min</span>
+              </div>
+              <div style="width:2px;height:16px;background:#f3f4f6;margin-left:17px;"></div>
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div class="step-dot" style="background:#f3f4f6;color:#9ca3af;">2</div>
+                <div>
+                  <p style="font-weight:600;font-size:14px;color:#374151;margin:0;">Personal / Company Details</p>
+                  <p style="font-size:12px;color:#9ca3af;margin:2px 0 0;">ID, address, documents</p>
+                </div>
+                <span style="margin-left:auto;font-size:11px;color:#9ca3af;background:#f3f4f6;padding:3px 10px;border-radius:100px;">~3 min</span>
+              </div>
+              <div style="width:2px;height:16px;background:#f3f4f6;margin-left:17px;"></div>
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div class="step-dot" style="background:#f3f4f6;color:#9ca3af;">3</div>
+                <div>
+                  <p style="font-weight:600;font-size:14px;color:#374151;margin:0;">Select Services</p>
+                  <p style="font-size:12px;color:#9ca3af;margin:2px 0 0;">Choose your protection plan</p>
+                </div>
+                <span style="margin-left:auto;font-size:11px;color:#9ca3af;background:#f3f4f6;padding:3px 10px;border-radius:100px;">~1 min</span>
+              </div>
+              <div style="width:2px;height:16px;background:#f3f4f6;margin-left:17px;"></div>
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div class="step-dot" style="background:#f3f4f6;color:#9ca3af;">4</div>
+                <div><p style="font-weight:600;font-size:14px;color:#374151;margin:0;">Review & Sign</p><p style="font-size:12px;color:#9ca3af;margin:2px 0 0;">Verify and sign documents</p></div>
+                <span style="margin-left:auto;font-size:11px;color:#9ca3af;background:#f3f4f6;padding:3px 10px;border-radius:100px;">~2 min</span>
+              </div>
+            </div>
+
+            <div style="margin-top:24px;padding:16px;background:#f9fafb;border-radius:16px;display:flex;align-items:center;gap:12px;">
+              <span style="font-size:20px;">🔒</span>
+              <p style="font-size:13px;color:#6b7280;margin:0;">Your data is encrypted and stored securely</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div style="height:4px;background:linear-gradient(90deg,#FFA500,#7C3AED);"></div>
+  </div>
+</div>
+
+<!-- ===== STEP 1 ===== -->
+<div id="step1" class="screen">
+  <div style="min-height:calc(100vh - 52px);background:#f9fafb;">
+    <!-- Header -->
+    <header style="background:#fff;border-bottom:1px solid #f3f4f6;position:sticky;top:52px;z-index:40;">
+      <div style="max-width:760px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-size:20px;font-weight:900;"><span style="color:#111827;">BYTES</span><span style="color:#FFA500;">CARE</span></div>
+        <span style="font-size:13px;color:#9ca3af;font-weight:500;">Customer Onboarding</span>
+      </div>
+    </header>
+
+    <main style="max-width:640px;margin:0 auto;padding:36px 24px 60px;">
+      <!-- Progress -->
+      <div style="margin-bottom:32px;">
+        <div style="display:flex;align-items:center;margin-bottom:16px;gap:0;">
+          <!-- Step dots -->
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+            <div class="step-dot" style="background:#FFA500;color:#111827;box-shadow:0 0 0 6px rgba(255,165,0,0.15);">1</div>
+            <span style="font-size:11px;font-weight:600;color:#FFA500;margin-top:4px;">Basic Info</span>
+          </div>
+          <div style="flex:1;height:2px;background:#e5e7eb;margin:0 6px;margin-bottom:20px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+            <div class="step-dot" style="background:#e5e7eb;color:#9ca3af;">2</div>
+            <span style="font-size:11px;font-weight:500;color:#9ca3af;margin-top:4px;">Details</span>
+          </div>
+          <div style="flex:1;height:2px;background:#e5e7eb;margin:0 6px;margin-bottom:20px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+            <div class="step-dot" style="background:#e5e7eb;color:#9ca3af;">3</div>
+            <span style="font-size:11px;font-weight:500;color:#9ca3af;margin-top:4px;">Services</span>
+          </div>
+          <div style="flex:1;height:2px;background:#e5e7eb;margin:0 6px;margin-bottom:20px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+            <div class="step-dot" style="background:#e5e7eb;color:#9ca3af;">4</div>
+            <span style="font-size:11px;font-weight:500;color:#9ca3af;margin-top:4px;">Review</span>
+          </div>
+          <div style="flex:1;height:2px;background:#e5e7eb;margin:0 6px;margin-bottom:20px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+            <div class="step-dot" style="background:#e5e7eb;color:#9ca3af;">5</div>
+            <span style="font-size:11px;font-weight:500;color:#9ca3af;margin-top:4px;">Sign</span>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:0%;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;">
+          <span style="font-size:12px;color:#9ca3af;font-weight:500;">Step 1 of 5</span>
+          <span style="font-size:12px;color:#9ca3af;font-weight:500;">0% complete</span>
+        </div>
+      </div>
+
+      <!-- Card -->
+      <div class="card">
+        <div style="margin-bottom:32px;">
+          <h2 style="font-size:28px;font-weight:900;color:#111827;letter-spacing:-0.02em;margin-bottom:8px;">Let's get started</h2>
+          <p style="font-size:15px;color:#9ca3af;line-height:1.5;">Enter your basic information to begin your onboarding journey.</p>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:24px;margin-bottom:32px;">
+          <!-- Email -->
+          <div>
+            <label class="field-label">Email Address <span style="color:#FFA500;">*</span></label>
+            <input class="field-input" type="email" placeholder="your@email.com" value="priya@example.com" />
+            <p class="field-hint">We'll send your confirmation and documents to this email.</p>
+          </div>
+
+          <!-- Type -->
+          <div>
+            <label class="field-label">Registration Type <span style="color:#FFA500;">*</span></label>
+            <div style="display:flex;gap:16px;margin-top:4px;">
+              <div class="type-card selected" style="position:relative;">
+                <div style="font-size:36px;margin-bottom:12px;">👤</div>
+                <p style="font-weight:700;font-size:15px;color:#111827;margin:0 0 4px;">Individual</p>
+                <p style="font-size:12px;color:#9ca3af;margin:0;">Creator, freelancer, influencer</p>
+                <div style="position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:50%;background:#FFA500;display:flex;align-items:center;justify-content:center;">
+                  <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                </div>
+              </div>
+              <div class="type-card">
+                <div style="font-size:36px;margin-bottom:12px;">🏢</div>
+                <p style="font-weight:700;font-size:15px;color:#374151;margin:0 0 4px;">Company</p>
+                <p style="font-size:12px;color:#9ca3af;margin:0;">Business, brand, agency</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Country -->
+          <div>
+            <label class="field-label">Country <span style="color:#FFA500;">*</span></label>
+            <select class="field-input" style="cursor:pointer;">
+              <option>India</option>
+              <option>United States</option>
+              <option>United Kingdom</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn-primary">Continue →</button>
+      </div>
+
+      <p style="text-align:center;font-size:12px;color:#9ca3af;margin-top:16px;">💾 Progress saved automatically</p>
+    </main>
+    <div style="height:4px;background:linear-gradient(90deg,#FFA500,#7C3AED);"></div>
+  </div>
+</div>
+
+<!-- ===== STEP 2 INDIVIDUAL ===== -->
+<div id="step2" class="screen">
+  <div style="min-height:calc(100vh - 52px);background:#f9fafb;">
+    <header style="background:#fff;border-bottom:1px solid #f3f4f6;position:sticky;top:52px;z-index:40;">
+      <div style="max-width:760px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-size:20px;font-weight:900;"><span style="color:#111827;">BYTES</span><span style="color:#FFA500;">CARE</span></div>
+        <span style="font-size:13px;color:#9ca3af;">Customer Onboarding</span>
+      </div>
+    </header>
+    <main style="max-width:640px;margin:0 auto;padding:36px 24px 60px;">
+      <!-- Progress -->
+      <div style="margin-bottom:32px;">
+        <div style="display:flex;align-items:center;margin-bottom:16px;">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+            <div class="step-dot" style="background:#FFA500;color:#111827;">✓</div>
+            <span style="font-size:11px;font-weight:600;color:#FFA500;margin-top:4px;">Basic Info</span>
+          </div>
+          <div style="flex:1;height:2px;background:#FFA500;margin:0 6px;margin-bottom:20px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+            <div class="step-dot" style="background:#FFA500;color:#111827;box-shadow:0 0 0 6px rgba(255,165,0,0.15);">2</div>
+            <span style="font-size:11px;font-weight:600;color:#FFA500;margin-top:4px;">Details</span>
+          </div>
+          <div style="flex:1;height:2px;background:#e5e7eb;margin:0 6px;margin-bottom:20px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;"><div class="step-dot" style="background:#e5e7eb;color:#9ca3af;">3</div><span style="font-size:11px;color:#9ca3af;margin-top:4px;">Services</span></div>
+          <div style="flex:1;height:2px;background:#e5e7eb;margin:0 6px;margin-bottom:20px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;"><div class="step-dot" style="background:#e5e7eb;color:#9ca3af;">4</div><span style="font-size:11px;color:#9ca3af;margin-top:4px;">Review</span></div>
+          <div style="flex:1;height:2px;background:#e5e7eb;margin:0 6px;margin-bottom:20px;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;"><div class="step-dot" style="background:#e5e7eb;color:#9ca3af;">5</div><span style="font-size:11px;color:#9ca3af;margin-top:4px;">Sign</span></div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:25%;"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;"><span style="font-size:12px;color:#9ca3af;">Step 2 of 5</span><span style="font-size:12px;color:#9ca3af;">25% complete</span></div>
+      </div>
+
+      <div class="card">
+        <div style="margin-bottom:28px;">
+          <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:#fff8e6;border-radius:100px;margin-bottom:16px;">
+            <span style="font-size:16px;">👤</span>
+            <span style="font-size:12px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:0.05em;">Individual</span>
+          </div>
+          <h2 style="font-size:28px;font-weight:900;color:#111827;letter-spacing:-0.02em;margin-bottom:8px;">Personal Details</h2>
+          <p style="font-size:15px;color:#9ca3af;">Your legal information required for documentation.</p>
+        </div>
+
+        <!-- Section: Identity -->
+        <div class="section-divider"><span>Identity &amp; Legal</span></div>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div>
+            <label class="field-label">Full Legal Name <span style="color:#FFA500;">*</span></label>
+            <input class="field-input" type="text" placeholder="As on Aadhaar / PAN / Passport" value="Priya Sharma" />
+          </div>
+          <div>
+            <label class="field-label">National ID Number <span style="color:#FFA500;">*</span></label>
+            <input class="field-input" type="text" placeholder="Aadhaar, PAN, Passport No." value="ABCDE1234F" />
+          </div>
+          <div>
+            <label class="field-label">Upload National ID Proof <span style="color:#FFA500;">*</span></label>
+            <div style="border:2px solid #22c55e;background:#f0fdf4;border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:12px;">
+              <div style="width:40px;height:40px;background:#22c55e;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <p style="font-weight:600;font-size:14px;color:#166534;margin:0;">aadhaar_card.pdf</p>
+                <p style="font-size:12px;color:#4ade80;margin:2px 0 0;">Uploaded successfully</p>
+              </div>
+              <button style="font-size:12px;color:#ef4444;font-weight:600;background:none;border:none;cursor:pointer;">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Contact -->
+        <div class="section-divider" style="margin-top:32px;"><span>Contact &amp; Address</span></div>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div>
+            <label class="field-label">Contact Number <span style="font-size:12px;color:#9ca3af;font-weight:400;">(optional)</span></label>
+            <input class="field-input" type="tel" placeholder="+91 98765 43210" />
+          </div>
+          <div>
+            <label class="field-label">Registered Address <span style="color:#FFA500;">*</span></label>
+            <textarea class="field-input" rows="3" placeholder="House No., Building, Street, City, State, Country" style="resize:none;">12, MG Road, Bandra West, Mumbai 400050, Maharashtra, India</textarea>
+            <p class="field-hint">Format: House No., Building, Street, City, District, State, Pincode, Country</p>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <label class="field-label">Pincode / ZIP <span style="color:#FFA500;">*</span></label>
+              <input class="field-input" type="text" placeholder="400050" value="400050" />
+            </div>
+            <div>
+              <label class="field-label">City</label>
+              <input class="field-input" type="text" placeholder="Mumbai" value="Mumbai" />
+            </div>
+          </div>
+          <div>
+            <label class="field-label">Mailing Address <span style="color:#FFA500;">*</span></label>
+            <textarea class="field-input" rows="2" placeholder="Type 'Same' if identical to registered address" style="resize:none;">Same</textarea>
+          </div>
+        </div>
+
+        <!-- Section: Professional -->
+        <div class="section-divider" style="margin-top:32px;"><span>Professional Information</span></div>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div>
+            <label class="field-label">Official Email Address <span style="color:#FFA500;">*</span></label>
+            <input class="field-input" type="email" placeholder="your@email.com" value="priya@example.com" />
+          </div>
+          <div>
+            <label class="field-label">Designation <span style="color:#FFA500;">*</span></label>
+            <input class="field-input" type="text" placeholder="Content Creator, Director, Proprietor…" value="Content Creator" />
+          </div>
+          <div>
+            <label class="field-label">Nature of Work <span style="color:#FFA500;">*</span></label>
+            <textarea class="field-input" rows="3" placeholder="Describe your work briefly…" style="resize:none;">Creating lifestyle and fashion content across YouTube and Instagram with 2M+ followers.</textarea>
+          </div>
+        </div>
+
+        <!-- Section: Online -->
+        <div class="section-divider" style="margin-top:32px;"><span>Online Presence</span></div>
+        <div>
+          <label class="field-label">Social Media Handles <span style="color:#FFA500;">*</span></label>
+          <textarea class="field-input" rows="4" placeholder="Instagram: @handle&#10;YouTube: @handle&#10;Website: https://yoursite.com" style="resize:none;">Instagram: @priya_creates&#10;Link: https://instagram.com/priya_creates&#10;&#10;YouTube: @PriyaCreates&#10;Link: https://youtube.com/@PriyaCreates</textarea>
+        </div>
+
+        <!-- Buttons -->
+        <div style="display:flex;gap:12px;margin-top:36px;">
+          <button class="btn-secondary" style="flex:1;">← Back</button>
+          <button class="btn-primary" style="flex:2;">Continue →</button>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:12px;color:#9ca3af;margin-top:16px;">💾 Progress saved automatically</p>
+    </main>
+    <div style="height:4px;background:linear-gradient(90deg,#FFA500,#7C3AED);"></div>
+  </div>
+</div>
+
+<!-- ===== STEP 2 COMPANY ===== -->
+<div id="step2b" class="screen">
+  <div style="min-height:calc(100vh - 52px);background:#f9fafb;">
+    <header style="background:#fff;border-bottom:1px solid #f3f4f6;position:sticky;top:52px;z-index:40;">
+      <div style="max-width:760px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-size:20px;font-weight:900;"><span style="color:#111827;">BYTES</span><span style="color:#FFA500;">CARE</span></div>
+        <span style="font-size:13px;color:#9ca3af;">Customer Onboarding</span>
+      </div>
+    </header>
+    <main style="max-width:640px;margin:0 auto;padding:36px 24px 60px;">
+      <div style="margin-bottom:32px;">
+        <div class="progress-bar"><div class="progress-fill" style="width:25%;"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;"><span style="font-size:12px;color:#9ca3af;">Step 2 of 5</span><span style="font-size:12px;color:#9ca3af;">25% complete</span></div>
+      </div>
+      <div class="card">
+        <div style="margin-bottom:28px;">
+          <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:#eff6ff;border-radius:100px;margin-bottom:16px;">
+            <span style="font-size:16px;">🏢</span>
+            <span style="font-size:12px;font-weight:700;color:#1e40af;text-transform:uppercase;letter-spacing:0.05em;">Company</span>
+          </div>
+          <h2 style="font-size:28px;font-weight:900;color:#111827;letter-spacing:-0.02em;margin-bottom:8px;">Company Details</h2>
+          <p style="font-size:15px;color:#9ca3af;">Official company information for documentation.</p>
+        </div>
+
+        <div class="section-divider"><span>Company Identity</span></div>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div><label class="field-label">Company Name <span style="color:#FFA500;">*</span></label><input class="field-input" type="text" placeholder="As registered with authorities" value="TechBrand Pvt. Ltd." /></div>
+          <div><label class="field-label">Registration Number <span style="color:#FFA500;">*</span></label><input class="field-input" type="text" placeholder="CIN / Registration No." value="U74999MH2020PTC123456" /></div>
+          <div>
+            <label class="field-label">Registration Certificate <span style="color:#FFA500;">*</span></label>
+            <div class="upload-area">
+              <div style="font-size:32px;margin-bottom:8px;">📎</div>
+              <p style="font-weight:600;font-size:14px;color:#374151;margin:0 0 4px;">Drop file or Browse</p>
+              <p style="font-size:12px;color:#9ca3af;margin:0;">PDF or image accepted</p>
+            </div>
+          </div>
+          <div><label class="field-label">GSTIN <span style="font-size:12px;color:#9ca3af;font-weight:400;">(optional)</span></label><input class="field-input" type="text" placeholder="22AAAAA0000A1Z5" /></div>
+        </div>
+
+        <div class="section-divider" style="margin-top:32px;"><span>Contact &amp; Address</span></div>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div><label class="field-label">Company Contact Number</label><input class="field-input" type="tel" placeholder="+91 22 1234 5678" /></div>
+          <div><label class="field-label">Registered Address <span style="color:#FFA500;">*</span></label><textarea class="field-input" rows="3" style="resize:none;" placeholder="Full registered office address">Plot 42, MIDC Industrial Area, Andheri East, Mumbai 400093</textarea></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div><label class="field-label">Pincode <span style="color:#FFA500;">*</span></label><input class="field-input" placeholder="400093" value="400093" /></div>
+            <div><label class="field-label">City</label><input class="field-input" placeholder="Mumbai" value="Mumbai" /></div>
+          </div>
+          <div><label class="field-label">Mailing Address <span style="color:#FFA500;">*</span></label><textarea class="field-input" rows="2" style="resize:none;" placeholder="Same if identical">Same</textarea></div>
+        </div>
+
+        <div class="section-divider" style="margin-top:32px;"><span>Authorized Signatory</span></div>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div><label class="field-label">Signatory Full Name <span style="color:#FFA500;">*</span></label><input class="field-input" placeholder="Director / Authorized Person" value="Rahul Mehta" /></div>
+          <div><label class="field-label">Designation <span style="color:#FFA500;">*</span></label><input class="field-input" placeholder="CEO, Director, Founder…" value="CEO" /></div>
+          <div><label class="field-label">Signatory Email <span style="color:#FFA500;">*</span></label><input class="field-input" type="email" placeholder="signatory@company.com" value="rahul@techbrand.com" /></div>
+        </div>
+
+        <div class="section-divider" style="margin-top:32px;"><span>Online Presence</span></div>
+        <div><label class="field-label">Website / Social Handles <span style="color:#FFA500;">*</span></label><textarea class="field-input" rows="3" style="resize:none;" placeholder="Website: https://&#10;LinkedIn: https://">Website: https://techbrand.com&#10;LinkedIn: https://linkedin.com/company/techbrand</textarea></div>
+
+        <div class="section-divider" style="margin-top:32px;"><span>Documents</span></div>
+        <div>
+          <label class="field-label">Copyright Certificate <span style="font-size:12px;color:#9ca3af;font-weight:400;">(optional)</span></label>
+          <div class="upload-area"><div style="font-size:32px;margin-bottom:8px;">📎</div><p style="font-weight:600;font-size:14px;color:#374151;margin:0 0 4px;">Upload if available</p><p style="font-size:12px;color:#9ca3af;">PDF or image accepted</p></div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:36px;">
+          <button class="btn-secondary" style="flex:1;">← Back</button>
+          <button class="btn-primary" style="flex:2;">Continue →</button>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:12px;color:#9ca3af;margin-top:16px;">💾 Progress saved automatically</p>
+    </main>
+    <div style="height:4px;background:linear-gradient(90deg,#FFA500,#7C3AED);"></div>
+  </div>
+</div>
+
+<!-- ===== STEP 3 SERVICES ===== -->
+<div id="step3" class="screen">
+  <div style="min-height:calc(100vh - 52px);background:#f9fafb;">
+    <header style="background:#fff;border-bottom:1px solid #f3f4f6;position:sticky;top:52px;z-index:40;">
+      <div style="max-width:760px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-size:20px;font-weight:900;"><span style="color:#111827;">BYTES</span><span style="color:#FFA500;">CARE</span></div>
+        <span style="font-size:13px;color:#9ca3af;">Customer Onboarding</span>
+      </div>
+    </header>
+    <main style="max-width:640px;margin:0 auto;padding:36px 24px 60px;">
+      <div style="margin-bottom:32px;"><div class="progress-bar"><div class="progress-fill" style="width:50%;"></div></div><div style="display:flex;justify-content:space-between;margin-top:8px;"><span style="font-size:12px;color:#9ca3af;">Step 3 of 5</span><span style="font-size:12px;color:#9ca3af;">50% complete</span></div></div>
+      <div class="card">
+        <div style="margin-bottom:28px;">
+          <h2 style="font-size:28px;font-weight:900;color:#111827;letter-spacing:-0.02em;margin-bottom:8px;">Select Services</h2>
+          <p style="font-size:15px;color:#9ca3af;">Choose the protection services you need. <span style="color:#FFA500;font-weight:600;">Select at least one.</span></p>
+        </div>
+
+        <!-- Selected count badge -->
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#fff8e6;border-radius:14px;padding:14px 20px;margin-bottom:24px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:18px;">✅</span>
+            <span style="font-weight:600;font-size:14px;color:#92400e;">3 services selected</span>
+          </div>
+          <button style="font-size:12px;color:#9ca3af;background:none;border:none;cursor:pointer;">Clear all</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;">
+          <!-- Service cards -->
+          <div class="svc-card selected">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:20px;height:20px;border-radius:6px;background:#FFA500;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;">
+                <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="#111827" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div>
+                <p style="font-size:13px;font-weight:700;color:#111827;margin:0 0 4px;">🛡️ Digital Piracy Protection</p>
+                <p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.4;">Detect and remove unauthorized copies of your content.</p>
+              </div>
+            </div>
+          </div>
+          <div class="svc-card selected">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:20px;height:20px;border-radius:6px;background:#FFA500;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="#111827" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+              <div><p style="font-size:13px;font-weight:700;color:#111827;margin:0 0 4px;">®️ Brand Protection</p><p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.4;">Safeguard your brand from misuse and impersonation.</p></div>
+            </div>
+          </div>
+          <div class="svc-card">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:20px;height:20px;border-radius:6px;border:2px solid #e5e7eb;flex-shrink:0;margin-top:1px;"></div>
+              <div><p style="font-size:13px;font-weight:700;color:#374151;margin:0 0 4px;">🔍 Threat Intelligence</p><p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.4;">Real-time cyber threat intelligence and insights.</p></div>
+            </div>
+          </div>
+          <div class="svc-card">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:20px;height:20px;border-radius:6px;border:2px solid #e5e7eb;flex-shrink:0;margin-top:1px;"></div>
+              <div><p style="font-size:13px;font-weight:700;color:#374151;margin:0 0 4px;">🪪 Identity Theft Protection</p><p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.4;">Monitor and protect from theft and fraud.</p></div>
+            </div>
+          </div>
+          <div class="svc-card selected">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:20px;height:20px;border-radius:6px;background:#FFA500;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="#111827" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+              <div><p style="font-size:13px;font-weight:700;color:#111827;margin:0 0 4px;">📊 Business Intelligence</p><p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.4;">Data-driven insights for competitive advantage.</p></div>
+            </div>
+          </div>
+          <div class="svc-card">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:20px;height:20px;border-radius:6px;border:2px solid #e5e7eb;flex-shrink:0;margin-top:1px;"></div>
+              <div><p style="font-size:13px;font-weight:700;color:#374151;margin:0 0 4px;">🏷️ Counterfeit Protection</p><p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.4;">Identify and eliminate counterfeit products.</p></div>
+            </div>
+          </div>
+          <div class="svc-card">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:20px;height:20px;border-radius:6px;border:2px solid #e5e7eb;flex-shrink:0;margin-top:1px;"></div>
+              <div><p style="font-size:13px;font-weight:700;color:#374151;margin:0 0 4px;">⭐ Reputation Management</p><p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.4;">Monitor your online reputation across platforms.</p></div>
+            </div>
+          </div>
+          <div class="svc-card">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div style="width:20px;height:20px;border-radius:6px;border:2px solid #e5e7eb;flex-shrink:0;margin-top:1px;"></div>
+              <div><p style="font-size:13px;font-weight:700;color:#374151;margin:0 0 4px;">⚖️ Legal Add-ons</p><p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.4;">Legal support for IP disputes and enforcement.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;">
+          <button class="btn-secondary" style="flex:1;">← Back</button>
+          <button class="btn-primary" style="flex:2;">Continue to Review →</button>
+        </div>
+      </div>
+    </main>
+    <div style="height:4px;background:linear-gradient(90deg,#FFA500,#7C3AED);"></div>
+  </div>
+</div>
+
+<!-- ===== STEP 4 REVIEW ===== -->
+<div id="step4" class="screen">
+  <div style="min-height:calc(100vh - 52px);background:#f9fafb;">
+    <header style="background:#fff;border-bottom:1px solid #f3f4f6;position:sticky;top:52px;z-index:40;"><div style="max-width:760px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;"><div style="font-size:20px;font-weight:900;"><span style="color:#111827;">BYTES</span><span style="color:#FFA500;">CARE</span></div><span style="font-size:13px;color:#9ca3af;">Customer Onboarding</span></div></header>
+    <main style="max-width:640px;margin:0 auto;padding:36px 24px 60px;">
+      <div style="margin-bottom:32px;"><div class="progress-bar"><div class="progress-fill" style="width:75%;"></div></div><div style="display:flex;justify-content:space-between;margin-top:8px;"><span style="font-size:12px;color:#9ca3af;">Step 4 of 5</span><span style="font-size:12px;color:#9ca3af;">75% complete</span></div></div>
+      <div class="card">
+        <div style="margin-bottom:28px;">
+          <h2 style="font-size:28px;font-weight:900;color:#111827;letter-spacing:-0.02em;margin-bottom:8px;">Review Your Details</h2>
+          <p style="font-size:15px;color:#9ca3af;">Check everything before proceeding to document signing.</p>
+        </div>
+
+        <!-- Section cards -->
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:28px;">
+          <!-- Basic Info -->
+          <div style="border:1.5px solid #f3f4f6;border-radius:18px;overflow:hidden;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#f9fafb;border-bottom:1px solid #f3f4f6;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:16px;">📋</span>
+                <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280;">Basic Information</span>
+              </div>
+              <button style="font-size:13px;font-weight:700;color:#FFA500;background:none;border:none;cursor:pointer;padding:4px 12px;border-radius:8px;background:#fff8e6;">Edit</button>
+            </div>
+            <div style="padding:16px 20px;">
+              <div class="rev-row"><span class="rev-label">Email</span><span class="rev-value">priya@example.com</span></div>
+              <div class="rev-row"><span class="rev-label">Type</span><span class="rev-value">Individual</span></div>
+              <div class="rev-row"><span class="rev-label">Country</span><span class="rev-value">India</span></div>
+            </div>
+          </div>
+
+          <!-- Personal Details -->
+          <div style="border:1.5px solid #f3f4f6;border-radius:18px;overflow:hidden;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#f9fafb;border-bottom:1px solid #f3f4f6;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;">👤</span><span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280;">Personal Details</span></div>
+              <button style="font-size:13px;font-weight:700;color:#FFA500;background:#fff8e6;border:none;cursor:pointer;padding:4px 12px;border-radius:8px;">Edit</button>
+            </div>
+            <div style="padding:16px 20px;">
+              <div class="rev-row"><span class="rev-label">Full Name</span><span class="rev-value">Priya Sharma</span></div>
+              <div class="rev-row"><span class="rev-label">National ID</span><span class="rev-value">ABCDE1234F</span></div>
+              <div class="rev-row"><span class="rev-label">ID Proof</span><span class="rev-value" style="display:flex;align-items:center;gap:6px;"><span style="color:#22c55e;">✓</span>aadhaar_card.pdf</span></div>
+              <div class="rev-row"><span class="rev-label">Address</span><span class="rev-value">12, MG Road, Bandra West, Mumbai 400050</span></div>
+              <div class="rev-row"><span class="rev-label">Official Email</span><span class="rev-value">priya@example.com</span></div>
+              <div class="rev-row"><span class="rev-label">Designation</span><span class="rev-value">Content Creator</span></div>
+              <div class="rev-row"><span class="rev-label">Social Media</span><span class="rev-value">@priya_creates (Instagram, YouTube)</span></div>
+            </div>
+          </div>
+
+          <!-- Services -->
+          <div style="border:1.5px solid #f3f4f6;border-radius:18px;overflow:hidden;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#f9fafb;border-bottom:1px solid #f3f4f6;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:16px;">🛡️</span><span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280;">Services (3 selected)</span></div>
+              <button style="font-size:13px;font-weight:700;color:#FFA500;background:#fff8e6;border:none;cursor:pointer;padding:4px 12px;border-radius:8px;">Edit</button>
+            </div>
+            <div style="padding:16px 20px;display:flex;flex-wrap:wrap;gap:8px;">
+              <span class="tag">🛡️ Digital Piracy Protection</span>
+              <span class="tag">®️ Brand Protection</span>
+              <span class="tag">📊 Business Intelligence</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notice -->
+        <div style="border:1.5px solid #fed7aa;background:linear-gradient(135deg,#fff8f0,#fff);border-radius:18px;padding:20px;margin-bottom:28px;display:flex;align-items:flex-start;gap:14px;">
+          <span style="font-size:24px;flex-shrink:0;">📝</span>
+          <div>
+            <p style="font-size:15px;font-weight:700;color:#111827;margin:0 0 6px;">Next: Sign your documents</p>
+            <p style="font-size:13px;color:#6b7280;margin:0;line-height:1.6;">Your <strong>Service Agreement</strong> and <strong>Letter of Authorization (LOA)</strong> will be prepared and shown for review and digital signing.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;">
+          <button class="btn-secondary" style="flex:1;">← Back</button>
+          <button class="btn-primary" style="flex:2;">Proceed to Sign Documents →</button>
+        </div>
+      </div>
+    </main>
+    <div style="height:4px;background:linear-gradient(90deg,#FFA500,#7C3AED);"></div>
+  </div>
+</div>
+
+<!-- ===== STEP 5 SIGN ===== -->
+<div id="step5" class="screen">
+  <div style="min-height:calc(100vh - 52px);background:#f9fafb;">
+    <header style="background:#fff;border-bottom:1px solid #f3f4f6;position:sticky;top:52px;z-index:40;"><div style="max-width:760px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;"><div style="font-size:20px;font-weight:900;"><span style="color:#111827;">BYTES</span><span style="color:#FFA500;">CARE</span></div><span style="font-size:13px;color:#9ca3af;">Customer Onboarding</span></div></header>
+    <main style="max-width:640px;margin:0 auto;padding:36px 24px 60px;">
+      <div style="margin-bottom:32px;"><div class="progress-bar"><div class="progress-fill" style="width:100%;"></div></div><div style="display:flex;justify-content:space-between;margin-top:8px;"><span style="font-size:12px;color:#9ca3af;">Step 5 of 5 — Final Step</span><span style="font-size:12px;color:#FFA500;font-weight:600;">100% complete</span></div></div>
+      <div class="card">
+        <div style="margin-bottom:28px;">
+          <h2 style="font-size:28px;font-weight:900;color:#111827;letter-spacing:-0.02em;margin-bottom:8px;">Sign Your Documents</h2>
+          <p style="font-size:15px;color:#9ca3af;">Review and digitally sign your Service Agreement &amp; Letter of Authorization.</p>
+        </div>
+
+        <!-- Doc pills -->
+        <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 18px;background:#fff8e6;border:1.5px solid rgba(255,165,0,0.3);border-radius:100px;">
+            <span>📄</span><span style="font-size:13px;font-weight:600;color:#92400e;">Service Agreement</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 18px;background:#fff8e6;border:1.5px solid rgba(255,165,0,0.3);border-radius:100px;">
+            <span>📄</span><span style="font-size:13px;font-weight:600;color:#92400e;">Letter of Authorization</span>
+          </div>
+        </div>
+
+        <!-- Top bar -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
+            <span style="font-size:13px;color:#374151;font-weight:500;">Document ready for signing</span>
+          </div>
+          <button style="display:flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;font-size:12px;font-weight:700;color:#FFA500;cursor:pointer;">⬇ Download PDF</button>
+        </div>
+
+        <!-- PandaDoc iframe placeholder -->
+        <div style="border:1.5px solid #e5e7eb;border-radius:20px;overflow:hidden;margin-bottom:20px;background:#f9fafb;height:480px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
+          <div style="width:64px;height:64px;border-radius:18px;background:#fff;border:1.5px solid #e5e7eb;display:flex;align-items:center;justify-content:center;font-size:28px;">📝</div>
+          <p style="font-weight:700;font-size:16px;color:#374151;margin:0;">PandaDoc Signing Area</p>
+          <p style="font-size:13px;color:#9ca3af;text-align:center;max-width:280px;margin:0;">The embedded document viewer appears here. Scroll, review, and click Sign to complete.</p>
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:#FFA500;animation:pulse 1.5s ease-in-out infinite;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#FFA500;opacity:0.5;animation:pulse 1.5s ease-in-out infinite 0.3s;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#FFA500;opacity:0.3;animation:pulse 1.5s ease-in-out infinite 0.6s;"></div>
+          </div>
+        </div>
+
+        <!-- Tip -->
+        <div style="background:#fff8e6;border-radius:14px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:flex-start;gap:12px;">
+          <span style="font-size:18px;flex-shrink:0;">💡</span>
+          <p style="font-size:13px;color:#6b7280;margin:0;line-height:1.6;"><strong style="color:#374151;">Tip:</strong> Scroll through the full document, fill any required fields, then click the <strong>Sign</strong> button inside the viewer. Your submission completes automatically after signing.</p>
+        </div>
+
+        <button class="btn-secondary">← Back to Review</button>
+      </div>
+    </main>
+    <div style="height:4px;background:linear-gradient(90deg,#FFA500,#7C3AED);"></div>
+  </div>
+</div>
+
+<!-- ===== SUCCESS ===== -->
+<div id="success" class="screen">
+  <div style="min-height:calc(100vh - 52px);background:linear-gradient(135deg,#fff8e6 0%,#fff 40%,#f5f3ff 100%);">
+    <header style="background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.06);position:sticky;top:52px;z-index:40;"><div style="max-width:760px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;"><div style="font-size:20px;font-weight:900;"><span style="color:#111827;">BYTES</span><span style="color:#FFA500;">CARE</span></div><span style="font-size:13px;color:#9ca3af;">Customer Onboarding</span></div></header>
+    <main style="max-width:600px;margin:0 auto;padding:48px 24px 80px;">
+      <div class="card" style="text-align:center;padding:48px 40px;">
+        <!-- Success icon -->
+        <div style="margin-bottom:32px;">
+          <div style="width:96px;height:96px;border-radius:50%;background:rgba(255,165,0,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;" class="success-glow">
+            <div style="width:68px;height:68px;border-radius:50%;background:#FFA500;display:flex;align-items:center;justify-content:center;">
+              <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <h2 style="font-size:36px;font-weight:900;color:#111827;letter-spacing:-0.03em;margin-bottom:12px;">You're All Set! 🎉</h2>
+        <p style="font-size:16px;color:#6b7280;margin-bottom:8px;">Thank you, <strong style="color:#111827;">Priya Sharma</strong>.</p>
+        <p style="font-size:14px;color:#9ca3af;margin-bottom:36px;">A confirmation has been sent to <strong style="color:#374151;">priya@example.com</strong></p>
+
+        <!-- Signed badge -->
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#f0fdf4;border:1.5px solid #86efac;border-radius:100px;margin-bottom:32px;">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#22c55e" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          <span style="font-size:13px;font-weight:700;color:#166534;">Documents Signed Successfully</span>
+        </div>
+
+        <!-- What's next -->
+        <div style="background:#f9fafb;border-radius:20px;padding:24px;margin-bottom:28px;text-align:left;">
+          <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:16px;">What happens next</p>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="font-size:20px;flex-shrink:0;">📧</span><span style="font-size:14px;color:#374151;line-height:1.5;">Confirmation email sent to your registered address</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="font-size:20px;flex-shrink:0;">⚙️</span><span style="font-size:14px;color:#374151;line-height:1.5;">Our operations team will begin setting up your account</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="font-size:20px;flex-shrink:0;">🔑</span><span style="font-size:14px;color:#374151;line-height:1.5;">You'll receive your <strong>client dashboard credentials</strong> within 1–2 business days</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px;"><span style="font-size:20px;flex-shrink:0;">👤</span><span style="font-size:14px;color:#374151;line-height:1.5;">Your account manager will reach out to guide you through the platform</span></div>
+          </div>
+        </div>
+
+        <!-- Services -->
+        <div style="margin-bottom:36px;">
+          <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:12px;">Services Enrolled</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
+            <span class="tag">🛡️ Digital Piracy Protection</span>
+            <span class="tag">®️ Brand Protection</span>
+            <span class="tag">📊 Business Intelligence</span>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="margin-bottom:16px;">← Back to Home</button>
+        <p style="font-size:12px;color:#9ca3af;">Questions? <a href="#" style="color:#FFA500;text-decoration:underline;">support@bytescare.com</a></p>
+      </div>
+    </main>
+    <div style="height:4px;background:linear-gradient(90deg,#FFA500,#7C3AED);"></div>
+  </div>
+</div>
+
+<!-- ===== MOBILE VIEW ===== -->
+<div id="mobile" class="screen">
+  <div style="background:#1f2937;min-height:calc(100vh - 52px);display:flex;align-items:flex-start;justify-content:center;padding:32px 24px;gap:32px;flex-wrap:wrap;">
+    <!-- Phone frame 1 - Step 1 -->
+    <div>
+      <p style="color:#9ca3af;font-size:12px;font-weight:600;text-align:center;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.08em;">Step 1 – Basic Info</p>
+      <div style="width:320px;background:#f9fafb;border-radius:40px;overflow:hidden;box-shadow:0 32px 64px rgba(0,0,0,0.4);border:8px solid #374151;">
+        <div style="background:#111827;height:28px;display:flex;align-items:center;justify-content:center;"><div style="width:80px;height:6px;background:#374151;border-radius:3px;"></div></div>
+        <div style="height:460px;overflow:hidden;">
+          <!-- Simulated content -->
+          <div style="background:#fff;padding:16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between;"><div style="font-size:16px;font-weight:900;"><span style="color:#111827;">BYTES</span><span style="color:#FFA500;">CARE</span></div><span style="font-size:10px;color:#9ca3af;">Onboarding</span></div>
+          <div style="padding:16px;">
+            <div style="margin-bottom:16px;"><div style="height:3px;background:#e5e7eb;border-radius:3px;overflow:hidden;"><div style="width:0%;height:100%;background:linear-gradient(90deg,#FFA500,#7C3AED);"></div></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:9px;color:#9ca3af;">Step 1 of 5</span><span style="font-size:9px;color:#9ca3af;">0%</span></div></div>
+            <div style="background:#fff;border-radius:16px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+              <p style="font-size:16px;font-weight:900;color:#111827;margin:0 0 4px;">Let's get started</p>
+              <p style="font-size:10px;color:#9ca3af;margin:0 0 16px;">Enter your basic info to begin</p>
+              <div style="margin-bottom:12px;"><p style="font-size:10px;font-weight:600;color:#374151;margin:0 0 4px;">Email Address <span style="color:#FFA500;">*</span></p><div style="border:2px solid #e5e7eb;border-radius:8px;padding:10px 12px;font-size:11px;color:#9ca3af;">your@email.com</div></div>
+              <div style="margin-bottom:12px;"><p style="font-size:10px;font-weight:600;color:#374151;margin:0 0 6px;">Registration Type <span style="color:#FFA500;">*</span></p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div style="border:2px solid #FFA500;border-radius:10px;padding:10px 8px;text-align:center;background:#fff8e6;"><div style="font-size:18px;">👤</div><p style="font-size:9px;font-weight:700;color:#111827;margin:2px 0 0;">Individual</p></div><div style="border:2px solid #e5e7eb;border-radius:10px;padding:10px 8px;text-align:center;"><div style="font-size:18px;">🏢</div><p style="font-size:9px;font-weight:600;color:#374151;margin:2px 0 0;">Company</p></div></div></div>
+              <div style="margin-bottom:16px;"><p style="font-size:10px;font-weight:600;color:#374151;margin:0 0 4px;">Country <span style="color:#FFA500;">*</span></p><div style="border:2px solid #e5e7eb;border-radius:8px;padding:10px 12px;font-size:11px;color:#374151;">India</div></div>
+              <button style="width:100%;background:#FFA500;border:none;border-radius:10px;padding:12px;font-size:12px;font-weight:800;color:#111827;cursor:pointer;">Continue →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone frame 2 - Step 3 Services -->
+    <div>
+      <p style="color:#9ca3af;font-size:12px;font-weight:600;text-align:center;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.08em;">Step 3 – Services</p>
+      <div style="width:320px;background:#f9fafb;border-radius:40px;overflow:hidden;box-shadow:0 32px 64px rgba(0,0,0,0.4);border:8px solid #374151;">
+        <div style="background:#111827;height:28px;display:flex;align-items:center;justify-content:center;"><div style="width:80px;height:6px;background:#374151;border-radius:3px;"></div></div>
+        <div style="height:460px;overflow:hidden;">
+          <div style="background:#fff;padding:16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between;"><div style="font-size:16px;font-weight:900;"><span style="color:#111827;">BYTES</span><span style="color:#FFA500;">CARE</span></div><span style="font-size:10px;color:#9ca3af;">Onboarding</span></div>
+          <div style="padding:16px;">
+            <div style="margin-bottom:16px;"><div style="height:3px;background:#e5e7eb;border-radius:3px;overflow:hidden;"><div style="width:50%;height:100%;background:linear-gradient(90deg,#FFA500,#7C3AED);"></div></div><div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:9px;color:#9ca3af;">Step 3 of 5</span><span style="font-size:9px;color:#9ca3af;">50%</span></div></div>
+            <div style="background:#fff;border-radius:16px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+              <p style="font-size:16px;font-weight:900;color:#111827;margin:0 0 4px;">Select Services</p>
+              <p style="font-size:10px;color:#9ca3af;margin:0 0 12px;">Choose at least one service</p>
+              <div style="background:#fff8e6;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;">✅</span><span style="font-size:11px;font-weight:600;color:#92400e;">2 services selected</span></div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="border:2px solid #FFA500;border-radius:10px;padding:10px 12px;background:#fffbeb;display:flex;align-items:center;gap:8px;"><div style="width:14px;height:14px;border-radius:4px;background:#FFA500;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="#111827" stroke-width="3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:11px;font-weight:600;color:#111827;">🛡️ Digital Piracy Protection</span></div>
+                <div style="border:2px solid #FFA500;border-radius:10px;padding:10px 12px;background:#fffbeb;display:flex;align-items:center;gap:8px;"><div style="width:14px;height:14px;border-radius:4px;background:#FFA500;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="#111827" stroke-width="3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:11px;font-weight:600;color:#111827;">®️ Brand Protection</span></div>
+                <div style="border:2px solid #e5e7eb;border-radius:10px;padding:10px 12px;background:#fff;display:flex;align-items:center;gap:8px;"><div style="width:14px;height:14px;border-radius:4px;border:2px solid #e5e7eb;flex-shrink:0;"></div><span style="font-size:11px;font-weight:600;color:#374151;">🔍 Threat Intelligence</span></div>
+                <div style="border:2px solid #e5e7eb;border-radius:10px;padding:10px 12px;background:#fff;display:flex;align-items:center;gap:8px;"><div style="width:14px;height:14px;border-radius:4px;border:2px solid #e5e7eb;flex-shrink:0;"></div><span style="font-size:11px;font-weight:600;color:#374151;">🪪 Identity Theft Protection</span></div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:14px;">
+                <button style="flex:1;border:2px solid #e5e7eb;border-radius:10px;padding:10px;font-size:11px;font-weight:600;color:#6b7280;background:#fff;cursor:pointer;">← Back</button>
+                <button style="flex:2;background:#FFA500;border:none;border-radius:10px;padding:10px;font-size:11px;font-weight:800;color:#111827;cursor:pointer;">Continue →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone frame 3 - Success -->
+    <div>
+      <p style="color:#9ca3af;font-size:12px;font-weight:600;text-align:center;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.08em;">Success Screen</p>
+      <div style="width:320px;background:#f9fafb;border-radius:40px;overflow:hidden;box-shadow:0 32px 64px rgba(0,0,0,0.4);border:8px solid #374151;">
+        <div style="background:#111827;height:28px;display:flex;align-items:center;justify-content:center;"><div style="width:80px;height:6px;background:#374151;border-radius:3px;"></div></div>
+        <div style="height:460px;overflow:hidden;background:linear-gradient(135deg,#fff8e6,#fff,#f5f3ff);">
+          <div style="background:rgba(255,255,255,0.85);padding:16px;border-bottom:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:space-between;"><div style="font-size:16px;font-weight:900;"><span style="color:#111827;">BYTES</span><span style="color:#FFA500;">CARE</span></div></div>
+          <div style="padding:24px 16px;text-align:center;">
+            <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,165,0,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+              <div style="width:46px;height:46px;border-radius:50%;background:#FFA500;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+            </div>
+            <p style="font-size:22px;font-weight:900;color:#111827;margin:0 0 6px;letter-spacing:-0.02em;">You're All Set! 🎉</p>
+            <p style="font-size:11px;color:#6b7280;margin:0 0 16px;">Confirmation sent to priya@example.com</p>
+            <div style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#f0fdf4;border:1px solid #86efac;border-radius:100px;margin-bottom:16px;"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="#22c55e" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span style="font-size:11px;font-weight:700;color:#166534;">Documents Signed</span></div>
+            <div style="background:#fff;border-radius:14px;padding:14px;text-align:left;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+              <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;"><span style="font-size:14px;">📧</span><span style="font-size:10px;color:#374151;">Confirmation email sent</span></div>
+              <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;"><span style="font-size:14px;">⚙️</span><span style="font-size:10px;color:#374151;">Account setup in progress</span></div>
+              <div style="display:flex;align-items:flex-start;gap:8px;"><span style="font-size:14px;">🔑</span><span style="font-size:10px;color:#374151;">Dashboard credentials in 1–2 days</span></div>
+            </div>
+            <button style="width:100%;background:#FFA500;border:none;border-radius:10px;padding:12px;font-size:12px;font-weight:800;color:#111827;cursor:pointer;">← Back to Home</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('#nav-tabs button').forEach((b, i) => {
+      const ids = ['home','step1','step2','step2b','step3','step4','step5','success','mobile'];
+      b.classList.toggle('active', ids[i] === id);
+    });
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>
