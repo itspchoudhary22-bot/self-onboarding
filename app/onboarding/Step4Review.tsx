@@ -4,9 +4,7 @@ import { FormData } from "./formTypes";
 interface Props {
   formData: FormData;
   onBack: () => void;
-  onSubmit: () => void;
-  isSubmitting: boolean;
-  submitError: string;
+  onNext: () => void;
   goToStep: (s: number) => void;
 }
 
@@ -31,21 +29,15 @@ function Section({ title, step, goToStep, children }: { title: string; step: num
   );
 }
 
-export default function Step4Review({ formData, onBack, onSubmit, isSubmitting, submitError, goToStep }: Props) {
+export default function Step4Review({ formData, onBack, onNext, goToStep }: Props) {
   const isCompany = formData.type === "company";
 
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-black text-gray-900">Review &amp; Submit</h2>
-        <p className="text-gray-500 mt-1 text-sm">Verify all information before submitting</p>
+        <h2 className="text-2xl font-black text-gray-900">Review Your Details</h2>
+        <p className="text-gray-500 mt-1 text-sm">Verify everything before proceeding to document signing</p>
       </div>
-
-      {submitError && (
-        <div className="mb-5 flex items-start gap-2 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
-          <span>⚠</span> <span>{submitError}</span>
-        </div>
-      )}
 
       <div className="space-y-3 mb-6">
         <Section title="Basic Information" step={1} goToStep={goToStep}>
@@ -96,23 +88,27 @@ export default function Step4Review({ formData, onBack, onSubmit, isSubmitting, 
         </Section>
       </div>
 
-      <p className="text-xs text-gray-400 mb-5 text-center">
-        By submitting, you agree to our{" "}
-        <span className="underline cursor-pointer text-gray-600">Terms of Service</span> and{" "}
-        <span className="underline cursor-pointer text-gray-600">Privacy Policy</span>.
-      </p>
+      <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 mb-6 flex items-start gap-3">
+        <span className="text-amber-500 text-lg mt-0.5">📝</span>
+        <div>
+          <p className="text-sm font-semibold text-gray-800">Next: Sign your documents</p>
+          <p className="text-xs text-gray-500 mt-0.5">Your Service Agreement and Letter of Authorization (LOA) will be prepared and shown for review and digital signing.</p>
+        </div>
+      </div>
 
       <div className="flex gap-3">
-        <button onClick={onBack} disabled={isSubmitting}
-          className="flex-1 py-3.5 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 transition-all hover:bg-gray-50 disabled:opacity-50">
+        <button
+          onClick={onBack}
+          className="flex-1 py-3.5 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 transition-all hover:bg-gray-50"
+        >
           ← Back
         </button>
-        <button onClick={onSubmit} disabled={isSubmitting}
-          className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95 disabled:opacity-70 flex items-center justify-center gap-2"
-          style={{ background: "#FFA500", color: "#111827" }}>
-          {isSubmitting ? (
-            <><svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Submitting…</>
-          ) : "Submit Application ✓"}
+        <button
+          onClick={onNext}
+          className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95"
+          style={{ background: "#FFA500", color: "#111827" }}
+        >
+          Proceed to Sign Documents →
         </button>
       </div>
     </div>

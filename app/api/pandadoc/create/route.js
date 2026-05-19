@@ -1,0 +1,132 @@
+import { NextResponse } from 'next/server';
+import connectDB from '@/lib/mongodb';
+import Draft from '@/models/Draft';
+
+const PANDADOC_API_KEY = process.env.PANDADOC_API_KEY;
+const SERVICE_AGREEMENT_TEMPLATE_ID = process.env.PANDADOC_SERVICE_AGREEMENT_TEMPLATE_ID;
+const LOA_TEMPLATE_ID = process.env.PANDADOC_LOA_TEMPLATE_ID;
+function buildRecipient(formData) {
+  const isCompany = formData.type === 'company';
+  return {
+    email: isCompany ? formData.signatoryEmail : formData.officialEmail || formData.email,
+    first_name: isCompany ? formData.signatoryName.split(' ')[0] : formData.individualName.split(' ')[0],
+    last_name: isCompany
+      ? formData.signatoryName.split(' ').slice(1).join(' ') || '-'
+      : formData.individualName.split(' ').slice(1).join(' ') || '-',
+    role: 'Client',
+  };
+}
+
+function buildTokens(formData) {
+  const isCompany = formData.type === 'company';
+  return [
+    { name: 'Client.Name', value: isCompany ? formData.companyName : formData.individualName },
+    { name: 'Client.Email', value: isCompany ? formData.signatoryEmail : formData.officialEmail },
+    { name: 'Client.Type', value: formData.type },
+    { name: 'Client.Country', value: formData.country },
+    { name: 'Client.Address', value: isCompany ? formData.companyRegisteredAddress : formData.registeredAddress },
+    { name: 'Client.Services', value: formData.services.join(', ') },
+    { name: 'Signatory.Name', value: isCompany ? formData.signatoryName : formData.individualName },
+    { name: 'Signatory.Designation', value: isCompany ? formData.signatoryDesignation : formData.designation },
+  ];
+}
+
+async function createPandaDocDocument(templateId, formData, name) {
+  const recipient = buildRecipient(formData);
+  const body = {
+    name,
+    template_uuid: templateId,
+    recipients: [recipient],
+    tokens: buildTokens(formData),
+    fields: {},
+  };
+
+  const res = await fetch('https://api.pandadoc.com/public/v1/documents', {
+    method: 'POST',
+    headers: {
+      Authorization: `API-Key ${PANDADOC_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`PandaDoc document creation failed: ${err}`);
+  }
+  return res.json();
+}
+
+async function getSigningSession(documentId, recipientEmail) {
+  // Wait briefly for document to be ready
+  await new Promise((r) => setTimeout(r, 3000));
+
+  const res = await fetch(`https://api.pandadoc.com/public/v1/documents/${documentId}/session`, {
+    method: 'POST',
+    headers: {
+      Authorization: `API-Key ${PANDADOC_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      signer: recipientEmail,
+      lifetime: 3600,
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Failed to create signing session: ${err}`);
+  }
+  return res.json();
+}
+
+export async function POST(request) {
+  try {
+    const { sessionId, formData } = await request.json();
+
+    if (!PANDADOC_API_KEY) {
+      return NextResponse.json(
+        { error: 'PANDADOC_API_KEY not configured', notConfigured: true },
+        { status: 503 }
+      );
+    }
+    if (!SERVICE_AGREEMENT_TEMPLATE_ID || !LOA_TEMPLATE_ID) {
+      return NextResponse.json(
+        { error: 'PandaDoc template IDs not configured', notConfigured: true },
+        { status: 503 }
+      );
+    }
+
+    const isCompany = formData.type === 'company';
+    const clientName = isCompany ? formData.companyName : formData.individualName;
+    const recipientEmail = isCompany ? formData.signatoryEmail : formData.officialEmail || formData.email;
+
+    const [saDoc, loaDoc] = await Promise.all([
+      createPandaDocDocument(SERVICE_AGREEMENT_TEMPLATE_ID, formData, `Service Agreement – ${clientName}`),
+      createPandaDocDocument(LOA_TEMPLATE_ID, formData, `Letter of Authorization – ${clientName}`),
+    ]);
+
+    // Get signing session for the service agreement (primary document)
+    const session = await getSigningSession(saDoc.id, recipientEmail);
+
+    await connectDB();
+    await Draft.findOneAndUpdate(
+      { sessionId },
+      {
+        pandadocDocumentId: saDoc.id,
+        status: 'signing',
+        lastActiveAt: new Date(),
+      }
+    );
+
+    return NextResponse.json({
+      documentId: saDoc.id,
+      loaDocumentId: loaDoc.id,
+      signingUrl: `https://app.pandadoc.com/s/${session.id}`,
+      downloadUrl: `https://api.pandadoc.com/public/v1/documents/${saDoc.id}/download`,
+    });
+  } catch (err) {
+    console.error('PandaDoc create error:', err);
+    return NextResponse.json({ error: err.message || 'Failed to create documents' }, { status: 500 });
+  }
+}

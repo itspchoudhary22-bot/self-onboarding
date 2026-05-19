@@ -33,7 +33,9 @@ const ApplicationSchema = new mongoose.Schema({
   copyrightCertName: { type: String, default: '' },
   copyrightCertBase64: { type: String, default: '' },
   services: { type: [String], required: true },
+  pandadocDocumentId: { type: String, default: '' },
   pandadocStatus: { type: String, default: 'pending' },
+  sessionId: { type: String, default: '' },
   createdAt: { type: Date, default: Date.now },
 });
 

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { FormData, INITIAL_FORM_DATA } from "./formTypes";
 import Step1Basic from "./Step1Basic";
@@ -7,6 +7,7 @@ import Step2Individual from "./Step2Individual";
 import Step2Company from "./Step2Company";
 import Step3Services from "./Step3Services";
 import Step4Review from "./Step4Review";
+import Step5Sign from "./Step5Sign";
 import SuccessScreen from "./SuccessScreen";
 
 const STEPS = (type: string) => [
@@ -14,46 +15,145 @@ const STEPS = (type: string) => [
   { key: 2, label: type === "company" ? "Company Details" : "Your Details" },
   { key: 3, label: "Services" },
   { key: 4, label: "Review" },
+  { key: 5, label: "Sign" },
 ];
+
+const LS_SESSION = "bytescare_session_id";
+const LS_DATA = "bytescare_form_data";
+const LS_STEP = "bytescare_step";
+
+interface ResumeInfo {
+  sessionId: string;
+  step: number;
+  email: string;
+  formData: FormData;
+}
 
 export default function OnboardingPage() {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [documentSigned, setDocumentSigned] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
+  const [sessionId, setSessionId] = useState("");
+  const [resumeInfo, setResumeInfo] = useState<ResumeInfo | null>(null);
+  const [showResumeBanner, setShowResumeBanner] = useState(false);
+  const draftTimer = useRef<NodeJS.Timeout>();
 
-  const update = (fields: Partial<FormData>) =>
-    setFormData((prev) => ({ ...prev, ...fields }));
+  // Initialize session on mount
+  useEffect(() => {
+    const savedId = localStorage.getItem(LS_SESSION);
+    const savedStep = localStorage.getItem(LS_STEP);
+    const savedData = localStorage.getItem(LS_DATA);
 
-  const steps = STEPS(formData.type);
-  const currentIdx = steps.findIndex((s) => s.key === step);
+    if (savedId && savedData) {
+      try {
+        const parsed: FormData = JSON.parse(savedData);
+        if (parsed.email) {
+          setResumeInfo({
+            sessionId: savedId,
+            step: parseInt(savedStep || "1"),
+            email: parsed.email,
+            formData: parsed,
+          });
+          setShowResumeBanner(true);
+          return;
+        }
+      } catch {}
+    }
+
+    // No saved session — create new
+    const newId = crypto.randomUUID();
+    localStorage.setItem(LS_SESSION, newId);
+    setSessionId(newId);
+    setFormData((p) => ({ ...p, sessionId: newId }));
+  }, []);
+
+  const saveDraftToServer = useCallback(async (data: FormData, currentStep: number, sid: string) => {
+    if (!sid || !data.email) return;
+    try {
+      await fetch("/api/draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId: sid, step: currentStep, formData: data }),
+      });
+    } catch {}
+  }, []);
+
+  const update = useCallback((fields: Partial<FormData>) => {
+    setFormData((prev) => {
+      const next = { ...prev, ...fields };
+      if (typeof window !== "undefined") {
+        localStorage.setItem(LS_DATA, JSON.stringify(next));
+      }
+      clearTimeout(draftTimer.current);
+      draftTimer.current = setTimeout(() => {
+        setStep((s) => { saveDraftToServer(next, s, sessionId); return s; });
+      }, 3000);
+      return next;
+    });
+  }, [saveDraftToServer, sessionId]);
 
   const goNext = () => {
-    const next = steps[currentIdx + 1];
-    if (next) setStep(next.key);
+    setStep((prev) => {
+      const nextStep = prev + 1;
+      if (typeof window !== "undefined") {
+        localStorage.setItem(LS_STEP, String(nextStep));
+      }
+      saveDraftToServer(formData, nextStep, sessionId);
+      return nextStep;
+    });
   };
 
-  const goBack = () => {
-    const prev = steps[currentIdx - 1];
-    if (prev) setStep(prev.key);
+  const goBack = () => setStep((p) => Math.max(1, p - 1));
+
+  const goToStep = (key: number) => {
+    setStep(key);
+    localStorage.setItem(LS_STEP, String(key));
   };
 
-  const goToStep = (key: number) => setStep(key);
+  const handleResume = () => {
+    if (!resumeInfo) return;
+    const { sessionId: sid, step: savedStep, formData: savedData } = resumeInfo;
+    localStorage.setItem(LS_SESSION, sid);
+    setSessionId(sid);
+    setFormData({ ...savedData, sessionId: sid });
+    setStep(Math.min(savedStep, 4)); // Don't resume into signing step
+    setShowResumeBanner(false);
+  };
 
-  const handleSubmit = async () => {
+  const handleStartFresh = () => {
+    localStorage.removeItem(LS_SESSION);
+    localStorage.removeItem(LS_DATA);
+    localStorage.removeItem(LS_STEP);
+    const newId = crypto.randomUUID();
+    localStorage.setItem(LS_SESSION, newId);
+    setSessionId(newId);
+    setFormData({ ...INITIAL_FORM_DATA, sessionId: newId });
+    setStep(1);
+    setShowResumeBanner(false);
+    setResumeInfo(null);
+  };
+
+  const handleSubmit = async (pandadocDocumentId: string) => {
     setIsSubmitting(true);
     setSubmitError("");
+    const sid = sessionId;
     try {
       const res = await fetch("/api/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, sessionId: sid, pandadocDocumentId }),
       });
       const data = await res.json();
       if (!res.ok) {
         setSubmitError(data.error || "Something went wrong. Please try again.");
       } else {
+        localStorage.removeItem(LS_SESSION);
+        localStorage.removeItem(LS_DATA);
+        localStorage.removeItem(LS_STEP);
+        setDocumentSigned(!!pandadocDocumentId);
         setSubmitted(true);
       }
     } catch {
@@ -63,8 +163,10 @@ export default function OnboardingPage() {
     }
   };
 
-  if (submitted) return <SuccessScreen formData={formData} />;
+  if (submitted) return <SuccessScreen formData={formData} documentSigned={documentSigned} />;
 
+  const steps = STEPS(formData.type);
+  const currentIdx = steps.findIndex((s) => s.key === step);
   const totalSteps = steps.length;
   const stepPosition = currentIdx + 1;
 
@@ -78,14 +180,16 @@ export default function OnboardingPage() {
           : <Step2Individual {...common} />;
       case 3: return <Step3Services {...common} />;
       case 4:
+        return <Step4Review formData={formData} onBack={goBack} onNext={goNext} goToStep={goToStep} />;
+      case 5:
         return (
-          <Step4Review
+          <Step5Sign
             formData={formData}
+            sessionId={sessionId}
             onBack={goBack}
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
             submitError={submitError}
-            goToStep={goToStep}
           />
         );
       default: return null;
@@ -104,6 +208,37 @@ export default function OnboardingPage() {
           <span className="text-gray-400 text-sm">Customer Onboarding</span>
         </div>
       </header>
+
+      {/* Resume banner */}
+      {showResumeBanner && resumeInfo && (
+        <div className="bg-amber-50 border-b border-amber-200">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-gray-800">
+                Welcome back! You have an unfinished application.
+              </p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Email: <span className="font-medium">{resumeInfo.email}</span> · Last at Step {resumeInfo.step}
+              </p>
+            </div>
+            <div className="flex gap-2 flex-shrink-0">
+              <button
+                onClick={handleStartFresh}
+                className="text-xs px-3 py-2 rounded-lg border border-gray-300 text-gray-500 hover:bg-white transition-all font-medium"
+              >
+                Start Fresh
+              </button>
+              <button
+                onClick={handleResume}
+                className="text-xs px-4 py-2 rounded-lg font-bold transition-all hover:opacity-90"
+                style={{ background: "#FFA500", color: "#111827" }}
+              >
+                Resume →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className="flex-1 py-8 px-4">
         <div className="max-w-2xl mx-auto">
@@ -161,19 +296,20 @@ export default function OnboardingPage() {
           </div>
 
           {/* Form Card */}
-          <div
-            key={step}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8"
-          >
+          <div key={step} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
             {renderStep()}
           </div>
+
+          {/* Auto-save indicator */}
+          {formData.email && (
+            <p className="text-center text-xs text-gray-400 mt-3">
+              💾 Progress saved automatically
+            </p>
+          )}
         </div>
       </main>
 
-      <div
-        className="h-1.5"
-        style={{ background: "linear-gradient(90deg, #FFA500, #7C3AED)" }}
-      />
+      <div className="h-1.5" style={{ background: "linear-gradient(90deg, #FFA500, #7C3AED)" }} />
     </div>
   );
 }

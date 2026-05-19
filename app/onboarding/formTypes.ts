@@ -3,6 +3,7 @@ export interface FormData {
   email: string;
   type: 'individual' | 'company' | '';
   country: string;
+  sessionId: string;
 
   // Individual - Step 2
   individualName: string;
@@ -41,7 +42,7 @@ export interface FormData {
 }
 
 export const INITIAL_FORM_DATA: FormData = {
-  email: '', type: '', country: '',
+  email: '', type: '', country: '', sessionId: '',
   individualName: '', nationalIdNumber: '', idProofBase64: '', idProofName: '',
   contactNumber: '', registeredAddress: '', pincode: '', mailingAddress: '',
   officialEmail: '', designation: '', workDescription: '', socialMediaHandles: '',
