@@ -9,22 +9,22 @@ interface Props {
   onBack: () => void;
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionDivider({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-3 mb-4 mt-7 first:mt-0">
-      <span className="text-xs font-bold uppercase tracking-widest text-gray-400">{children}</span>
-      <div className="flex-1 h-px bg-gray-100" />
+    <div className="flex items-center gap-3 mt-8 mb-5">
+      <span className="text-xs font-bold uppercase tracking-widest flex-shrink-0" style={{ color: "#9ca3af" }}>{children}</span>
+      <div className="flex-1" style={{ height: 1, background: "#f0f0f0" }} />
     </div>
   );
 }
 
 function FieldError({ msg }: { msg?: string }) {
   if (!msg) return null;
-  return (
-    <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">
-      <span>⚠</span> {msg}
-    </p>
-  );
+  return <p className="text-xs mt-1.5 flex items-center gap-1" style={{ color: "#ef4444" }}><span>⚠</span> {msg}</p>;
+}
+
+function FieldHint({ children }: { children: React.ReactNode }) {
+  return <p className="text-xs mt-1.5" style={{ color: "#9ca3af" }}>{children}</p>;
 }
 
 interface FileUploadProps {
@@ -38,87 +38,62 @@ interface FileUploadProps {
 
 function FileUpload({ label, required, fileBase64, fileName, onChange, error }: FileUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
-      onChange(reader.result as string, file.name);
-    };
+    reader.onload = () => onChange(reader.result as string, file.name);
     reader.readAsDataURL(file);
   };
-
-  const handleRemove = () => {
-    onChange("", "");
-    if (inputRef.current) inputRef.current.value = "";
-  };
-
   return (
     <div>
-      <label className="block text-sm font-semibold mb-1.5 text-gray-700">
+      <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
         {label} {required && <span style={{ color: "#FFA500" }}>*</span>}
       </label>
       {fileBase64 ? (
-        <div className="flex items-center gap-3 px-4 py-3 rounded-xl border-2 border-green-300 bg-green-50">
-          <span className="text-green-600 text-base">✓</span>
-          <span className="text-sm text-green-700 font-medium flex-1 truncate">{fileName}</span>
-          <button
-            type="button"
-            onClick={handleRemove}
-            className="text-xs text-red-500 hover:text-red-700 font-semibold flex-shrink-0"
-          >
-            Remove
-          </button>
+        <div className="flex items-center gap-3 px-4 py-4 rounded-2xl" style={{ border: "2px solid #86efac", background: "#f0fdf4" }}>
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "#22c55e" }}>
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold truncate" style={{ color: "#166534" }}>{fileName}</p>
+            <p className="text-xs" style={{ color: "#4ade80" }}>Uploaded successfully</p>
+          </div>
+          <button type="button" onClick={() => { onChange("", ""); if (inputRef.current) inputRef.current.value = ""; }}
+            className="text-xs font-semibold flex-shrink-0 px-3 py-1.5 rounded-lg transition-all hover:bg-red-50"
+            style={{ color: "#ef4444" }}>Remove</button>
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          className="w-full flex flex-col items-center gap-2 px-4 py-5 rounded-xl border-2 border-dashed transition-all hover:border-amber-400 hover:bg-amber-50"
-          style={{ borderColor: error ? "#ef4444" : "#d1d5db" }}
-        >
-          <span className="text-2xl">📎</span>
-          <span className="text-sm font-medium text-gray-500">
-            Drop file here or <span style={{ color: "#FFA500" }} className="font-semibold">Browse files</span>
+        <button type="button" onClick={() => inputRef.current?.click()}
+          className="w-full flex flex-col items-center gap-2 px-4 py-7 rounded-2xl border-2 border-dashed transition-all hover:bg-amber-50"
+          style={{ borderColor: error ? "#ef4444" : "#e5e7eb" }}
+          onMouseEnter={(e) => { if (!error) (e.currentTarget as HTMLElement).style.borderColor = "#FFA500"; }}
+          onMouseLeave={(e) => { if (!error) (e.currentTarget as HTMLElement).style.borderColor = "#e5e7eb"; }}>
+          <span className="text-3xl">📎</span>
+          <span className="text-sm font-semibold" style={{ color: "#374151" }}>
+            Drop file here or <span style={{ color: "#FFA500" }}>Browse files</span>
           </span>
-          <span className="text-xs text-gray-400">PDF or image files accepted</span>
+          <span className="text-xs" style={{ color: "#9ca3af" }}>PDF or image accepted</span>
         </button>
       )}
-      <input
-        ref={inputRef}
-        type="file"
-        accept="application/pdf,image/*"
-        onChange={handleFile}
-        className="hidden"
-      />
+      <input ref={inputRef} type="file" accept="application/pdf,image/*" onChange={handleFile} className="hidden" />
       {error && <FieldError msg={error} />}
     </div>
   );
 }
 
-type ErrorKeys =
-  | "individualName"
-  | "nationalIdNumber"
-  | "idProof"
-  | "registeredAddress"
-  | "pincode"
-  | "mailingAddress"
-  | "officialEmail"
-  | "designation"
-  | "workDescription"
-  | "socialMediaHandles";
+type EK = "individualName"|"nationalIdNumber"|"idProof"|"registeredAddress"|"pincode"|"mailingAddress"|"officialEmail"|"designation"|"workDescription"|"socialMediaHandles";
+type Errors = Partial<Record<EK, string>>;
 
-type Errors = Partial<Record<ErrorKeys, string>>;
-
-const inputCls =
-  "w-full px-4 py-3 rounded-xl border-2 text-gray-800 placeholder-gray-400 text-sm transition-all duration-200 outline-none bg-white";
-const textareaCls =
-  "w-full px-4 py-3 rounded-xl border-2 text-gray-800 placeholder-gray-400 text-sm transition-all duration-200 outline-none bg-white resize-none";
-
-function isValidEmail(e: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-}
+const inp = "w-full px-4 py-3.5 rounded-xl border-2 text-sm transition-all duration-200 outline-none bg-white";
+const tea = "w-full px-4 py-3.5 rounded-xl border-2 text-sm transition-all duration-200 outline-none bg-white resize-none";
+const bs = (err?: string) => ({ style: { borderColor: err ? "#ef4444" : "#e5e7eb", color: "#111827" } });
+const fo = (err?: string) => ({
+  onFocus: (e: React.FocusEvent<HTMLInputElement|HTMLTextAreaElement>) => (e.target.style.borderColor = err ? "#ef4444" : "#FFA500"),
+  onBlur: (e: React.FocusEvent<HTMLInputElement|HTMLTextAreaElement>) => (e.target.style.borderColor = err ? "#ef4444" : "#e5e7eb"),
+});
 
 export default function Step2Individual({ formData, update, onNext, onBack }: Props) {
   const [errors, setErrors] = useState<Errors>({});
@@ -132,7 +107,7 @@ export default function Step2Individual({ formData, update, onNext, onBack }: Pr
     if (!formData.pincode.trim()) errs.pincode = "Pincode / ZIP is required.";
     if (!formData.mailingAddress.trim()) errs.mailingAddress = "Mailing address is required.";
     if (!formData.officialEmail.trim()) errs.officialEmail = "Official email is required.";
-    else if (!isValidEmail(formData.officialEmail)) errs.officialEmail = "Please enter a valid email.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.officialEmail)) errs.officialEmail = "Please enter a valid email.";
     if (!formData.designation.trim()) errs.designation = "Designation is required.";
     if (!formData.workDescription.trim()) errs.workDescription = "Nature of work is required.";
     if (!formData.socialMediaHandles.trim()) errs.socialMediaHandles = "At least one social media handle or website is required.";
@@ -140,218 +115,152 @@ export default function Step2Individual({ formData, update, onNext, onBack }: Pr
     return Object.keys(errs).length === 0;
   };
 
-  const handleNext = () => { if (validate()) onNext(); };
-
-  const bs = (key: ErrorKeys) => ({
-    style: { borderColor: errors[key] ? "#ef4444" : "#e5e7eb" },
-    onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      (e.target.style.borderColor = errors[key] ? "#ef4444" : "#FFA500"),
-    onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      (e.target.style.borderColor = errors[key] ? "#ef4444" : "#e5e7eb"),
-  });
-
-  const clear = (key: ErrorKeys) => setErrors((p) => ({ ...p, [key]: undefined }));
+  const clr = (k: EK) => setErrors((p) => ({ ...p, [k]: undefined }));
 
   return (
     <div>
-      <div className="mb-5">
-        <h2 className="text-2xl font-black text-gray-900">Personal Details</h2>
-        <p className="text-gray-500 mt-1 text-sm">Your legal information required for documentation</p>
+      <div className="mb-7">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold mb-4"
+          style={{ background: "#fff8e6", color: "#92400e" }}>
+          <span>👤</span> Individual
+        </div>
+        <h2 className="text-2xl sm:text-3xl font-black tracking-tight mb-2" style={{ color: "#111827", letterSpacing: "-0.02em" }}>
+          Personal Details
+        </h2>
+        <p className="text-sm sm:text-base" style={{ color: "#9ca3af" }}>Your legal information required for documentation.</p>
       </div>
 
       {/* Identity & Legal */}
-      <SectionLabel>Identity &amp; Legal</SectionLabel>
-      <div className="space-y-4">
+      <SectionDivider>Identity &amp; Legal</SectionDivider>
+      <div className="flex flex-col gap-5">
         <div>
-          <label className="block text-sm font-semibold mb-1.5 text-gray-700">
-            Full Legal Name <span style={{ color: "#FFA500" }}>*</span>
-          </label>
-          <input
-            type="text"
-            placeholder="As on Aadhaar / PAN / Passport"
-            value={formData.individualName}
-            onChange={(e) => { update({ individualName: e.target.value }); clear("individualName"); }}
-            className={inputCls}
-            {...bs("individualName")}
-          />
+          <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>Full Legal Name <span style={{ color: "#FFA500" }}>*</span></label>
+          <input type="text" placeholder="As on Aadhaar / PAN / Passport" value={formData.individualName}
+            onChange={(e) => { update({ individualName: e.target.value }); clr("individualName"); }}
+            className={inp} {...bs(errors.individualName)} {...fo(errors.individualName)} />
           <FieldError msg={errors.individualName} />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1.5 text-gray-700">
-            National ID Number <span style={{ color: "#FFA500" }}>*</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Aadhaar Number, PAN, etc."
-            value={formData.nationalIdNumber}
-            onChange={(e) => { update({ nationalIdNumber: e.target.value }); clear("nationalIdNumber"); }}
-            className={inputCls}
-            {...bs("nationalIdNumber")}
-          />
+          <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>National ID Number <span style={{ color: "#FFA500" }}>*</span></label>
+          <input type="text" placeholder="Aadhaar, PAN, Passport No." value={formData.nationalIdNumber}
+            onChange={(e) => { update({ nationalIdNumber: e.target.value }); clr("nationalIdNumber"); }}
+            className={inp} {...bs(errors.nationalIdNumber)} {...fo(errors.nationalIdNumber)} />
           <FieldError msg={errors.nationalIdNumber} />
         </div>
 
-        <FileUpload
-          label="Upload National ID Proof"
-          required
-          fileBase64={formData.idProofBase64}
-          fileName={formData.idProofName}
-          onChange={(base64, name) => { update({ idProofBase64: base64, idProofName: name }); clear("idProof"); }}
-          error={errors.idProof}
-        />
+        <FileUpload label="Upload National ID Proof" required
+          fileBase64={formData.idProofBase64} fileName={formData.idProofName}
+          onChange={(b, n) => { update({ idProofBase64: b, idProofName: n }); clr("idProof"); }}
+          error={errors.idProof} />
       </div>
 
       {/* Contact & Address */}
-      <SectionLabel>Contact &amp; Address</SectionLabel>
-      <div className="space-y-4">
+      <SectionDivider>Contact &amp; Address</SectionDivider>
+      <div className="flex flex-col gap-5">
         <div>
-          <label className="block text-sm font-semibold mb-1.5 text-gray-700">
-            Contact Number <span className="font-normal text-gray-400">(optional)</span>
+          <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
+            Contact Number <span className="font-normal" style={{ color: "#9ca3af" }}>(optional)</span>
           </label>
-          <input
-            type="tel"
-            placeholder="+91 98765 43210"
-            value={formData.contactNumber}
+          <input type="tel" placeholder="+91 98765 43210" value={formData.contactNumber}
             onChange={(e) => update({ contactNumber: e.target.value })}
-            className={inputCls}
-            style={{ borderColor: "#e5e7eb" }}
+            className={inp} style={{ borderColor: "#e5e7eb", color: "#111827" }}
             onFocus={(e) => (e.target.style.borderColor = "#FFA500")}
-            onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
-          />
+            onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")} />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1.5 text-gray-700">
-            Registered Address <span style={{ color: "#FFA500" }}>*</span>
-          </label>
-          <textarea
-            rows={3}
-            placeholder="House No., Building, Street, City, District, State, Pincode, Country"
+          <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>Registered Address <span style={{ color: "#FFA500" }}>*</span></label>
+          <textarea rows={3} placeholder="House No., Building, Street, City, District, State, Pincode, Country"
             value={formData.registeredAddress}
-            onChange={(e) => { update({ registeredAddress: e.target.value }); clear("registeredAddress"); }}
-            className={textareaCls}
-            {...bs("registeredAddress")}
-          />
-          <p className="text-xs text-gray-400 mt-1">Format: House No., Building, Street, City, District, State, Pincode, Country</p>
+            onChange={(e) => { update({ registeredAddress: e.target.value }); clr("registeredAddress"); }}
+            className={tea} {...bs(errors.registeredAddress)} {...fo(errors.registeredAddress)} />
+          <FieldHint>Format: House No., Building, Street, City, District, State, Pincode, Country</FieldHint>
           <FieldError msg={errors.registeredAddress} />
         </div>
 
-        <div>
-          <label className="block text-sm font-semibold mb-1.5 text-gray-700">
-            Pincode / ZIP <span style={{ color: "#FFA500" }}>*</span>
-          </label>
-          <input
-            type="text"
-            placeholder="110001"
-            value={formData.pincode}
-            onChange={(e) => { update({ pincode: e.target.value }); clear("pincode"); }}
-            className={inputCls}
-            {...bs("pincode")}
-          />
-          <FieldError msg={errors.pincode} />
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>Pincode / ZIP <span style={{ color: "#FFA500" }}>*</span></label>
+            <input type="text" placeholder="110001" value={formData.pincode}
+              onChange={(e) => { update({ pincode: e.target.value }); clr("pincode"); }}
+              className={inp} {...bs(errors.pincode)} {...fo(errors.pincode)} />
+            <FieldError msg={errors.pincode} />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>City</label>
+            <input type="text" placeholder="Mumbai" value=""
+              onChange={() => {}}
+              className={inp} style={{ borderColor: "#e5e7eb", color: "#111827" }}
+              onFocus={(e) => (e.target.style.borderColor = "#FFA500")}
+              onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")} />
+          </div>
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1.5 text-gray-700">
-            Mailing Address <span style={{ color: "#FFA500" }}>*</span>
-          </label>
-          <textarea
-            rows={3}
-            placeholder="Type 'Same' if identical to registered address"
+          <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>Mailing Address <span style={{ color: "#FFA500" }}>*</span></label>
+          <textarea rows={2} placeholder="Type 'Same' if identical to registered address"
             value={formData.mailingAddress}
-            onChange={(e) => { update({ mailingAddress: e.target.value }); clear("mailingAddress"); }}
-            className={textareaCls}
-            {...bs("mailingAddress")}
-          />
-          <p className="text-xs text-gray-400 mt-1">Type &apos;Same&apos; if identical to registered address</p>
+            onChange={(e) => { update({ mailingAddress: e.target.value }); clr("mailingAddress"); }}
+            className={tea} {...bs(errors.mailingAddress)} {...fo(errors.mailingAddress)} />
+          <FieldHint>Type &apos;Same&apos; if identical to registered address</FieldHint>
           <FieldError msg={errors.mailingAddress} />
         </div>
       </div>
 
       {/* Professional Information */}
-      <SectionLabel>Professional Information</SectionLabel>
-      <div className="space-y-4">
+      <SectionDivider>Professional Information</SectionDivider>
+      <div className="flex flex-col gap-5">
         <div>
-          <label className="block text-sm font-semibold mb-1.5 text-gray-700">
-            Official Email Address <span style={{ color: "#FFA500" }}>*</span>
-          </label>
-          <input
-            type="email"
-            placeholder="your@email.com"
-            value={formData.officialEmail}
-            onChange={(e) => { update({ officialEmail: e.target.value }); clear("officialEmail"); }}
-            className={inputCls}
-            {...bs("officialEmail")}
-          />
+          <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>Official Email Address <span style={{ color: "#FFA500" }}>*</span></label>
+          <input type="email" placeholder="your@email.com" value={formData.officialEmail}
+            onChange={(e) => { update({ officialEmail: e.target.value }); clr("officialEmail"); }}
+            className={inp} {...bs(errors.officialEmail)} {...fo(errors.officialEmail)} />
           <FieldError msg={errors.officialEmail} />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1.5 text-gray-700">
-            Designation <span style={{ color: "#FFA500" }}>*</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Content Creator, Proprietor, Social Media Influencer, Director, etc."
-            value={formData.designation}
-            onChange={(e) => { update({ designation: e.target.value }); clear("designation"); }}
-            className={inputCls}
-            {...bs("designation")}
-          />
+          <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>Designation <span style={{ color: "#FFA500" }}>*</span></label>
+          <input type="text" placeholder="Content Creator, Proprietor, Director…" value={formData.designation}
+            onChange={(e) => { update({ designation: e.target.value }); clr("designation"); }}
+            className={inp} {...bs(errors.designation)} {...fo(errors.designation)} />
           <FieldError msg={errors.designation} />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1.5 text-gray-700">
-            Nature of Work <span style={{ color: "#FFA500" }}>*</span>
-          </label>
-          <textarea
-            rows={3}
-            placeholder="Describe your work briefly"
+          <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>Nature of Work <span style={{ color: "#FFA500" }}>*</span></label>
+          <textarea rows={3} placeholder="Describe your work briefly…"
             value={formData.workDescription}
-            onChange={(e) => { update({ workDescription: e.target.value }); clear("workDescription"); }}
-            className={textareaCls}
-            {...bs("workDescription")}
-          />
+            onChange={(e) => { update({ workDescription: e.target.value }); clr("workDescription"); }}
+            className={tea} {...bs(errors.workDescription)} {...fo(errors.workDescription)} />
           <FieldError msg={errors.workDescription} />
         </div>
       </div>
 
       {/* Online Presence */}
-      <SectionLabel>Online Presence</SectionLabel>
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-semibold mb-1.5 text-gray-700">
-            Official Social Media Handles <span style={{ color: "#FFA500" }}>*</span>
-          </label>
-          <textarea
-            rows={5}
-            placeholder={"Instagram Handle: @handle\nLink: https://instagram.com/handle\n\nYouTube: @handle\nLink: https://youtube.com/channel"}
-            value={formData.socialMediaHandles}
-            onChange={(e) => { update({ socialMediaHandles: e.target.value }); clear("socialMediaHandles"); }}
-            className={textareaCls}
-            {...bs("socialMediaHandles")}
-          />
-          <p className="text-xs text-gray-400 mt-1">
-            Format — Instagram Handle: @handle | Link: https://instagram.com/handle
-          </p>
-          <FieldError msg={errors.socialMediaHandles} />
-        </div>
+      <SectionDivider>Online Presence</SectionDivider>
+      <div>
+        <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
+          Social Media Handles <span style={{ color: "#FFA500" }}>*</span>
+        </label>
+        <textarea rows={5}
+          placeholder={"Instagram: @handle\nLink: https://instagram.com/handle\n\nYouTube: @handle\nLink: https://youtube.com/channel"}
+          value={formData.socialMediaHandles}
+          onChange={(e) => { update({ socialMediaHandles: e.target.value }); clr("socialMediaHandles"); }}
+          className={tea} {...bs(errors.socialMediaHandles)} {...fo(errors.socialMediaHandles)} />
+        <FieldHint>Format — Platform: @handle | Link: https://…</FieldHint>
+        <FieldError msg={errors.socialMediaHandles} />
       </div>
 
-      <div className="flex gap-3 mt-8">
-        <button
-          onClick={onBack}
-          className="flex-1 py-3.5 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 transition-all hover:bg-gray-50"
-        >
+      <div className="flex gap-3 mt-9">
+        <button onClick={onBack}
+          className="flex-1 py-4 rounded-2xl font-semibold text-sm transition-all hover:bg-gray-50"
+          style={{ border: "2px solid #e5e7eb", color: "#6b7280" }}>
           ← Back
         </button>
-        <button
-          onClick={handleNext}
-          className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95"
-          style={{ background: "#FFA500", color: "#111827" }}
-        >
+        <button onClick={() => { if (validate()) onNext(); }}
+          className="py-4 rounded-2xl font-extrabold text-sm transition-all hover:opacity-90 active:scale-95"
+          style={{ flex: 2, background: "#FFA500", color: "#111827", boxShadow: "0 4px 14px rgba(255,165,0,0.3)" }}>
           Continue →
         </button>
       </div>

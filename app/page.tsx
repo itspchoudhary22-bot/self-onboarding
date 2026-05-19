@@ -1,98 +1,128 @@
 "use client";
-
 import Link from "next/link";
+
+const STEPS = [
+  { n: 1, title: "Basic Information", sub: "Email, type, country", time: "~1 min" },
+  { n: 2, title: "Personal / Company Details", sub: "ID, address, documents", time: "~3 min" },
+  { n: 3, title: "Select Services", sub: "Choose your protection plan", time: "~1 min" },
+  { n: 4, title: "Review & Sign Documents", sub: "Verify and sign digitally", time: "~2 min" },
+];
+
+const CHECKLIST = [
+  "Government-issued identity verification",
+  "Registered business or personal address",
+  "Contact number and official email",
+  "Social media handles or website",
+  "Digital signature on Service Agreement & LOA",
+];
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* Nav - matches bytescare.com white nav */}
-      <nav className="border-b border-gray-100 bg-white">
+    <div className="min-h-screen flex flex-col" style={{ background: "linear-gradient(135deg, #fff8e6 0%, #fff 50%, #f5f3ff 100%)" }}>
+      <nav style={{ background: "rgba(255,255,255,0.85)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(0,0,0,0.06)", position: "sticky", top: 0, zIndex: 40 }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-1 font-black text-2xl tracking-tight select-none">
+          <div className="flex items-center gap-0.5 font-black text-2xl tracking-tight select-none">
             <span style={{ color: "#111827" }}>BYTES</span>
             <span style={{ color: "#FFA500" }}>CARE</span>
           </div>
-          <a
-            href="https://bytescare.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-slate-500 hover:text-slate-700 transition-colors hidden sm:block"
-          >
+          <a href="https://bytescare.com" target="_blank" rel="noopener noreferrer"
+            className="text-sm font-medium hidden sm:block transition-colors"
+            style={{ color: "#9ca3af" }}>
             ← Back to main site
           </a>
         </div>
       </nav>
 
-      {/* Main content - clean and minimal */}
-      <main className="flex-1 flex items-center justify-center px-4 py-16">
-        <div className="max-w-lg w-full text-center">
-          {/* Icon */}
-          <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 shadow-md"
-            style={{ background: "#FFA500" }}
-          >
-            📋
-          </div>
+      <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-14 sm:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-          <h1 className="text-3xl sm:text-4xl font-black text-gray-900 mb-3">
-            Customer Onboarding
-          </h1>
-          <p className="text-gray-500 text-base leading-relaxed mb-8 max-w-md mx-auto">
-            The following information is required to prepare legal documents such as
-            the <strong className="text-gray-700">Authorisation Letter</strong> and{" "}
-            <strong className="text-gray-700">Service Agreement</strong> for your
-            official onboarding with Bytescare.
-          </p>
+          {/* Left */}
+          <div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium mb-7"
+              style={{ background: "#fff", borderColor: "#e5e7eb", color: "#374151", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
+              <span className="w-2 h-2 rounded-full bg-green-400 inline-block" />
+              Takes 5–10 minutes to complete
+            </div>
 
-          {/* Info checklist */}
-          <div className="bg-gray-50 rounded-2xl p-5 mb-8 text-left border border-gray-100">
-            <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">
-              You will need to provide
+            <h1 className="text-4xl sm:text-5xl font-black leading-tight tracking-tight mb-5" style={{ color: "#111827", letterSpacing: "-0.03em" }}>
+              Start Your<br />
+              <span style={{ background: "linear-gradient(135deg, #FFA500, #f97316)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                Bytescare
+              </span>
+              <br />Onboarding
+            </h1>
+
+            <p className="text-base sm:text-lg mb-8 leading-relaxed" style={{ color: "#6b7280", maxWidth: 420 }}>
+              Complete your onboarding to access Bytescare&apos;s full suite of digital protection services. We&apos;ll prepare your legal documents for signing.
             </p>
-            <div className="space-y-2">
-              {[
-                "Valid email address",
-                "Government-issued ID details",
-                "Registered address",
-                "Contact information",
-                "Business / work description",
-                "Social media handles or website",
-              ].map((item) => (
-                <div key={item} className="flex items-center gap-2.5 text-sm text-gray-600">
-                  <span
-                    className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 text-white text-xs font-bold"
-                    style={{ background: "#FFA500" }}
-                  >
-                    ✓
-                  </span>
-                  {item}
+
+            <div className="mb-8" style={{ borderTop: "1px solid #f3f4f6" }}>
+              {CHECKLIST.map((item) => (
+                <div key={item} className="flex items-center gap-3 py-3" style={{ borderBottom: "1px solid #f3f4f6" }}>
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "#FFA500" }}>
+                    <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={3}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span className="text-sm sm:text-base font-medium" style={{ color: "#374151" }}>{item}</span>
                 </div>
               ))}
             </div>
+
+            <Link href="/onboarding"
+              className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-2xl font-extrabold text-base transition-all hover:opacity-90 active:scale-95 w-full sm:w-auto"
+              style={{ background: "#FFA500", color: "#111827", boxShadow: "0 8px 24px rgba(255,165,0,0.35)" }}>
+              Start Onboarding →
+            </Link>
           </div>
 
-          <Link
-            href="/onboarding"
-            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-10 py-4 rounded-xl font-bold text-base transition-all duration-200 hover:opacity-90 active:scale-95 shadow-lg"
-            style={{ background: "#FFA500", color: "#111827" }}
-          >
-            Start Onboarding →
-          </Link>
+          {/* Right – step timeline card */}
+          <div className="hidden lg:block">
+            <div className="rounded-3xl p-8" style={{ background: "#fff", boxShadow: "0 24px 64px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)" }}>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0"
+                  style={{ background: "#FFA500", boxShadow: "0 8px 20px rgba(255,165,0,0.35)" }}>
+                  📋
+                </div>
+                <div>
+                  <p className="font-extrabold text-lg" style={{ color: "#111827" }}>Customer Onboarding</p>
+                  <p className="text-sm" style={{ color: "#9ca3af" }}>4 simple steps to get started</p>
+                </div>
+              </div>
 
-          <p className="text-xs text-gray-400 mt-4">
-            Takes approximately 5–10 minutes to complete
-          </p>
+              <div className="flex flex-col gap-0">
+                {STEPS.map((s, i) => (
+                  <div key={s.n}>
+                    <div className="flex items-center gap-4">
+                      <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
+                        style={{ background: i === 0 ? "#FFA500" : "#f3f4f6", color: i === 0 ? "#111827" : "#9ca3af" }}>
+                        {s.n}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-sm" style={{ color: i === 0 ? "#111827" : "#374151" }}>{s.title}</p>
+                        <p className="text-xs" style={{ color: "#9ca3af" }}>{s.sub}</p>
+                      </div>
+                      <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ background: "#f3f4f6", color: "#9ca3af" }}>{s.time}</span>
+                    </div>
+                    {i < STEPS.length - 1 && (
+                      <div className="ml-4 my-1" style={{ width: 2, height: 20, background: "#f3f4f6", borderRadius: 2 }} />
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-7 flex items-center gap-3 p-4 rounded-2xl" style={{ background: "#f9fafb" }}>
+                <span className="text-xl">🔒</span>
+                <p className="text-sm" style={{ color: "#6b7280" }}>Your data is encrypted and stored securely</p>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
 
-      {/* Minimal gradient footer strip - matches bytescare.com */}
-      <div
-        className="h-2"
-        style={{ background: "linear-gradient(90deg, #FFA500, #7C3AED)" }}
-      />
-
-      <footer className="bg-white py-4 text-center text-xs text-gray-400 border-t border-gray-100">
-        &copy; {new Date().getFullYear()} Bytescare. All rights reserved.
+      <div className="h-1" style={{ background: "linear-gradient(90deg, #FFA500, #7C3AED)" }} />
+      <footer className="py-4 text-center text-xs" style={{ color: "#9ca3af", background: "#fff", borderTop: "1px solid #f3f4f6" }}>
+        © {new Date().getFullYear()} Bytescare. All rights reserved.
       </footer>
     </div>
   );

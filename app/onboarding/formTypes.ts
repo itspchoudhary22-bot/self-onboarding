@@ -37,8 +37,12 @@ export interface FormData {
   copyrightCertBase64: string;
   copyrightCertName: string;
 
+  // Company additional
+  companyOfficialEmail: string;
+
   // Step 3
   services: string[];
+  serviceDetails: Record<string, string>;
 }
 
 export const INITIAL_FORM_DATA: FormData = {
@@ -51,5 +55,7 @@ export const INITIAL_FORM_DATA: FormData = {
   companyMailingAddress: '', companyDescription: '',
   signatoryName: '', signatoryDesignation: '', signatoryEmail: '', companySocialMedia: '',
   copyrightCertBase64: '', copyrightCertName: '',
+  companyOfficialEmail: '',
   services: [],
+  serviceDetails: {},
 };
