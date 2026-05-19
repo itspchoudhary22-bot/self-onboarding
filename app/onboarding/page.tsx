@@ -5,29 +5,15 @@ import { FormData, INITIAL_FORM_DATA } from "./formTypes";
 import Step1Basic from "./Step1Basic";
 import Step2Individual from "./Step2Individual";
 import Step2Company from "./Step2Company";
-import Step3Address from "./Step3Address";
-import Step4Company from "./Step4Company";
-import Step5Services from "./Step5Services";
-import Step6Review from "./Step6Review";
+import Step3Services from "./Step3Services";
+import Step4Review from "./Step4Review";
 import SuccessScreen from "./SuccessScreen";
 
-// Individual: 5 steps (no signatory step)
-// Company:    6 steps
-const IND_STEPS = [
+const STEPS = (type: string) => [
   { key: 1, label: "Basic Info" },
-  { key: 2, label: "Personal Details" },
-  { key: 3, label: "Address" },
-  { key: 5, label: "Services" },
-  { key: 6, label: "Review" },
-];
-
-const CO_STEPS = [
-  { key: 1, label: "Basic Info" },
-  { key: 2, label: "Company Details" },
-  { key: 3, label: "Address" },
-  { key: 4, label: "Signatory" },
-  { key: 5, label: "Services" },
-  { key: 6, label: "Review" },
+  { key: 2, label: type === "company" ? "Company Details" : "Your Details" },
+  { key: 3, label: "Services" },
+  { key: 4, label: "Review" },
 ];
 
 export default function OnboardingPage() {
@@ -40,7 +26,7 @@ export default function OnboardingPage() {
   const update = (fields: Partial<FormData>) =>
     setFormData((prev) => ({ ...prev, ...fields }));
 
-  const steps = formData.type === "company" ? CO_STEPS : IND_STEPS;
+  const steps = STEPS(formData.type);
   const currentIdx = steps.findIndex((s) => s.key === step);
 
   const goNext = () => {
@@ -80,24 +66,35 @@ export default function OnboardingPage() {
   if (submitted) return <SuccessScreen formData={formData} />;
 
   const totalSteps = steps.length;
-  const stepPosition = currentIdx + 1; // 1-based position in current path
+  const stepPosition = currentIdx + 1;
 
   const renderStep = () => {
     const common = { formData, update, onNext: goNext, onBack: goBack };
     switch (step) {
       case 1: return <Step1Basic {...common} />;
-      case 2: return formData.type === "company" ? <Step2Company {...common} /> : <Step2Individual {...common} />;
-      case 3: return <Step3Address {...common} />;
-      case 4: return <Step4Company {...common} />;
-      case 5: return <Step5Services {...common} />;
-      case 6: return <Step6Review formData={formData} onBack={goBack} onSubmit={handleSubmit} isSubmitting={isSubmitting} submitError={submitError} goToStep={goToStep} />;
+      case 2:
+        return formData.type === "company"
+          ? <Step2Company {...common} />
+          : <Step2Individual {...common} />;
+      case 3: return <Step3Services {...common} />;
+      case 4:
+        return (
+          <Step4Review
+            formData={formData}
+            onBack={goBack}
+            onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+            submitError={submitError}
+            goToStep={goToStep}
+          />
+        );
       default: return null;
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "#f9fafb" }}>
-      {/* Header - white, matching bytescare.com */}
+      {/* Header */}
       <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1 font-black text-xl tracking-tight">
@@ -164,13 +161,19 @@ export default function OnboardingPage() {
           </div>
 
           {/* Form Card */}
-          <div key={step} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 animate-fade-in">
+          <div
+            key={step}
+            className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8"
+          >
             {renderStep()}
           </div>
         </div>
       </main>
 
-      <div className="h-1.5" style={{ background: "linear-gradient(90deg, #FFA500, #7C3AED)" }} />
+      <div
+        className="h-1.5"
+        style={{ background: "linear-gradient(90deg, #FFA500, #7C3AED)" }}
+      />
     </div>
   );
 }

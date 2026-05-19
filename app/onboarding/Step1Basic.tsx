@@ -96,7 +96,7 @@ export default function Step1Basic({ formData, update, onNext }: Props) {
               borderColor: errors.email ? "#ef4444" : "#e2e8f0",
               boxShadow: errors.email ? "0 0 0 3px rgba(239,68,68,0.1)" : "none",
             }}
-            onFocus={(e) => (e.target.style.borderColor = errors.email ? "#ef4444" : "#001F3F")}
+            onFocus={(e) => (e.target.style.borderColor = errors.email ? "#ef4444" : "#FFA500")}
             onBlur={(e) => (e.target.style.borderColor = errors.email ? "#ef4444" : "#e2e8f0")}
           />
         </InputField>
@@ -160,7 +160,7 @@ export default function Step1Basic({ formData, update, onNext }: Props) {
               boxShadow: errors.country ? "0 0 0 3px rgba(239,68,68,0.1)" : "none",
             }}
             onFocus={(e) =>
-              (e.target.style.borderColor = errors.country ? "#ef4444" : "#001F3F")
+              (e.target.style.borderColor = errors.country ? "#ef4444" : "#FFA500")
             }
             onBlur={(e) =>
               (e.target.style.borderColor = errors.country ? "#ef4444" : "#e2e8f0")

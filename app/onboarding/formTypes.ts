@@ -3,40 +3,52 @@ export interface FormData {
   email: string;
   type: 'individual' | 'company' | '';
   country: string;
-  // Individual Step 2
+
+  // Individual - Step 2
   individualName: string;
   nationalIdNumber: string;
+  idProofBase64: string;
+  idProofName: string;
   contactNumber: string;
-  officialEmail: string;
-  designation: string;
-  // Company Step 2
-  companyName: string;
-  companyRegNumber: string;
-  gstin: string;
-  companyContact: string;
-  companyDescription: string;
-  // Step 3 Address (shared)
   registeredAddress: string;
   pincode: string;
   mailingAddress: string;
-  // Individual Step 4
+  officialEmail: string;
+  designation: string;
   workDescription: string;
   socialMediaHandles: string;
-  // Company Step 4
+
+  // Company - Step 2
+  companyName: string;
+  companyRegNumber: string;
+  regCertBase64: string;
+  regCertName: string;
+  gstin: string;
+  companyContact: string;
+  companyRegisteredAddress: string;
+  companyPincode: string;
+  companyMailingAddress: string;
+  companyDescription: string;
   signatoryName: string;
   signatoryDesignation: string;
   signatoryEmail: string;
   companySocialMedia: string;
-  // Step 5
+  copyrightCertBase64: string;
+  copyrightCertName: string;
+
+  // Step 3
   services: string[];
 }
 
 export const INITIAL_FORM_DATA: FormData = {
   email: '', type: '', country: '',
-  individualName: '', nationalIdNumber: '', contactNumber: '', officialEmail: '', designation: '',
-  companyName: '', companyRegNumber: '', gstin: '', companyContact: '', companyDescription: '',
-  registeredAddress: '', pincode: '', mailingAddress: '',
-  workDescription: '', socialMediaHandles: '',
+  individualName: '', nationalIdNumber: '', idProofBase64: '', idProofName: '',
+  contactNumber: '', registeredAddress: '', pincode: '', mailingAddress: '',
+  officialEmail: '', designation: '', workDescription: '', socialMediaHandles: '',
+  companyName: '', companyRegNumber: '', regCertBase64: '', regCertName: '',
+  gstin: '', companyContact: '', companyRegisteredAddress: '', companyPincode: '',
+  companyMailingAddress: '', companyDescription: '',
   signatoryName: '', signatoryDesignation: '', signatoryEmail: '', companySocialMedia: '',
+  copyrightCertBase64: '', copyrightCertName: '',
   services: [],
 };
