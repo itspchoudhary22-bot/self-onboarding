@@ -53,20 +53,32 @@ async function createPandaDocDocument(templateId, formData, name) {
     silent: true,
   };
 
-  const res = await fetch('https://api.pandadoc.com/public/v1/documents', {
-    method: 'POST',
-    headers: {
-      Authorization: `API-Key ${PANDADOC_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const res = await fetch('https://api.pandadoc.com/public/v1/documents', {
+      method: 'POST',
+      headers: {
+        Authorization: `API-Key ${PANDADOC_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
 
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`PandaDoc document creation failed: ${err}`);
+    if (res.status === 429) {
+      const text = await res.text();
+      const match = text.match(/(\d+)\s*second/);
+      const wait = match ? parseInt(match[1]) * 1000 : 5000;
+      await new Promise((r) => setTimeout(r, wait + 500));
+      continue;
+    }
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(`PandaDoc document creation failed: ${err}`);
+    }
+    return res.json();
   }
-  return res.json();
+
+  throw new Error('PandaDoc rate limit exceeded after retries. Please try again in a moment.');
 }
 
 async function getSigningSession(documentId, recipientEmail) {
@@ -113,10 +125,8 @@ export async function POST(request) {
     const clientName = isCompany ? formData.companyName : formData.individualName;
     const recipientEmail = isCompany ? formData.signatoryEmail : formData.officialEmail || formData.email;
 
-    const [saDoc, loaDoc] = await Promise.all([
-      createPandaDocDocument(SERVICE_AGREEMENT_TEMPLATE_ID, formData, `Service Agreement – ${clientName}`),
-      createPandaDocDocument(LOA_TEMPLATE_ID, formData, `Letter of Authorization – ${clientName}`),
-    ]);
+    const saDoc = await createPandaDocDocument(SERVICE_AGREEMENT_TEMPLATE_ID, formData, `Service Agreement – ${clientName}`);
+    const loaDoc = await createPandaDocDocument(LOA_TEMPLATE_ID, formData, `Letter of Authorization – ${clientName}`);
 
     // Get signing session for the service agreement (primary document)
     const session = await getSigningSession(saDoc.id, recipientEmail);

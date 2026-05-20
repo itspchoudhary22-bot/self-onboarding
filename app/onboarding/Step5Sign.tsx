@@ -61,6 +61,8 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
   }, []);
 
   const createDocuments = async () => {
+    setStatus("creating");
+    setError("");
     try {
       const res = await fetch("/api/pandadoc/create", {
         method: "POST",
