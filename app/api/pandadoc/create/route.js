@@ -11,22 +11,31 @@ const SIGNER_EMAIL = process.env.PANDADOC_SIGNER_EMAIL || process.env.OPS_EMAIL;
 const SIGNER_FIRST = process.env.PANDADOC_SIGNER_FIRST_NAME || 'Bytescare';
 const SIGNER_LAST = process.env.PANDADOC_SIGNER_LAST_NAME || 'Team';
 
-function buildRecipients(formData) {
+function buildClientRecipient(formData) {
   const isCompany = formData.type === 'company';
   const clientEmail = isCompany ? formData.signatoryEmail : formData.officialEmail || formData.email;
   const clientFullName = isCompany ? formData.signatoryName : formData.individualName;
   const [clientFirst, ...rest] = clientFullName.split(' ');
   const clientLast = rest.join(' ') || '-';
+  return { email: clientEmail, first_name: clientFirst, last_name: clientLast, role: CLIENT_ROLE };
+}
 
-  const recipients = [
-    { email: clientEmail, first_name: clientFirst, last_name: clientLast, role: CLIENT_ROLE },
-  ];
+function buildSignerRecipient() {
+  if (!SIGNER_EMAIL) return null;
+  return { email: SIGNER_EMAIL, first_name: SIGNER_FIRST, last_name: SIGNER_LAST, role: SIGNER_ROLE };
+}
 
-  if (SIGNER_EMAIL) {
-    recipients.push({ email: SIGNER_EMAIL, first_name: SIGNER_FIRST, last_name: SIGNER_LAST, role: SIGNER_ROLE });
-  }
-
+// SA has both Client + Sender roles; LOA has only Sender role
+function buildRecipientsForSA(formData) {
+  const recipients = [buildClientRecipient(formData)];
+  const signer = buildSignerRecipient();
+  if (signer) recipients.push(signer);
   return recipients;
+}
+
+function buildRecipientsForLOA() {
+  const signer = buildSignerRecipient();
+  return signer ? [signer] : [];
 }
 
 function buildTokens(formData) {
@@ -43,12 +52,12 @@ function buildTokens(formData) {
   ];
 }
 
-async function createPandaDocDocument(templateId, formData, name) {
+async function createPandaDocDocument(templateId, recipients, tokens, name) {
   const body = {
     name,
     template_uuid: templateId,
-    recipients: buildRecipients(formData),
-    tokens: buildTokens(formData),
+    recipients,
+    tokens,
     fields: {},
     silent: true,
   };
@@ -125,8 +134,9 @@ export async function POST(request) {
     const clientName = isCompany ? formData.companyName : formData.individualName;
     const recipientEmail = isCompany ? formData.signatoryEmail : formData.officialEmail || formData.email;
 
-    const saDoc = await createPandaDocDocument(SERVICE_AGREEMENT_TEMPLATE_ID, formData, `Service Agreement – ${clientName}`);
-    const loaDoc = await createPandaDocDocument(LOA_TEMPLATE_ID, formData, `Letter of Authorization – ${clientName}`);
+    const tokens = buildTokens(formData);
+    const saDoc = await createPandaDocDocument(SERVICE_AGREEMENT_TEMPLATE_ID, buildRecipientsForSA(formData), tokens, `Service Agreement – ${clientName}`);
+    const loaDoc = await createPandaDocDocument(LOA_TEMPLATE_ID, buildRecipientsForLOA(), tokens, `Letter of Authorization – ${clientName}`);
 
     // Get signing session for the service agreement (primary document)
     const session = await getSigningSession(saDoc.id, recipientEmail);
