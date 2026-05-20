@@ -32,6 +32,7 @@ const blurGray = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>, err
 
 export default function Step1Basic({ formData, update, onNext }: Props) {
   const [errors, setErrors] = useState<{ email?: string; type?: string; country?: string }>({});
+  const [checking, setChecking] = useState(false);
 
   const validate = () => {
     const errs: typeof errors = {};
@@ -41,6 +42,24 @@ export default function Step1Basic({ formData, update, onNext }: Props) {
     if (!formData.country) errs.country = "Please select your country.";
     setErrors(errs);
     return Object.keys(errs).length === 0;
+  };
+
+  const handleNext = async () => {
+    if (!validate()) return;
+    setChecking(true);
+    try {
+      const res = await fetch(`/api/check-email?email=${encodeURIComponent(formData.email)}`);
+      const { exists } = await res.json();
+      if (exists) {
+        setErrors((p) => ({ ...p, email: "An application with this email already exists. Please contact support if you need help." }));
+        return;
+      }
+    } catch {
+      // If check fails, allow proceeding — submit will catch duplicates
+    } finally {
+      setChecking(false);
+    }
+    onNext();
   };
 
   const clr = (k: keyof typeof errors) => setErrors((p) => ({ ...p, [k]: undefined }));
@@ -139,10 +158,19 @@ export default function Step1Basic({ formData, update, onNext }: Props) {
       </div>
 
       <button
-        onClick={() => { if (validate()) onNext(); }}
-        className="w-full py-4 rounded-2xl font-extrabold text-base transition-all duration-200 hover:opacity-90 active:scale-95"
+        onClick={handleNext}
+        disabled={checking}
+        className="w-full py-4 rounded-2xl font-extrabold text-base transition-all duration-200 hover:opacity-90 active:scale-95 flex items-center justify-center gap-2 disabled:opacity-70"
         style={{ background: "#FFA500", color: "#111827", boxShadow: "0 4px 14px rgba(255,165,0,0.3)" }}>
-        Continue →
+        {checking ? (
+          <>
+            <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            Checking…
+          </>
+        ) : "Continue →"}
       </button>
     </div>
   );
