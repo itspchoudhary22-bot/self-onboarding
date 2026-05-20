@@ -218,7 +218,7 @@ export default function OnboardingPage() {
         <div style={{ background: "#fffbeb", borderBottom: "1px solid rgba(255,165,0,0.25)" }}>
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-semibold" style={{ color: "#111827" }}>Welcome back — you have an unfinished application</p>
+              <p className="text-sm font-semibold" style={{ color: "#111827" }}>Welcome back</p>
               <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>
                 {resumeInfo.email} · Left at Step {resumeInfo.step}
               </p>

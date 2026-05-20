@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { randomBytes } from 'crypto';
 import connectDB from '@/lib/mongodb';
 import Draft from '@/models/Draft';
+import Application from '@/models/Application';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -20,6 +21,12 @@ export async function POST(request) {
     if (!sessionId || !formData) return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
 
     await connectDB();
+
+    // Don't save draft if email is already fully registered
+    if (formData.email) {
+      const alreadySubmitted = await Application.findOne({ email: formData.email.toLowerCase().trim() }).select('_id').lean();
+      if (alreadySubmitted) return NextResponse.json({ ok: false, alreadyRegistered: true });
+    }
 
     const existing = await Draft.findOne({ sessionId });
     const isFirstSaveWithEmail = !existing?.email && formData.email;
