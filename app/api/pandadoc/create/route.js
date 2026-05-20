@@ -5,17 +5,28 @@ import Draft from '@/models/Draft';
 const PANDADOC_API_KEY = process.env.PANDADOC_API_KEY;
 const SERVICE_AGREEMENT_TEMPLATE_ID = process.env.PANDADOC_SERVICE_AGREEMENT_TEMPLATE_ID;
 const LOA_TEMPLATE_ID = process.env.PANDADOC_LOA_TEMPLATE_ID;
-const SIGNER_ROLE = process.env.PANDADOC_SIGNER_ROLE || 'Signer';
-function buildRecipient(formData) {
+const CLIENT_ROLE = process.env.PANDADOC_CLIENT_ROLE || 'client';
+const SIGNER_ROLE = process.env.PANDADOC_SIGNER_ROLE || 'signer';
+const SIGNER_EMAIL = process.env.PANDADOC_SIGNER_EMAIL || process.env.OPS_EMAIL;
+const SIGNER_FIRST = process.env.PANDADOC_SIGNER_FIRST_NAME || 'Bytescare';
+const SIGNER_LAST = process.env.PANDADOC_SIGNER_LAST_NAME || 'Team';
+
+function buildRecipients(formData) {
   const isCompany = formData.type === 'company';
-  return {
-    email: isCompany ? formData.signatoryEmail : formData.officialEmail || formData.email,
-    first_name: isCompany ? formData.signatoryName.split(' ')[0] : formData.individualName.split(' ')[0],
-    last_name: isCompany
-      ? formData.signatoryName.split(' ').slice(1).join(' ') || '-'
-      : formData.individualName.split(' ').slice(1).join(' ') || '-',
-    role: SIGNER_ROLE,
-  };
+  const clientEmail = isCompany ? formData.signatoryEmail : formData.officialEmail || formData.email;
+  const clientFullName = isCompany ? formData.signatoryName : formData.individualName;
+  const [clientFirst, ...rest] = clientFullName.split(' ');
+  const clientLast = rest.join(' ') || '-';
+
+  const recipients = [
+    { email: clientEmail, first_name: clientFirst, last_name: clientLast, role: CLIENT_ROLE },
+  ];
+
+  if (SIGNER_EMAIL) {
+    recipients.push({ email: SIGNER_EMAIL, first_name: SIGNER_FIRST, last_name: SIGNER_LAST, role: SIGNER_ROLE });
+  }
+
+  return recipients;
 }
 
 function buildTokens(formData) {
@@ -33,11 +44,10 @@ function buildTokens(formData) {
 }
 
 async function createPandaDocDocument(templateId, formData, name) {
-  const recipient = buildRecipient(formData);
   const body = {
     name,
     template_uuid: templateId,
-    recipients: [recipient],
+    recipients: buildRecipients(formData),
     tokens: buildTokens(formData),
     fields: {},
   };
