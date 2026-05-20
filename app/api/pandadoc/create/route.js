@@ -5,6 +5,7 @@ import Draft from '@/models/Draft';
 const PANDADOC_API_KEY = process.env.PANDADOC_API_KEY;
 const SERVICE_AGREEMENT_TEMPLATE_ID = process.env.PANDADOC_SERVICE_AGREEMENT_TEMPLATE_ID;
 const LOA_TEMPLATE_ID = process.env.PANDADOC_LOA_TEMPLATE_ID;
+const SIGNER_ROLE = process.env.PANDADOC_SIGNER_ROLE || 'Signer';
 function buildRecipient(formData) {
   const isCompany = formData.type === 'company';
   return {
@@ -13,7 +14,7 @@ function buildRecipient(formData) {
     last_name: isCompany
       ? formData.signatoryName.split(' ').slice(1).join(' ') || '-'
       : formData.individualName.split(' ').slice(1).join(' ') || '-',
-    role: 'Client',
+    role: SIGNER_ROLE,
   };
 }
 
