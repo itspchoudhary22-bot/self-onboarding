@@ -52,24 +52,15 @@ function buildTokens(formData) {
   ];
 }
 
-async function createPandaDocDocument(templateId, recipients, tokens, name) {
-  const body = {
-    name,
-    template_uuid: templateId,
-    recipients,
-    tokens,
-    fields: {},
-    silent: true,
-  };
-
+async function pandaDocRequest(url, method, body) {
   for (let attempt = 0; attempt < 3; attempt++) {
-    const res = await fetch('https://api.pandadoc.com/public/v1/documents', {
-      method: 'POST',
+    const res = await fetch(url, {
+      method,
       headers: {
         Authorization: `API-Key ${PANDADOC_API_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: body ? JSON.stringify(body) : undefined,
     });
 
     if (res.status === 429) {
@@ -80,32 +71,60 @@ async function createPandaDocDocument(templateId, recipients, tokens, name) {
       continue;
     }
 
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(`PandaDoc document creation failed: ${err}`);
-    }
-    return res.json();
+    return res;
   }
-
   throw new Error('PandaDoc rate limit exceeded after retries. Please try again in a moment.');
 }
 
-async function getSigningSession(documentId, recipientEmail) {
-  // Wait briefly for document to be ready
-  await new Promise((r) => setTimeout(r, 3000));
-
-  const res = await fetch(`https://api.pandadoc.com/public/v1/documents/${documentId}/session`, {
-    method: 'POST',
-    headers: {
-      Authorization: `API-Key ${PANDADOC_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      signer: recipientEmail,
-      lifetime: 3600,
-    }),
+async function createPandaDocDocument(templateId, recipients, tokens, name) {
+  const res = await pandaDocRequest('https://api.pandadoc.com/public/v1/documents', 'POST', {
+    name,
+    template_uuid: templateId,
+    recipients,
+    tokens,
+    fields: {},
+    silent: true,
   });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`PandaDoc document creation failed: ${err}`);
+  }
+  return res.json();
+}
 
+async function sendDocument(documentId) {
+  // Poll until document moves out of 'document.draft' before sending
+  for (let i = 0; i < 10; i++) {
+    const statusRes = await pandaDocRequest(`https://api.pandadoc.com/public/v1/documents/${documentId}`, 'GET');
+    const { status } = await statusRes.json();
+    if (status !== 'document.draft') break;
+    await new Promise((r) => setTimeout(r, 1500));
+  }
+
+  const res = await pandaDocRequest(`https://api.pandadoc.com/public/v1/documents/${documentId}/send`, 'POST', {
+    silent: true,
+    subject: 'Please sign your Bytescare documents',
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Failed to send document: ${err}`);
+  }
+  return res.json();
+}
+
+async function getSigningSession(documentId, recipientEmail) {
+  // Poll until document is in 'document.waiting_approval' or 'document.sent'
+  for (let i = 0; i < 10; i++) {
+    const statusRes = await pandaDocRequest(`https://api.pandadoc.com/public/v1/documents/${documentId}`, 'GET');
+    const { status } = await statusRes.json();
+    if (status === 'document.waiting_approval' || status === 'document.sent' || status === 'document.viewed') break;
+    await new Promise((r) => setTimeout(r, 1500));
+  }
+
+  const res = await pandaDocRequest(`https://api.pandadoc.com/public/v1/documents/${documentId}/session`, 'POST', {
+    signer: recipientEmail,
+    lifetime: 3600,
+  });
   if (!res.ok) {
     const err = await res.text();
     throw new Error(`Failed to create signing session: ${err}`);
@@ -137,6 +156,9 @@ export async function POST(request) {
     const tokens = buildTokens(formData);
     const saDoc = await createPandaDocDocument(SERVICE_AGREEMENT_TEMPLATE_ID, buildRecipientsForSA(formData), tokens, `Service Agreement – ${clientName}`);
     const loaDoc = await createPandaDocDocument(LOA_TEMPLATE_ID, buildRecipientsForLOA(), tokens, `Letter of Authorization – ${clientName}`);
+
+    // Send SA so it moves from draft → sent, enabling embedded signing session
+    await sendDocument(saDoc.id);
 
     // Get signing session for the service agreement (primary document)
     const session = await getSigningSession(saDoc.id, recipientEmail);
