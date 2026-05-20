@@ -25,18 +25,11 @@ export default function HomePage() {
             <span style={{ color: "#111827" }}>BYTES</span>
             <span style={{ color: "#FFA500" }}>CARE</span>
           </div>
-          <div className="flex items-center gap-4">
-            <a href="https://bytescare.com" target="_blank" rel="noopener noreferrer"
-              className="text-sm font-medium hidden sm:block transition-colors"
-              style={{ color: "#9ca3af" }}>
-              ← Back to main site
-            </a>
-            <Link href="/onboarding"
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95"
-              style={{ background: "#FFA500", color: "#111827" }}>
-              Start Onboarding →
-            </Link>
-          </div>
+          <a href="https://bytescare.com" target="_blank" rel="noopener noreferrer"
+            className="text-sm font-medium hidden sm:block transition-colors"
+            style={{ color: "#9ca3af" }}>
+            ← Back to main site
+          </a>
         </div>
       </nav>
 
