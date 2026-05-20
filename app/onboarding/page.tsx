@@ -39,6 +39,8 @@ export default function OnboardingPage() {
   const [sessionId, setSessionId] = useState("");
   const [resumeInfo, setResumeInfo] = useState<ResumeInfo | null>(null);
   const [showResumeBanner, setShowResumeBanner] = useState(false);
+  const [resumeLink, setResumeLink] = useState("");
+  const [linkCopied, setLinkCopied] = useState(false);
   const draftTimer = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -88,13 +90,18 @@ export default function OnboardingPage() {
   const saveDraftToServer = useCallback(async (data: FormData, currentStep: number, sid: string) => {
     if (!sid || !data.email) return;
     try {
-      await fetch("/api/draft", {
+      const res = await fetch("/api/draft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId: sid, step: currentStep, formData: data }),
       });
+      const json = await res.json();
+      if (json.resumeToken && !resumeLink) {
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+        setResumeLink(`${appUrl}/onboarding?session=${json.resumeToken}`);
+      }
     } catch {}
-  }, []);
+  }, [resumeLink]);
 
   const update = useCallback((fields: Partial<FormData>) => {
     setFormData((prev) => {
@@ -280,9 +287,28 @@ export default function OnboardingPage() {
             {renderStep()}
           </div>
 
-          {formData.email && (
+          {resumeLink ? (
+            <div className="mt-4 px-4 py-3 rounded-2xl flex items-center gap-3"
+              style={{ background: "#fff", border: "1.5px solid #e5e7eb", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
+              <span className="text-base flex-shrink-0">🔗</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold mb-0.5" style={{ color: "#374151" }}>Your progress is saved</p>
+                <p className="text-xs truncate" style={{ color: "#9ca3af" }}>Bookmark this link to resume from any device</p>
+              </div>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(resumeLink);
+                  setLinkCopied(true);
+                  setTimeout(() => setLinkCopied(false), 2000);
+                }}
+                className="flex-shrink-0 text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
+                style={{ background: linkCopied ? "#f0fdf4" : "#fff8e6", color: linkCopied ? "#166534" : "#92400e", border: `1.5px solid ${linkCopied ? "#86efac" : "rgba(255,165,0,0.3)"}` }}>
+                {linkCopied ? "✓ Copied!" : "Copy link"}
+              </button>
+            </div>
+          ) : formData.email ? (
             <p className="text-center text-xs mt-3" style={{ color: "#9ca3af" }}>💾 Progress saved automatically</p>
-          )}
+          ) : null}
         </div>
       </main>
 

@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { randomBytes } from 'crypto';
 import connectDB from '@/lib/mongodb';
 import Draft from '@/models/Draft';
-import { sendResumeLink } from '@/lib/email';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -25,7 +24,7 @@ export async function POST(request) {
     const existing = await Draft.findOne({ sessionId });
     const isFirstSaveWithEmail = !existing?.email && formData.email;
 
-    // Generate resume token on first save with a valid email
+    // Generate resume token on first save with a valid email (no email sent)
     const resumeToken = isFirstSaveWithEmail
       ? randomBytes(24).toString('hex')
       : existing?.resumeToken;
@@ -43,11 +42,6 @@ export async function POST(request) {
       },
       { upsert: true, new: true }
     );
-
-    // Send resume link email on first save (fire and forget)
-    if (isFirstSaveWithEmail && resumeToken) {
-      sendResumeLink(formData.email, resumeToken).catch(() => {});
-    }
 
     return NextResponse.json({ ok: true, resumeToken: resumeToken || null });
   } catch (err) {
