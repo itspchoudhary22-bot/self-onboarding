@@ -93,12 +93,12 @@ async function createPandaDocDocument(templateId, recipients, tokens, name) {
 }
 
 async function sendDocument(documentId) {
-  // Poll until document moves out of 'document.draft' before sending
-  for (let i = 0; i < 10; i++) {
+  // Wait until document finishes processing (uploaded → draft)
+  for (let i = 0; i < 20; i++) {
     const statusRes = await pandaDocRequest(`https://api.pandadoc.com/public/v1/documents/${documentId}`, 'GET');
     const { status } = await statusRes.json();
-    if (status !== 'document.draft') break;
-    await new Promise((r) => setTimeout(r, 1500));
+    if (status === 'document.draft') break;
+    await new Promise((r) => setTimeout(r, 2000));
   }
 
   const res = await pandaDocRequest(`https://api.pandadoc.com/public/v1/documents/${documentId}/send`, 'POST', {
