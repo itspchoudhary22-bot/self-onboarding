@@ -43,6 +43,10 @@ export interface FormData {
   // Step 3
   services: string[];
   serviceDetails: Record<string, string>;
+
+  // Step 6
+  paymentPlan: 'standard' | 'pro' | 'business' | 'custom' | '';
+  paymentMethod: 'card' | 'bank' | '';
 }
 
 export const INITIAL_FORM_DATA: FormData = {
@@ -58,4 +62,6 @@ export const INITIAL_FORM_DATA: FormData = {
   companyOfficialEmail: '',
   services: [],
   serviceDetails: {},
+  paymentPlan: '',
+  paymentMethod: '',
 };

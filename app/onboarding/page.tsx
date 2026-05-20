@@ -8,6 +8,7 @@ import Step2Company from "./Step2Company";
 import Step3Services from "./Step3Services";
 import Step4Review from "./Step4Review";
 import Step5Sign from "./Step5Sign";
+import Step6Payment from "./Step6Payment";
 import SuccessScreen from "./SuccessScreen";
 
 const STEPS = (type: string) => [
@@ -16,6 +17,7 @@ const STEPS = (type: string) => [
   { key: 3, label: "Services" },
   { key: 4, label: "Review" },
   { key: 5, label: "Sign" },
+  { key: 6, label: "Payment" },
 ];
 
 const LS_SESSION = "bytescare_session_id";
@@ -41,6 +43,7 @@ export default function OnboardingPage() {
   const [showResumeBanner, setShowResumeBanner] = useState(false);
   const [resumeLink, setResumeLink] = useState("");
   const [linkCopied, setLinkCopied] = useState(false);
+  const [pandadocDocId, setPandadocDocId] = useState("");
   const draftTimer = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -154,14 +157,19 @@ export default function OnboardingPage() {
     setResumeInfo(null);
   };
 
-  const handleSubmit = async (pandadocDocumentId: string) => {
+  const handleStep5Complete = (docId: string) => {
+    setPandadocDocId(docId);
+    goNext();
+  };
+
+  const handleSubmit = async () => {
     setIsSubmitting(true);
     setSubmitError("");
     try {
       const res = await fetch("/api/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, sessionId, pandadocDocumentId }),
+        body: JSON.stringify({ ...formData, sessionId, pandadocDocumentId: pandadocDocId }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -170,7 +178,7 @@ export default function OnboardingPage() {
         localStorage.removeItem(LS_SESSION);
         localStorage.removeItem(LS_DATA);
         localStorage.removeItem(LS_STEP);
-        setDocumentSigned(!!pandadocDocumentId);
+        setDocumentSigned(!!pandadocDocId);
         setSubmitted(true);
       }
     } catch {
@@ -195,7 +203,8 @@ export default function OnboardingPage() {
       case 2: return formData.type === "company" ? <Step2Company {...common} /> : <Step2Individual {...common} />;
       case 3: return <Step3Services {...common} />;
       case 4: return <Step4Review formData={formData} onBack={goBack} onNext={goNext} goToStep={goToStep} />;
-      case 5: return <Step5Sign formData={formData} sessionId={sessionId} onBack={goBack} onSubmit={handleSubmit} isSubmitting={isSubmitting} submitError={submitError} />;
+      case 5: return <Step5Sign formData={formData} sessionId={sessionId} onBack={goBack} onComplete={handleStep5Complete} />;
+      case 6: return <Step6Payment formData={formData} update={update} onBack={goBack} onSubmit={handleSubmit} isSubmitting={isSubmitting} submitError={submitError} />;
       default: return null;
     }
   };

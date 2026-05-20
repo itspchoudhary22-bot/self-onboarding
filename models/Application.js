@@ -37,6 +37,8 @@ const ApplicationSchema = new mongoose.Schema({
   serviceDetails: { type: mongoose.Schema.Types.Mixed, default: {} },
   pandadocDocumentId: { type: String, default: '' },
   pandadocStatus: { type: String, default: 'pending' },
+  paymentPlan: { type: String, default: '' },
+  paymentMethod: { type: String, default: '' },
   sessionId: { type: String, default: '' },
   createdAt: { type: Date, default: Date.now },
 });

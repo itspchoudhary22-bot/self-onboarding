@@ -7,7 +7,7 @@ import { sendClientConfirmation, sendOpsNotification } from '@/lib/email';
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { email, type, country, services, sessionId, pandadocDocumentId } = body;
+    const { email, type, country, services, sessionId, pandadocDocumentId, paymentPlan, paymentMethod } = body;
 
     if (!email || !type || !country || !services || services.length === 0) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -20,6 +20,8 @@ export async function POST(request) {
       sessionId: sessionId || '',
       pandadocDocumentId: pandadocDocumentId || '',
       pandadocStatus: pandadocDocumentId ? 'completed' : 'pending',
+      paymentPlan: paymentPlan || '',
+      paymentMethod: paymentMethod || '',
     });
 
     // Mark draft as submitted

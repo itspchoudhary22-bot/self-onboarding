@@ -6,14 +6,14 @@ interface Props {
   formData: FormData;
   sessionId: string;
   onBack: () => void;
-  onSubmit: (pandadocDocumentId: string) => void;
-  isSubmitting: boolean;
-  submitError: string;
+  onComplete: (pandadocDocumentId: string) => void;
+  isSubmitting?: boolean;
+  submitError?: string;
 }
 
 type SignStatus = "creating" | "ready" | "signing" | "completed" | "error" | "not_configured";
 
-export default function Step5Sign({ formData, sessionId, onBack, onSubmit, isSubmitting, submitError }: Props) {
+export default function Step5Sign({ formData, sessionId, onBack, onComplete, isSubmitting, submitError }: Props) {
   const [status, setStatus] = useState<SignStatus>("creating");
   const [signingUrl, setSigningUrl] = useState("");
   const [documentId, setDocumentId] = useState("");
@@ -59,7 +59,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onSubmit, isSub
         if (docStatus === "document.completed") {
           clearInterval(pollRef.current);
           setStatus("completed");
-          onSubmit(docId);
+          onComplete(docId);
         }
       } catch {}
     }, 5000);
@@ -136,7 +136,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onSubmit, isSub
             ← Back
           </button>
           <button
-            onClick={() => onSubmit("")}
+            onClick={() => onComplete("")}
             disabled={isSubmitting}
             className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95 disabled:opacity-70 flex items-center justify-center gap-2"
             style={{ background: "#FFA500", color: "#111827" }}
@@ -173,7 +173,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onSubmit, isSub
       <div className="flex flex-col items-center justify-center py-16 gap-4">
         <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl" style={{ background: "rgba(255,165,0,0.1)" }}>✅</div>
         <p className="text-lg font-bold text-gray-800">Documents Signed!</p>
-        <p className="text-sm text-gray-500">Finalizing your submission…</p>
+        <p className="text-sm text-gray-500">Moving to payment plan selection…</p>
         <svg className="animate-spin w-5 h-5 mt-2" fill="none" viewBox="0 0 24 24" style={{ color: "#FFA500" }}>
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
