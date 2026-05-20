@@ -30,27 +30,53 @@ function FieldHint({ children }: { children: React.ReactNode }) {
 interface FileUploadProps {
   label: string;
   required?: boolean;
-  fileBase64: string;
+  fileUrl: string;
   fileName: string;
-  onChange: (base64: string, name: string) => void;
+  onChange: (url: string, name: string) => void;
   error?: string;
 }
 
-function FileUpload({ label, required, fileBase64, fileName, onChange, error }: FileUploadProps) {
+function FileUpload({ label, required, fileUrl, fileName, onChange, error }: FileUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [uploading, setUploading] = useState(false);
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setUploading(true);
     const reader = new FileReader();
-    reader.onload = () => onChange(reader.result as string, file.name);
+    reader.onload = async () => {
+      try {
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ base64: reader.result, fileName: file.name }),
+        });
+        const { url } = await res.json();
+        onChange(url ?? "", file.name);
+      } catch {
+        onChange("", file.name);
+      } finally {
+        setUploading(false);
+      }
+    };
     reader.readAsDataURL(file);
   };
+
   return (
     <div>
       <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
         {label} {required && <span style={{ color: "#FFA500" }}>*</span>}
       </label>
-      {fileBase64 ? (
+      {uploading ? (
+        <div className="flex items-center gap-3 px-4 py-4 rounded-2xl" style={{ border: "2px solid #e5e7eb", background: "#f9fafb" }}>
+          <svg className="animate-spin w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" style={{ color: "#FFA500" }}>
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          <p className="text-sm font-medium" style={{ color: "#6b7280" }}>Uploading…</p>
+        </div>
+      ) : fileName ? (
         <div className="flex items-center gap-3 px-4 py-4 rounded-2xl" style={{ border: "2px solid #86efac", background: "#f0fdf4" }}>
           <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "#22c55e" }}>
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}>
@@ -102,7 +128,7 @@ export default function Step2Individual({ formData, update, onNext, onBack }: Pr
     const errs: Errors = {};
     if (!formData.individualName.trim()) errs.individualName = "Full legal name is required.";
     if (!formData.nationalIdNumber.trim()) errs.nationalIdNumber = "National ID number is required.";
-    if (!formData.idProofBase64) errs.idProof = "Please upload your National ID proof.";
+    if (!formData.idProofName) errs.idProof = "Please upload your National ID proof.";
     if (!formData.registeredAddress.trim()) errs.registeredAddress = "Registered address is required.";
     if (!formData.pincode.trim()) errs.pincode = "Pincode / ZIP is required.";
     if (!formData.mailingAddress.trim()) errs.mailingAddress = "Mailing address is required.";
@@ -150,8 +176,8 @@ export default function Step2Individual({ formData, update, onNext, onBack }: Pr
         </div>
 
         <FileUpload label="Upload National ID Proof" required
-          fileBase64={formData.idProofBase64} fileName={formData.idProofName}
-          onChange={(b, n) => { update({ idProofBase64: b, idProofName: n }); clr("idProof"); }}
+          fileUrl={formData.idProofUrl} fileName={formData.idProofName}
+          onChange={(u, n) => { update({ idProofUrl: u, idProofName: n }); clr("idProof"); }}
           error={errors.idProof} />
       </div>
 

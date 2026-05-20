@@ -8,7 +8,7 @@ export interface FormData {
   // Individual - Step 2
   individualName: string;
   nationalIdNumber: string;
-  idProofBase64: string;
+  idProofUrl: string;
   idProofName: string;
   contactNumber: string;
   registeredAddress: string;
@@ -22,7 +22,7 @@ export interface FormData {
   // Company - Step 2
   companyName: string;
   companyRegNumber: string;
-  regCertBase64: string;
+  regCertUrl: string;
   regCertName: string;
   gstin: string;
   companyContact: string;
@@ -34,7 +34,7 @@ export interface FormData {
   signatoryDesignation: string;
   signatoryEmail: string;
   companySocialMedia: string;
-  copyrightCertBase64: string;
+  copyrightCertUrl: string;
   copyrightCertName: string;
 
   // Company additional
@@ -51,14 +51,14 @@ export interface FormData {
 
 export const INITIAL_FORM_DATA: FormData = {
   email: '', type: '', country: '', sessionId: '',
-  individualName: '', nationalIdNumber: '', idProofBase64: '', idProofName: '',
+  individualName: '', nationalIdNumber: '', idProofUrl: '', idProofName: '',
   contactNumber: '', registeredAddress: '', pincode: '', mailingAddress: '',
   officialEmail: '', designation: '', workDescription: '', socialMediaHandles: '',
-  companyName: '', companyRegNumber: '', regCertBase64: '', regCertName: '',
+  companyName: '', companyRegNumber: '', regCertUrl: '', regCertName: '',
   gstin: '', companyContact: '', companyRegisteredAddress: '', companyPincode: '',
   companyMailingAddress: '', companyDescription: '',
   signatoryName: '', signatoryDesignation: '', signatoryEmail: '', companySocialMedia: '',
-  copyrightCertBase64: '', copyrightCertName: '',
+  copyrightCertUrl: '', copyrightCertName: '',
   companyOfficialEmail: '',
   services: [],
   serviceDetails: {},

@@ -59,6 +59,8 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
   useEffect(() => {
     if (existingDocumentId) return;
 
+    createDocuments();
+
     // Listen for PandaDoc postMessage — fires when client signs, no need to wait for Bytescare
     const handleMessage = (e: MessageEvent) => {
       if (typeof e.data !== "object") return;
