@@ -53,10 +53,28 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
   const [documentId, setDocumentId] = useState("");
   const [error, setError] = useState("");
   const pollRef = useRef<NodeJS.Timeout>();
+  const docIdRef = useRef("");
 
   useEffect(() => {
     createDocuments();
-    return () => clearInterval(pollRef.current);
+
+    // Listen for PandaDoc postMessage — fires when client signs, no need to wait for Bytescare
+    const handleMessage = (e: MessageEvent) => {
+      if (typeof e.data !== "object") return;
+      const event = e.data?.event;
+      if (event === "session_view.document.completed" || event === "session_view.document.exception") {
+        if (event === "session_view.document.completed") {
+          clearInterval(pollRef.current);
+          setStatus("completed");
+          onComplete(docIdRef.current);
+        }
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => {
+      clearInterval(pollRef.current);
+      window.removeEventListener("message", handleMessage);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -77,9 +95,11 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
       }
       if (!res.ok) throw new Error(data.error || "Failed to prepare documents");
 
+      docIdRef.current = data.documentId;
       setDocumentId(data.documentId);
       setSigningUrl(data.signingUrl);
       setStatus("ready");
+      // Fallback poll in case postMessage doesn't fire
       startPolling(data.documentId);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Failed to prepare documents");
@@ -91,8 +111,13 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
     pollRef.current = setInterval(async () => {
       try {
         const res = await fetch(`/api/pandadoc/status?documentId=${docId}`);
-        const { status: docStatus } = await res.json();
-        if (docStatus === "document.completed") {
+        const { status: docStatus, recipients } = await res.json();
+        // Move forward once the client recipient has signed (not waiting for Bytescare)
+        const clientSigned = recipients?.some(
+          (r: { role: string; signing_status?: string }) =>
+            r.role?.toLowerCase() === "client" && r.signing_status === "signed"
+        );
+        if (clientSigned || docStatus === "document.completed") {
           clearInterval(pollRef.current);
           setStatus("completed");
           onComplete(docId);
@@ -103,10 +128,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
 
   const handleDownload = () => {
     if (!documentId) return;
-    window.open(
-      `https://api.pandadoc.com/public/v1/documents/${documentId}/download`,
-      "_blank"
-    );
+    window.open(`https://api.pandadoc.com/public/v1/documents/${documentId}/download`, "_blank");
   };
 
   if (status === "creating") {
@@ -129,7 +151,6 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
           <h2 className="text-2xl font-black text-gray-900">Sign Documents</h2>
           <p className="text-gray-500 mt-1 text-sm">Service Agreement &amp; Letter of Authorization</p>
         </div>
-
         <div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-5 mb-6">
           <div className="flex items-start gap-3">
             <span className="text-2xl">⚙️</span>
@@ -138,48 +159,18 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
               <p className="text-sm text-gray-600 mb-3">
                 The document signing integration requires PandaDoc API credentials. Once configured, your Service Agreement and LOA will appear here for review and digital signing.
               </p>
-              <div className="bg-white rounded-lg border border-amber-200 px-4 py-3 text-xs text-gray-600 space-y-1">
-                <p className="font-semibold text-gray-700 mb-1">Required environment variables:</p>
-                <p><code className="bg-gray-100 px-1 rounded">PANDADOC_API_KEY</code></p>
-                <p><code className="bg-gray-100 px-1 rounded">PANDADOC_SERVICE_AGREEMENT_TEMPLATE_ID</code></p>
-                <p><code className="bg-gray-100 px-1 rounded">PANDADOC_LOA_TEMPLATE_ID</code></p>
-              </div>
             </div>
           </div>
         </div>
-
-        <div className="rounded-xl border border-gray-100 bg-gray-50 px-5 py-4 mb-6">
-          <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">What you&apos;re agreeing to sign</p>
-          <div className="space-y-2">
-            {["Service Agreement – defines the scope of Bytescare services", "Letter of Authorization (LOA) – authorizes Bytescare to act on your behalf"].map((doc) => (
-              <div key={doc} className="flex items-center gap-2 text-sm text-gray-600">
-                <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-white text-xs font-bold" style={{ background: "#FFA500" }}>📄</span>
-                {doc}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {submitError && (
-          <div className="mb-4 flex items-start gap-2 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
-            <span>⚠</span> <span>{submitError}</span>
-          </div>
-        )}
-
         <div className="flex gap-3 mb-3">
           <button onClick={onBack} disabled={isSubmitting}
             className="flex-1 py-3.5 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 transition-all hover:bg-gray-50 disabled:opacity-50">
             ← Back
           </button>
-          <button
-            onClick={() => onComplete("")}
-            disabled={isSubmitting}
+          <button onClick={() => onComplete("")} disabled={isSubmitting}
             className="flex-[2] py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95 disabled:opacity-70 flex items-center justify-center gap-2"
-            style={{ background: "#FFA500", color: "#111827" }}
-          >
-            {isSubmitting ? (
-              <><svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Submitting…</>
-            ) : "Submit Application →"}
+            style={{ background: "#FFA500", color: "#111827" }}>
+            {isSubmitting ? "Submitting…" : "Submit Application →"}
           </button>
         </div>
         <SalesContactButton formData={formData} />
@@ -222,7 +213,8 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
   // status === "ready" | "signing"
   return (
     <div>
-      <div className="mb-5">
+      {/* Header + action bar — always visible at the top */}
+      <div className="mb-4">
         <h2 className="text-2xl font-black text-gray-900">Sign Your Documents</h2>
         <p className="text-gray-500 mt-1 text-sm">Review and digitally sign your Service Agreement &amp; LOA</p>
       </div>
@@ -232,27 +224,25 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
           Document ready for signing
         </div>
-        <button
-          onClick={handleDownload}
+        <button onClick={handleDownload}
           className="text-xs font-semibold flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all"
-          style={{ color: "#FFA500" }}
-        >
+          style={{ color: "#FFA500" }}>
           ⬇ Download PDF
         </button>
       </div>
 
-      <div className="rounded-xl overflow-hidden border border-gray-200 mb-5" style={{ height: "600px" }}>
-        <iframe
-          src={signingUrl}
-          className="w-full h-full"
-          title="Document Signing"
-          allow="camera"
-        />
+      {/* Buttons ABOVE iframe so they're always visible */}
+      <div className="flex flex-col gap-2 mb-4">
+        <SalesContactButton formData={formData} />
+        <button onClick={onBack}
+          className="w-full py-3 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 transition-all hover:bg-gray-50">
+          ← Back to Review
+        </button>
       </div>
 
-      <div className="rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 mb-5 text-sm text-gray-600">
+      <div className="rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 mb-4 text-sm text-gray-600">
         <span className="font-semibold text-gray-700">💡 Tip: </span>
-        Scroll through the document, fill any required fields, then click the <strong>Sign</strong> button inside the document viewer. Your submission will complete automatically after signing.
+        Scroll through the document, fill any required fields, then click <strong>Sign</strong>. You&apos;ll automatically move to the next step.
       </div>
 
       {submitError && (
@@ -261,14 +251,9 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
         </div>
       )}
 
-      <div className="flex flex-col gap-3">
-        <SalesContactButton formData={formData} />
-        <button
-          onClick={onBack}
-          className="w-full py-3.5 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 transition-all hover:bg-gray-50"
-        >
-          ← Back to Review
-        </button>
+      {/* Iframe below — scrollable */}
+      <div className="rounded-xl overflow-hidden border border-gray-200" style={{ height: "600px" }}>
+        <iframe src={signingUrl} className="w-full h-full" title="Document Signing" allow="camera" />
       </div>
     </div>
   );
