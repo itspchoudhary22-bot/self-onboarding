@@ -13,6 +13,40 @@ interface Props {
 
 type SignStatus = "creating" | "ready" | "signing" | "completed" | "error" | "not_configured";
 
+function SalesContactButton({ formData }: { formData: FormData }) {
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  const handleContact = async () => {
+    setSending(true);
+    try {
+      await fetch("/api/contact-sales", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      setSent(true);
+    } catch {}
+    finally { setSending(false); }
+  };
+
+  if (sent) {
+    return (
+      <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold" style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", color: "#166534" }}>
+        <span>✅</span> Our sales team will reach out to you shortly.
+      </div>
+    );
+  }
+
+  return (
+    <button onClick={handleContact} disabled={sending}
+      className="w-full py-3 rounded-xl text-sm font-semibold transition-all hover:bg-gray-50 disabled:opacity-50 flex items-center justify-center gap-2"
+      style={{ border: "1.5px solid #e5e7eb", color: "#6b7280" }}>
+      {sending ? "Sending…" : "💬 Questions about the agreement? Contact our sales team"}
+    </button>
+  );
+}
+
 export default function Step5Sign({ formData, sessionId, onBack, onComplete, isSubmitting, submitError }: Props) {
   const [status, setStatus] = useState<SignStatus>("creating");
   const [signingUrl, setSigningUrl] = useState("");
@@ -130,7 +164,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
           </div>
         )}
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 mb-3">
           <button onClick={onBack} disabled={isSubmitting}
             className="flex-1 py-3.5 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 transition-all hover:bg-gray-50 disabled:opacity-50">
             ← Back
@@ -146,6 +180,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
             ) : "Submit Application →"}
           </button>
         </div>
+        <SalesContactButton formData={formData} />
       </div>
     );
   }
@@ -224,12 +259,15 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
         </div>
       )}
 
-      <button
-        onClick={onBack}
-        className="w-full py-3.5 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 transition-all hover:bg-gray-50"
-      >
-        ← Back to Review
-      </button>
+      <div className="flex flex-col gap-3">
+        <SalesContactButton formData={formData} />
+        <button
+          onClick={onBack}
+          className="w-full py-3.5 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 transition-all hover:bg-gray-50"
+        >
+          ← Back to Review
+        </button>
+      </div>
     </div>
   );
 }

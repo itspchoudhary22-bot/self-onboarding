@@ -50,6 +50,7 @@ async function createPandaDocDocument(templateId, formData, name) {
     recipients: buildRecipients(formData),
     tokens: buildTokens(formData),
     fields: {},
+    silent: true,
   };
 
   const res = await fetch('https://api.pandadoc.com/public/v1/documents', {
