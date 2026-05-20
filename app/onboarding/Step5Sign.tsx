@@ -9,9 +9,10 @@ interface Props {
   onComplete: (pandadocDocumentId: string) => void;
   isSubmitting?: boolean;
   submitError?: string;
+  existingDocumentId?: string;
 }
 
-type SignStatus = "creating" | "ready" | "signing" | "completed" | "error" | "not_configured";
+type SignStatus = "creating" | "ready" | "signing" | "completed" | "already_signed" | "error" | "not_configured";
 
 function SalesContactButton({ formData }: { formData: FormData }) {
   const [sent, setSent] = useState(false);
@@ -47,16 +48,16 @@ function SalesContactButton({ formData }: { formData: FormData }) {
   );
 }
 
-export default function Step5Sign({ formData, sessionId, onBack, onComplete, isSubmitting, submitError }: Props) {
-  const [status, setStatus] = useState<SignStatus>("creating");
+export default function Step5Sign({ formData, sessionId, onBack, onComplete, isSubmitting, submitError, existingDocumentId }: Props) {
+  const [status, setStatus] = useState<SignStatus>(existingDocumentId ? "already_signed" : "creating");
   const [signingUrl, setSigningUrl] = useState("");
-  const [documentId, setDocumentId] = useState("");
+  const [documentId, setDocumentId] = useState(existingDocumentId || "");
   const [error, setError] = useState("");
   const pollRef = useRef<NodeJS.Timeout>();
-  const docIdRef = useRef("");
+  const docIdRef = useRef(existingDocumentId || "");
 
   useEffect(() => {
-    createDocuments();
+    if (existingDocumentId) return;
 
     // Listen for PandaDoc postMessage — fires when client signs, no need to wait for Bytescare
     const handleMessage = (e: MessageEvent) => {
@@ -174,6 +175,35 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
           </button>
         </div>
         <SalesContactButton formData={formData} />
+      </div>
+    );
+  }
+
+  if (status === "already_signed") {
+    return (
+      <div>
+        <div className="mb-6">
+          <h2 className="text-2xl font-black text-gray-900">Sign Documents</h2>
+          <p className="text-gray-500 mt-1 text-sm">Service Agreement &amp; Letter of Authorization</p>
+        </div>
+        <div className="rounded-xl border border-green-200 bg-green-50 px-5 py-5 mb-6 flex items-start gap-3">
+          <span className="text-2xl">✅</span>
+          <div>
+            <p className="font-bold text-gray-800 mb-1">Documents Already Signed</p>
+            <p className="text-sm text-gray-600">You have already signed the Service Agreement. You can continue to the payment step.</p>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <button onClick={onBack}
+            className="flex-1 py-3.5 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 hover:bg-gray-50 transition-all">
+            ← Back
+          </button>
+          <button onClick={() => onComplete(documentId)}
+            className="flex-[2] py-3.5 rounded-xl font-bold text-sm hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
+            style={{ background: "#FFA500", color: "#111827" }}>
+            Continue to Payment →
+          </button>
+        </div>
       </div>
     );
   }

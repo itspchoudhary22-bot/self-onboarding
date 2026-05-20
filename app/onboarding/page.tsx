@@ -203,7 +203,7 @@ export default function OnboardingPage() {
       case 2: return formData.type === "company" ? <Step2Company {...common} /> : <Step2Individual {...common} />;
       case 3: return <Step3Services {...common} />;
       case 4: return <Step4Review formData={formData} onBack={goBack} onNext={goNext} goToStep={goToStep} />;
-      case 5: return <Step5Sign formData={formData} sessionId={sessionId} onBack={goBack} onComplete={handleStep5Complete} />;
+      case 5: return <Step5Sign formData={formData} sessionId={sessionId} onBack={goBack} onComplete={handleStep5Complete} existingDocumentId={pandadocDocId || undefined} />;
       case 6: return <Step6Payment formData={formData} update={update} onBack={goBack} onSubmit={handleSubmit} isSubmitting={isSubmitting} submitError={submitError} />;
       default: return null;
     }
