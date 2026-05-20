@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const DraftSchema = new mongoose.Schema({
   sessionId: { type: String, required: true, unique: true },
+  resumeToken: { type: String, unique: true, sparse: true },
   email: { type: String, default: '' },
   step: { type: Number, default: 1 },
   status: { type: String, default: 'draft', enum: ['draft', 'signing', 'submitted'] },

@@ -42,23 +42,47 @@ export default function OnboardingPage() {
   const draftTimer = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    const savedId = localStorage.getItem(LS_SESSION);
-    const savedStep = localStorage.getItem(LS_STEP);
-    const savedData = localStorage.getItem(LS_DATA);
-    if (savedId && savedData) {
-      try {
-        const parsed: FormData = JSON.parse(savedData);
-        if (parsed.email) {
-          setResumeInfo({ sessionId: savedId, step: parseInt(savedStep || "1"), email: parsed.email, formData: parsed });
-          setShowResumeBanner(true);
-          return;
-        }
-      } catch {}
-    }
-    const newId = crypto.randomUUID();
-    localStorage.setItem(LS_SESSION, newId);
-    setSessionId(newId);
-    setFormData((p) => ({ ...p, sessionId: newId }));
+    const init = async () => {
+      // Check for ?session=TOKEN in URL (resume link from email)
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('session');
+      if (token) {
+        try {
+          const res = await fetch(`/api/resume?token=${token}`);
+          const { draft } = await res.json();
+          if (draft?.formData?.email) {
+            // Clear the token from URL without reload
+            window.history.replaceState({}, '', '/onboarding');
+            localStorage.setItem(LS_SESSION, draft.sessionId);
+            setSessionId(draft.sessionId);
+            setFormData({ ...draft.formData, sessionId: draft.sessionId });
+            setStep(Math.min(draft.step, 4));
+            return;
+          }
+        } catch {}
+      }
+
+      // Fall back to localStorage session
+      const savedId = localStorage.getItem(LS_SESSION);
+      const savedStep = localStorage.getItem(LS_STEP);
+      const savedData = localStorage.getItem(LS_DATA);
+      if (savedId && savedData) {
+        try {
+          const parsed: FormData = JSON.parse(savedData);
+          if (parsed.email) {
+            setResumeInfo({ sessionId: savedId, step: parseInt(savedStep || "1"), email: parsed.email, formData: parsed });
+            setShowResumeBanner(true);
+            return;
+          }
+        } catch {}
+      }
+
+      const newId = crypto.randomUUID();
+      localStorage.setItem(LS_SESSION, newId);
+      setSessionId(newId);
+      setFormData((p) => ({ ...p, sessionId: newId }));
+    };
+    init();
   }, []);
 
   const saveDraftToServer = useCallback(async (data: FormData, currentStep: number, sid: string) => {
