@@ -23,12 +23,14 @@ const STEPS = (type: string) => [
 const LS_SESSION = "bytescare_session_id";
 const LS_DATA = "bytescare_form_data";
 const LS_STEP = "bytescare_step";
+const LS_PANDADOC = "bytescare_pandadoc_id";
 
 interface ResumeInfo {
   sessionId: string;
   step: number;
   email: string;
   formData: FormData;
+  pandadocDocId: string;
 }
 
 export default function OnboardingPage() {
@@ -56,12 +58,15 @@ export default function OnboardingPage() {
           const res = await fetch(`/api/resume?token=${token}`);
           const { draft } = await res.json();
           if (draft?.formData?.email) {
-            // Clear the token from URL without reload
             window.history.replaceState({}, '', '/onboarding');
+            const docId = draft.pandadocDocumentId || '';
+            const resumeStep = draft.step === 5 && !docId ? 4 : draft.step;
             localStorage.setItem(LS_SESSION, draft.sessionId);
+            if (docId) localStorage.setItem(LS_PANDADOC, docId);
             setSessionId(draft.sessionId);
             setFormData({ ...draft.formData, sessionId: draft.sessionId });
-            setStep(Math.min(draft.step, 4));
+            setPandadocDocId(docId);
+            setStep(resumeStep);
             return;
           }
         } catch {}
@@ -75,7 +80,15 @@ export default function OnboardingPage() {
         try {
           const parsed: FormData = JSON.parse(savedData);
           if (parsed.email) {
-            setResumeInfo({ sessionId: savedId, step: parseInt(savedStep || "1"), email: parsed.email, formData: parsed });
+            const savedDocId = localStorage.getItem(LS_PANDADOC) || '';
+            const savedStepNum = parseInt(savedStep || "1");
+            setResumeInfo({
+              sessionId: savedId,
+              step: savedStepNum,
+              email: parsed.email,
+              formData: parsed,
+              pandadocDocId: savedDocId,
+            });
             setShowResumeBanner(true);
             return;
           }
@@ -136,11 +149,14 @@ export default function OnboardingPage() {
 
   const handleResume = () => {
     if (!resumeInfo) return;
-    const { sessionId: sid, step: savedStep, formData: savedData } = resumeInfo;
+    const { sessionId: sid, step: savedStep, formData: savedData, pandadocDocId: savedDocId } = resumeInfo;
+    // If they were mid-signing (step 5) with no doc ID, drop back to review
+    const resumeStep = savedStep === 5 && !savedDocId ? 4 : savedStep;
     localStorage.setItem(LS_SESSION, sid);
     setSessionId(sid);
     setFormData({ ...savedData, sessionId: sid });
-    setStep(Math.min(savedStep, 4));
+    setPandadocDocId(savedDocId);
+    setStep(resumeStep);
     setShowResumeBanner(false);
   };
 
@@ -148,6 +164,7 @@ export default function OnboardingPage() {
     localStorage.removeItem(LS_SESSION);
     localStorage.removeItem(LS_DATA);
     localStorage.removeItem(LS_STEP);
+    localStorage.removeItem(LS_PANDADOC);
     const newId = crypto.randomUUID();
     localStorage.setItem(LS_SESSION, newId);
     setSessionId(newId);
@@ -159,6 +176,7 @@ export default function OnboardingPage() {
 
   const handleStep5Complete = (docId: string) => {
     setPandadocDocId(docId);
+    if (docId) localStorage.setItem(LS_PANDADOC, docId);
     goNext();
   };
 
@@ -178,6 +196,7 @@ export default function OnboardingPage() {
         localStorage.removeItem(LS_SESSION);
         localStorage.removeItem(LS_DATA);
         localStorage.removeItem(LS_STEP);
+        localStorage.removeItem(LS_PANDADOC);
         setDocumentSigned(!!pandadocDocId);
         setSubmitted(true);
       }
