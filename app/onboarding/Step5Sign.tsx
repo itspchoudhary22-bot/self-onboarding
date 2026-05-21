@@ -12,8 +12,17 @@ interface Props {
   existingDocumentId?: string;
 }
 
-type SignStatus = "creating" | "ready" | "transitioning" | "completed" | "already_signed" | "error" | "not_configured";
+type SignStatus = "creating" | "ready" | "verifying" | "completed" | "already_signed" | "error" | "not_configured";
 type SignPhase = "sa" | "loa";
+
+function Spinner({ size = 8, color = "#FFA500" }: { size?: number; color?: string }) {
+  return (
+    <svg className={`animate-spin w-${size} h-${size}`} fill="none" viewBox="0 0 24 24" style={{ color }}>
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+    </svg>
+  );
+}
 
 function SalesContactButton({ formData }: { formData: FormData }) {
   const [sent, setSent] = useState(false);
@@ -52,33 +61,47 @@ function SalesContactButton({ formData }: { formData: FormData }) {
 export default function Step5Sign({ formData, sessionId, onBack, onComplete, isSubmitting, submitError, existingDocumentId }: Props) {
   const [status, setStatus] = useState<SignStatus>(existingDocumentId ? "already_signed" : "creating");
   const [phase, setPhase] = useState<SignPhase>("sa");
+  const [verifyingLabel, setVerifyingLabel] = useState("");
   const [signingUrl, setSigningUrl] = useState("");
   const [documentId, setDocumentId] = useState(existingDocumentId || "");
   const [error, setError] = useState("");
 
-  // Refs so closures in useEffect & setInterval always see current values
   const pollRef = useRef<NodeJS.Timeout>();
   const docIdRef = useRef(existingDocumentId || "");
   const phaseRef = useRef<SignPhase>("sa");
   const loaUrlRef = useRef("");
   const loaDocIdRef = useRef("");
+  // Guard: prevent handling the same signing event twice
+  const handledRef = useRef(false);
 
-  const advanceToLoa = () => {
+  // Called the moment signing is detected (postMessage OR poll).
+  // Shows the loader instantly, then advances after confirming with API.
+  const onSigningDetected = () => {
+    if (handledRef.current) return;
+    handledRef.current = true;
     clearInterval(pollRef.current);
-    setStatus("transitioning");
-    setTimeout(() => {
-      phaseRef.current = "loa";
-      setPhase("loa");
-      setSigningUrl(loaUrlRef.current);
-      setStatus("ready");
-      startPolling(loaDocIdRef.current);
-    }, 1200);
-  };
 
-  const finishSigning = () => {
-    clearInterval(pollRef.current);
-    setStatus("completed");
-    setTimeout(() => onComplete(docIdRef.current), 1800);
+    if (phaseRef.current === "sa" && loaDocIdRef.current) {
+      // SA signed — show loader, then load LOA iframe
+      setVerifyingLabel("Service Agreement signed! Loading Letter of Authorization…");
+      setStatus("verifying");
+      setTimeout(() => {
+        handledRef.current = false; // reset for LOA phase
+        phaseRef.current = "loa";
+        setPhase("loa");
+        setSigningUrl(loaUrlRef.current);
+        setStatus("ready");
+        startPolling(loaDocIdRef.current);
+      }, 1200);
+    } else {
+      // LOA (or only) doc signed — show loader, then advance to payment
+      setVerifyingLabel("Processing your signature… please wait");
+      setStatus("verifying");
+      setTimeout(() => {
+        setStatus("completed");
+        onComplete(docIdRef.current);
+      }, 1500);
+    }
   };
 
   const startPolling = (docId: string) => {
@@ -92,14 +115,10 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
             r.role?.toLowerCase() === "client" && r.signing_status === "signed"
         );
         if (clientSigned || docStatus === "document.completed") {
-          if (phaseRef.current === "sa" && loaDocIdRef.current) {
-            advanceToLoa();
-          } else {
-            finishSigning();
-          }
+          onSigningDetected();
         }
       } catch {}
-    }, 3000);
+    }, 1500);
   };
 
   useEffect(() => {
@@ -107,14 +126,11 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
 
     createDocuments();
 
+    // PandaDoc fires this when the current signer completes signing
     const handleMessage = (e: MessageEvent) => {
       if (typeof e.data !== "object") return;
       if (e.data?.event !== "session_view.document.completed") return;
-      if (phaseRef.current === "sa" && loaDocIdRef.current) {
-        advanceToLoa();
-      } else {
-        finishSigning();
-      }
+      onSigningDetected();
     };
     window.addEventListener("message", handleMessage);
     return () => {
@@ -157,15 +173,49 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
     window.open(`https://api.pandadoc.com/public/v1/documents/${documentId}/download`, "_blank");
   };
 
+  // ── Loading screens ──────────────────────────────────────────────
+
   if (status === "creating") {
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-4">
-        <svg className="animate-spin w-8 h-8" fill="none" viewBox="0 0 24 24" style={{ color: "#FFA500" }}>
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-        </svg>
+        <Spinner size={8} />
         <p className="text-sm text-gray-500 font-medium">Preparing your documents…</p>
         <p className="text-xs text-gray-400">This may take a few seconds</p>
+      </div>
+    );
+  }
+
+  // Shown immediately when signing is detected — before API confirmation
+  if (status === "verifying") {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 gap-5">
+        <div className="relative">
+          <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background: "rgba(255,165,0,0.08)" }}>
+            <Spinner size={8} />
+          </div>
+        </div>
+        <div className="text-center">
+          <p className="text-base font-bold text-gray-800 mb-1">
+            {verifyingLabel || "Processing your signature…"}
+          </p>
+          <p className="text-sm text-gray-400">Please don&apos;t close this window</p>
+        </div>
+        <div className="flex gap-1.5 mt-2">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="w-2 h-2 rounded-full animate-bounce" style={{ background: "#FFA500", animationDelay: `${i * 0.15}s` }} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (status === "completed") {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 gap-4">
+        <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl" style={{ background: "rgba(255,165,0,0.1)" }}>✅</div>
+        <p className="text-lg font-bold text-gray-800">Documents Signed!</p>
+        <p className="text-sm text-gray-500">Moving to payment plan selection…</p>
+        <Spinner size={5} />
       </div>
     );
   }
@@ -251,37 +301,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
     );
   }
 
-  if (status === "transitioning") {
-    return (
-      <div className="flex flex-col items-center justify-center py-16 gap-4">
-        <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl" style={{ background: "#f0fdf4" }}>✅</div>
-        <p className="text-base font-bold text-gray-800">Service Agreement signed!</p>
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <svg className="animate-spin w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" style={{ color: "#FFA500" }}>
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-          </svg>
-          Loading Letter of Authorization…
-        </div>
-      </div>
-    );
-  }
-
-  if (status === "completed") {
-    return (
-      <div className="flex flex-col items-center justify-center py-16 gap-4">
-        <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl" style={{ background: "rgba(255,165,0,0.1)" }}>✅</div>
-        <p className="text-lg font-bold text-gray-800">Documents Signed!</p>
-        <p className="text-sm text-gray-500">Moving to payment plan selection…</p>
-        <svg className="animate-spin w-5 h-5 mt-2" fill="none" viewBox="0 0 24 24" style={{ color: "#FFA500" }}>
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-        </svg>
-      </div>
-    );
-  }
-
-  // status === "ready" — show SA or LOA iframe depending on phase
+  // status === "ready" — show SA or LOA iframe
   const docLabel = phase === "sa" ? "Service Agreement" : "Letter of Authorization";
   const docStep = phase === "sa" ? "1 of 2" : "2 of 2";
 
@@ -298,7 +318,6 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
         </button>
       </div>
 
-      {/* Document progress indicator */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2 text-sm text-gray-500">
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
@@ -311,7 +330,6 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
         </button>
       </div>
 
-      {/* Mini progress pills */}
       <div className="flex gap-2 mb-4">
         {["Service Agreement", "Letter of Authorization"].map((label, i) => {
           const isActive = (i === 0 && phase === "sa") || (i === 1 && phase === "loa");
