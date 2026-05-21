@@ -36,7 +36,7 @@ interface FileUploadProps {
   error?: string;
 }
 
-function FileUpload({ label, required, fileBase64: _fileBase64, fileName, onChange, error }: FileUploadProps) {
+function FileUpload({ label, required, fileName, onChange, error }: FileUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
