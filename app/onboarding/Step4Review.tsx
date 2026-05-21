@@ -1,5 +1,6 @@
 "use client";
 import { FormData } from "./formTypes";
+import { IconClipboard, IconBuilding, IconUser, IconShieldCheck, IconDocument } from "./Icons";
 
 interface Props {
   formData: FormData;
@@ -18,13 +19,13 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 function Section({ icon, title, step, goToStep, children }: {
-  icon: string; title: string; step: number; goToStep: (s: number) => void; children: React.ReactNode;
+  icon: React.ReactNode; title: string; step: number; goToStep: (s: number) => void; children: React.ReactNode;
 }) {
   return (
     <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #f3f4f6" }}>
       <div className="flex items-center justify-between px-5 py-3.5" style={{ background: "#f9fafb", borderBottom: "1px solid #f3f4f6" }}>
         <div className="flex items-center gap-2">
-          <span className="text-base">{icon}</span>
+          <span style={{ color: "#FFA500" }}>{icon}</span>
           <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "#6b7280" }}>{title}</span>
         </div>
         <button onClick={() => goToStep(step)}
@@ -54,14 +55,14 @@ export default function Step4Review({ formData, onBack, onNext, goToStep }: Prop
       </div>
 
       <div className="flex flex-col gap-3 mb-7">
-        <Section icon="📋" title="Basic Information" step={1} goToStep={goToStep}>
+        <Section icon={<IconClipboard size={16} />} title="Basic Information" step={1} goToStep={goToStep}>
           <Row label="Email" value={formData.email} />
           <Row label="Type" value={formData.type.charAt(0).toUpperCase() + formData.type.slice(1)} />
           <Row label="Country" value={formData.country} />
         </Section>
 
         {isCompany ? (
-          <Section icon="🏢" title="Company Details" step={2} goToStep={goToStep}>
+          <Section icon={<IconBuilding size={16} />} title="Company Details" step={2} goToStep={goToStep}>
             <Row label="Company Name" value={formData.companyName} />
             <Row label="Reg. Number" value={formData.companyRegNumber} />
             <Row label="Reg. Certificate" value={formData.regCertName || "Not uploaded"} />
@@ -79,7 +80,7 @@ export default function Step4Review({ formData, onBack, onNext, goToStep }: Prop
             <Row label="Copyright Cert." value={formData.copyrightCertName || "Not provided"} />
           </Section>
         ) : (
-          <Section icon="👤" title="Personal Details" step={2} goToStep={goToStep}>
+          <Section icon={<IconUser size={16} />} title="Personal Details" step={2} goToStep={goToStep}>
             <Row label="Full Name" value={formData.individualName} />
             <Row label="National ID" value={formData.nationalIdNumber} />
             <Row label="ID Proof" value={formData.idProofName || "Not uploaded"} />
@@ -94,7 +95,7 @@ export default function Step4Review({ formData, onBack, onNext, goToStep }: Prop
           </Section>
         )}
 
-        <Section icon="🛡️" title={`Services Selected (${formData.services.length})`} step={3} goToStep={goToStep}>
+        <Section icon={<IconShieldCheck size={16} />} title={`Services Selected (${formData.services.length})`} step={3} goToStep={goToStep}>
           <div className="flex flex-wrap gap-2 py-2">
             {formData.services.map((s) => (
               <span key={s} className="text-xs px-3 py-1.5 rounded-full font-medium"
@@ -123,7 +124,7 @@ export default function Step4Review({ formData, onBack, onNext, goToStep }: Prop
       {/* Next step notice */}
       <div className="flex items-start gap-4 px-5 py-4 rounded-2xl mb-7"
         style={{ border: "1.5px solid #fed7aa", background: "linear-gradient(135deg, #fff8f0, #fff)" }}>
-        <span className="text-2xl flex-shrink-0">📝</span>
+        <IconDocument size={22} color="#FFA500" className="flex-shrink-0" />
         <div>
           <p className="font-bold text-sm mb-1" style={{ color: "#111827" }}>Next: Sign your documents</p>
           <p className="text-xs leading-relaxed" style={{ color: "#6b7280" }}>

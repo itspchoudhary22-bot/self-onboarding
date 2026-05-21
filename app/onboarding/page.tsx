@@ -10,6 +10,7 @@ import Step4Review from "./Step4Review";
 import Step5Sign from "./Step5Sign";
 import Step6Payment from "./Step6Payment";
 import SuccessScreen from "./SuccessScreen";
+import { IconLink } from "./Icons";
 
 const STEPS = (type: string) => [
   { key: 1, label: "Basic Info" },
@@ -318,7 +319,7 @@ export default function OnboardingPage() {
           {resumeLink ? (
             <div className="mt-4 px-4 py-3 rounded-2xl flex items-center gap-3"
               style={{ background: "#fff", border: "1.5px solid #e5e7eb", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
-              <span className="text-base flex-shrink-0">🔗</span>
+              <IconLink size={16} color="#9ca3af" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold mb-0.5" style={{ color: "#374151" }}>Your progress is saved</p>
                 <p className="text-xs truncate" style={{ color: "#9ca3af" }}>Bookmark this link to resume from any device</p>

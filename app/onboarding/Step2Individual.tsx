@@ -2,6 +2,7 @@
 import { useState, useRef } from "react";
 import { FormData } from "./formTypes";
 import { validatePincode, validateSocialMedia, getPincodeHint } from "@/lib/validations";
+import { IconUpload, IconWarning } from "./Icons";
 
 interface Props {
   formData: FormData;
@@ -21,7 +22,7 @@ function SectionDivider({ children }: { children: React.ReactNode }) {
 
 function FieldError({ msg }: { msg?: string }) {
   if (!msg) return null;
-  return <p className="text-xs mt-1.5 flex items-center gap-1" style={{ color: "#ef4444" }}><span>⚠</span> {msg}</p>;
+  return <p className="text-xs mt-1.5 flex items-center gap-1" style={{ color: "#ef4444" }}><IconWarning size={12} color="#ef4444" /> {msg}</p>;
 }
 
 function FieldHint({ children }: { children: React.ReactNode }) {
@@ -74,7 +75,7 @@ function FileUpload({ label, required, fileName, onChange, error }: FileUploadPr
           style={{ borderColor: error ? "#ef4444" : "#e5e7eb" }}
           onMouseEnter={(e) => { if (!error) (e.currentTarget as HTMLElement).style.borderColor = "#FFA500"; }}
           onMouseLeave={(e) => { if (!error) (e.currentTarget as HTMLElement).style.borderColor = "#e5e7eb"; }}>
-          <span className="text-3xl">📎</span>
+          <IconUpload size={28} color="#9ca3af" />
           <span className="text-sm font-semibold" style={{ color: "#374151" }}>
             Drop file here or <span style={{ color: "#FFA500" }}>Browse files</span>
           </span>

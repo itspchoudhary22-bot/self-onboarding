@@ -1,6 +1,10 @@
 "use client";
 import { useState } from "react";
 import { FormData } from "./formTypes";
+import {
+  IconShieldCheck, IconFingerprint, IconEye, IconIdCard,
+  IconChartBar, IconTag, IconStar, IconScale, IconDocument, IconInfo, IconWarning,
+} from "./Icons";
 
 interface Props {
   formData: FormData;
@@ -10,7 +14,7 @@ interface Props {
 }
 
 interface ServiceInfo {
-  icon: string;
+  icon: React.ReactNode;
   name: string;
   desc: string;
   prompt: string;
@@ -22,7 +26,7 @@ interface ServiceInfo {
 
 const SERVICES: ServiceInfo[] = [
   {
-    icon: "🛡️",
+    icon: <IconShieldCheck size={18} />,
     name: "Digital Piracy Protection",
     desc: "Detect and remove unauthorized copies of your digital content.",
     prompt: "What content needs protection? (e.g. YouTube videos, Instagram reels, music, courses, eBooks)",
@@ -31,7 +35,7 @@ const SERVICES: ServiceInfo[] = [
     benefits: ["Protects revenue", "Secures digital assets", "Preserves creator rights"],
   },
   {
-    icon: "®️",
+    icon: <IconFingerprint size={18} />,
     name: "Brand Protection",
     desc: "Safeguard your brand identity from misuse and impersonation.",
     prompt: "What brand issues are you facing? (e.g. fake accounts, counterfeit products, impersonation)",
@@ -40,7 +44,7 @@ const SERVICES: ServiceInfo[] = [
     benefits: ["Keeps brand presence clean", "Reduces major risks", "Boosts consumer confidence"],
   },
   {
-    icon: "🔍",
+    icon: <IconEye size={18} />,
     name: "Threat Intelligence",
     desc: "Real-time cyber threat intelligence and actionable insights.",
     prompt: "What threats are you concerned about? (e.g. data breaches, phishing, cyber attacks)",
@@ -49,7 +53,7 @@ const SERVICES: ServiceInfo[] = [
     benefits: ["Keeps brand presence clean", "Reduces major risks", "Boosts consumer confidence"],
   },
   {
-    icon: "🪪",
+    icon: <IconIdCard size={18} />,
     name: "Identity Theft Protection",
     desc: "Monitor and protect identities from theft and fraud.",
     prompt: "Whose identity needs protection and what risks are you facing?",
@@ -58,7 +62,7 @@ const SERVICES: ServiceInfo[] = [
     benefits: ["Fraud Risk Prevention", "Stronger User Trust", "Improved Identity Control"],
   },
   {
-    icon: "📊",
+    icon: <IconChartBar size={18} />,
     name: "Business Intelligence",
     desc: "Data-driven insights to strengthen your competitive advantage.",
     prompt: "What insights are you looking for? (e.g. competitor analysis, market trends, brand sentiment)",
@@ -67,7 +71,7 @@ const SERVICES: ServiceInfo[] = [
     benefits: ["Visibility", "Control Narrative", "Builds audience trust"],
   },
   {
-    icon: "🏷️",
+    icon: <IconTag size={18} />,
     name: "Counterfeit Protection",
     desc: "Identify and eliminate counterfeit products affecting your brand.",
     prompt: "What products are being counterfeited? Where are you seeing them?",
@@ -76,7 +80,7 @@ const SERVICES: ServiceInfo[] = [
     benefits: ["Stops Customer Misleading", "Ensures product authenticity", "Stops Revenue Loss"],
   },
   {
-    icon: "⭐",
+    icon: <IconStar size={18} />,
     name: "Reputation Management",
     desc: "Monitor and improve your online reputation across platforms.",
     prompt: "What reputation issues are you facing? (e.g. negative reviews, false news, defamation)",
@@ -86,7 +90,7 @@ const SERVICES: ServiceInfo[] = [
     note: "This service is not applicable to remove content that is protected by freedom of speech laws.",
   },
   {
-    icon: "⚖️",
+    icon: <IconScale size={18} />,
     name: "Legal Add-ons",
     desc: "Specialized legal support for IP disputes and enforcement.",
     prompt: "What legal assistance do you need? (e.g. takedown notices, IP registration, dispute resolution)",
@@ -109,8 +113,8 @@ function InfoModal({ svc, onClose }: { svc: ServiceInfo; onClose: () => void }) 
         <div className="px-6 pt-6 pb-4 flex items-start justify-between gap-3 flex-shrink-0"
           style={{ borderBottom: "1px solid #f3f4f6" }}>
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
-              style={{ background: "#fff8e6" }}>
+            <div className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
+              style={{ background: "#fff8e6", color: "#FFA500" }}>
               {svc.icon}
             </div>
             <div>
@@ -167,7 +171,7 @@ function InfoModal({ svc, onClose }: { svc: ServiceInfo; onClose: () => void }) 
           {svc.note && (
             <div className="flex items-start gap-2 px-4 py-3 rounded-xl text-xs"
               style={{ background: "#fefce8", border: "1px solid #fde68a", color: "#92400e" }}>
-              <span className="flex-shrink-0 mt-0.5">ℹ️</span>
+              <IconInfo size={14} color="#92400e" className="flex-shrink-0 mt-0.5" />
               <span>{svc.note}</span>
             </div>
           )}
@@ -228,7 +232,7 @@ export default function Step3Services({ formData, update, onNext, onBack }: Prop
       {error && (
         <div className="mb-5 flex items-center gap-2 px-4 py-3 rounded-2xl text-sm"
           style={{ background: "#fef2f2", border: "1.5px solid #fecaca", color: "#dc2626" }}>
-          <span>⚠</span> {error}
+          <IconWarning size={14} color="#dc2626" /> {error}
         </div>
       )}
 
@@ -236,7 +240,7 @@ export default function Step3Services({ formData, update, onNext, onBack }: Prop
         <div className="mb-5 flex items-center justify-between px-4 py-3 rounded-2xl"
           style={{ background: "rgba(255,165,0,0.08)", border: "1.5px solid rgba(255,165,0,0.2)" }}>
           <div className="flex items-center gap-2">
-            <span>✅</span>
+            <IconShieldCheck size={16} color="#92400e" />
             <span className="text-sm font-semibold" style={{ color: "#92400e" }}>
               {formData.services.length} service{formData.services.length !== 1 ? "s" : ""} selected
             </span>
@@ -271,7 +275,7 @@ export default function Step3Services({ formData, update, onNext, onBack }: Prop
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-base">{svc.icon}</span>
+                    <span style={{ color: sel ? "#FFA500" : "#9ca3af" }}>{svc.icon}</span>
                     <span className="font-bold text-sm" style={{ color: sel ? "#111827" : "#374151" }}>{svc.name}</span>
                   </div>
                   <p className="text-xs leading-relaxed" style={{ color: "#9ca3af" }}>{svc.desc}</p>
@@ -297,7 +301,7 @@ export default function Step3Services({ formData, update, onNext, onBack }: Prop
         <div className="mb-7">
           <div className="flex items-start gap-3 px-5 py-4 rounded-2xl mb-5"
             style={{ background: "linear-gradient(135deg, #fff8e6, #fff)", border: "1.5px solid rgba(255,165,0,0.2)" }}>
-            <span className="text-xl flex-shrink-0 mt-0.5">📝</span>
+            <IconDocument size={20} color="#FFA500" className="flex-shrink-0 mt-0.5" />
             <div>
               <p className="font-bold text-sm mb-1" style={{ color: "#111827" }}>Tell us more about your needs</p>
               <p className="text-xs leading-relaxed" style={{ color: "#9ca3af" }}>
@@ -312,7 +316,7 @@ export default function Step3Services({ formData, update, onNext, onBack }: Prop
                 style={{ border: "1.5px solid #FFA500", background: "#fffbeb" }}>
                 <div className="flex items-center gap-3 px-5 py-3.5"
                   style={{ borderBottom: "1px solid rgba(255,165,0,0.2)" }}>
-                  <span className="text-lg">{svc.icon}</span>
+                  <span style={{ color: "#FFA500" }}>{svc.icon}</span>
                   <span className="font-bold text-sm flex-1" style={{ color: "#111827" }}>{svc.name}</span>
                   <span className="text-xs font-semibold px-2.5 py-1 rounded-full"
                     style={{ background: "rgba(255,165,0,0.15)", color: "#92400e" }}>

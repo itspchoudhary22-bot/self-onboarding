@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { FormData } from "./formTypes";
+import { IconPhone, IconCreditCard, IconBankNote, IconLock, IconWarning } from "./Icons";
 
 interface Props {
   formData: FormData;
@@ -152,7 +153,7 @@ export default function Step6Payment({ formData, update, onBack, onSubmit, isSub
       {/* Custom plan message */}
       {isCustom && (
         <div className="rounded-2xl border border-gray-200 bg-gray-50 px-6 py-6 mb-6 text-center">
-          <div className="text-4xl mb-3">📞</div>
+          <div className="flex justify-center mb-3"><IconPhone size={36} color="#6b7280" /></div>
           <h3 className="text-lg font-black text-gray-900 mb-1">Our Sales Team Will Contact You</h3>
           <p className="text-sm text-gray-500 mb-1">
             Thank you for your interest in a Custom plan. One of our sales representatives will reach out within 1 business day to understand your requirements and prepare a tailored proposal.
@@ -169,8 +170,8 @@ export default function Step6Payment({ formData, update, onBack, onSubmit, isSub
           <p className="text-sm font-bold text-gray-700 mb-3">Select Payment Method</p>
           <div className="grid grid-cols-2 gap-3 mb-5">
             {[
-              { id: "card" as const, label: "Credit / Debit Card", icon: "💳" },
-              { id: "bank" as const, label: "Bank Transfer", icon: "🏦" },
+              { id: "card" as const, label: "Credit / Debit Card", icon: <IconCreditCard size={24} /> },
+              { id: "bank" as const, label: "Bank Transfer", icon: <IconBankNote size={24} /> },
             ].map((m) => (
               <button
                 key={m.id}
@@ -183,7 +184,7 @@ export default function Step6Payment({ formData, update, onBack, onSubmit, isSub
                   boxShadow: method === m.id ? "0 0 0 3px rgba(255,165,0,0.15)" : "none",
                 }}
               >
-                <span className="text-2xl">{m.icon}</span>
+                <span style={{ color: method === m.id ? "#92400e" : "#9ca3af" }}>{m.icon}</span>
                 {m.label}
               </button>
             ))}
@@ -248,7 +249,7 @@ export default function Step6Payment({ formData, update, onBack, onSubmit, isSub
                 </div>
               </div>
               <div className="flex items-center gap-2 text-xs text-gray-400 pt-1">
-                <span>🔒</span>
+                <IconLock size={13} color="#9ca3af" />
                 <span>This is a demo screen. No payment will be processed.</span>
               </div>
             </div>
@@ -290,7 +291,7 @@ export default function Step6Payment({ formData, update, onBack, onSubmit, isSub
                 </div>
               </div>
               <div className="flex items-center gap-2 text-xs text-gray-400 pt-1">
-                <span>🔒</span>
+                <IconLock size={13} color="#9ca3af" />
                 <span>This is a demo screen. No payment will be processed.</span>
               </div>
             </div>
@@ -300,7 +301,7 @@ export default function Step6Payment({ formData, update, onBack, onSubmit, isSub
 
       {submitError && (
         <div className="mb-4 flex items-start gap-2 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
-          <span>⚠</span> <span>{submitError}</span>
+          <IconWarning size={14} color="#b91c1c" /> <span>{submitError}</span>
         </div>
       )}
 

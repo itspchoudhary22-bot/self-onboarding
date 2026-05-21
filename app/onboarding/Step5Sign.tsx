@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { FormData } from "./formTypes";
+import { IconCheckCircle, IconCog, IconWarning, IconInfo } from "./Icons";
 
 interface Props {
   formData: FormData;
@@ -212,7 +213,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
   if (status === "completed") {
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-4">
-        <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl" style={{ background: "rgba(255,165,0,0.1)" }}>✅</div>
+        <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: "rgba(255,165,0,0.1)" }}><IconCheckCircle size={32} color="#FFA500" /></div>
         <p className="text-lg font-bold text-gray-800">Documents Signed!</p>
         <p className="text-sm text-gray-500">Moving to payment plan selection…</p>
         <Spinner size={5} />
@@ -229,7 +230,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
         </div>
         <div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-5 mb-6">
           <div className="flex items-start gap-3">
-            <span className="text-2xl">⚙️</span>
+            <IconCog size={22} color="#92400e" />
             <div>
               <p className="font-bold text-gray-800 mb-1">PandaDoc Not Yet Configured</p>
               <p className="text-sm text-gray-600">
@@ -262,7 +263,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
           <p className="text-gray-500 mt-1 text-sm">Service Agreement &amp; Letter of Authorization</p>
         </div>
         <div className="rounded-xl border border-green-200 bg-green-50 px-5 py-5 mb-6 flex items-start gap-3">
-          <span className="text-2xl">✅</span>
+          <IconCheckCircle size={22} color="#16a34a" />
           <div>
             <p className="font-bold text-gray-800 mb-1">Documents Already Signed</p>
             <p className="text-sm text-gray-600">You have already signed your documents. You can continue to the payment step.</p>
@@ -352,14 +353,14 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
       </div>
 
       <div className="rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 mb-4 text-sm text-gray-600">
-        <span className="font-semibold text-gray-700">💡 Tip: </span>
+        <span className="font-semibold text-gray-700 inline-flex items-center gap-1"><IconInfo size={13} color="#374151" /> Tip: </span>
         Scroll through the document, fill any required fields, then click <strong>Sign</strong>.{" "}
         {phase === "sa" ? "After signing, your LOA will load automatically." : "This is your last document — you'll move to payment after signing."}
       </div>
 
       {submitError && (
         <div className="mb-4 flex items-start gap-2 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
-          <span>⚠</span> <span>{submitError}</span>
+          <IconWarning size={14} color="#b91c1c" /> <span>{submitError}</span>
         </div>
       )}
 

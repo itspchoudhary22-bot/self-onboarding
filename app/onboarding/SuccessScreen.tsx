@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormData } from "./formTypes";
+import { IconEnvelope, IconCog, IconKey, IconUserCircle, IconCheckCircle, IconLink } from "./Icons";
 
 interface Props {
   formData: FormData;
@@ -50,13 +51,13 @@ export default function SuccessScreen({ formData, documentSigned }: Props) {
               <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">What happens next</p>
               <div className="space-y-3">
                 {[
-                  { icon: "📧", text: `A confirmation email has been sent to ${recipientEmail}` },
-                  { icon: "⚙️", text: "Our operations team will begin setting up your account" },
-                  { icon: "🔑", text: "You will receive your client dashboard credentials within 1–2 business days" },
-                  { icon: "👤", text: "Your account manager will reach out shortly to guide you" },
+                  { icon: <IconEnvelope size={16} color="#FFA500" />, text: `A confirmation email has been sent to ${recipientEmail}` },
+                  { icon: <IconCog size={16} color="#FFA500" />, text: "Our operations team will begin setting up your account" },
+                  { icon: <IconKey size={16} color="#FFA500" />, text: "You will receive your client dashboard credentials within 1–2 business days" },
+                  { icon: <IconUserCircle size={16} color="#FFA500" />, text: "Your account manager will reach out shortly to guide you" },
                 ].map((item) => (
                   <div key={item.text} className="flex items-start gap-3">
-                    <span className="text-base mt-0.5">{item.icon}</span>
+                    <span className="flex-shrink-0 mt-0.5">{item.icon}</span>
                     <span className="text-sm text-gray-600">{item.text}</span>
                   </div>
                 ))}
@@ -66,7 +67,7 @@ export default function SuccessScreen({ formData, documentSigned }: Props) {
             {/* Documents signed indicator */}
             {documentSigned && (
               <div className="rounded-xl border border-green-200 bg-green-50 px-5 py-3 mb-5 flex items-center gap-3">
-                <span className="text-green-500 text-xl">✓</span>
+                <IconCheckCircle size={20} color="#16a34a" />
                 <div>
                   <p className="text-sm font-semibold text-green-800">Documents Signed</p>
                   <p className="text-xs text-green-600">Your Service Agreement and LOA have been successfully signed and recorded.</p>

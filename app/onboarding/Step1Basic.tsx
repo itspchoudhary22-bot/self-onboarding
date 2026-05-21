@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { FormData } from "./formTypes";
 import { COUNTRIES } from "@/lib/countries";
+import { IconUser, IconBuilding, IconWarning } from "./Icons";
 
 interface Props {
   formData: FormData;
@@ -18,7 +19,7 @@ function FieldError({ msg }: { msg?: string }) {
   if (!msg) return null;
   return (
     <p className="text-xs mt-1.5 flex items-center gap-1" style={{ color: "#ef4444" }}>
-      <span>⚠</span> {msg}
+      <IconWarning size={12} color="#ef4444" /> {msg}
     </p>
   );
 }
@@ -123,7 +124,9 @@ export default function Step1Basic({ formData, update, onNext }: Props) {
                       </svg>
                     </div>
                   )}
-                  <span className="text-4xl">{t === "individual" ? "👤" : "🏢"}</span>
+                  <span style={{ color: sel ? "#FFA500" : "#9ca3af" }}>
+                    {t === "individual" ? <IconUser size={32} /> : <IconBuilding size={32} />}
+                  </span>
                   <div className="text-center">
                     <p className="font-bold text-sm capitalize" style={{ color: sel ? "#111827" : "#374151" }}>{t}</p>
                     <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>

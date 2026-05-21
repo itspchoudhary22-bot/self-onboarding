@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { IconLock, IconClipboard } from "./onboarding/Icons";
 
 const STEPS = [
   { n: 1, title: "Basic Information", sub: "Email, type, country", time: "~1 min" },
@@ -77,9 +78,9 @@ export default function HomePage() {
           <div className="hidden lg:block">
             <div className="rounded-3xl p-8" style={{ background: "#fff", boxShadow: "0 24px 64px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)" }}>
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0"
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
                   style={{ background: "#FFA500", boxShadow: "0 8px 20px rgba(255,165,0,0.35)" }}>
-                  📋
+                  <IconClipboard size={28} color="#111827" />
                 </div>
                 <div>
                   <p className="font-extrabold text-lg" style={{ color: "#111827" }}>Customer Onboarding</p>
@@ -109,7 +110,7 @@ export default function HomePage() {
               </div>
 
               <div className="mt-7 flex items-center gap-3 p-4 rounded-2xl" style={{ background: "#f9fafb" }}>
-                <span className="text-xl">🔒</span>
+                <IconLock size={20} color="#9ca3af" />
                 <p className="text-sm" style={{ color: "#6b7280" }}>Your data is encrypted and stored securely</p>
               </div>
             </div>
