@@ -267,9 +267,15 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
 
   return (
     <div>
-      <div className="mb-4">
-        <h2 className="text-2xl font-black text-gray-900">Sign Your Documents</h2>
-        <p className="text-gray-500 mt-1 text-sm">Review and digitally sign your Service Agreement &amp; LOA</p>
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div>
+          <h2 className="text-2xl font-black text-gray-900">Sign Your Documents</h2>
+          <p className="text-gray-500 mt-1 text-sm">Review and digitally sign your Service Agreement &amp; LOA</p>
+        </div>
+        <button onClick={onBack}
+          className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border-2 border-gray-200 text-gray-500 transition-all hover:bg-gray-50 mt-1">
+          ← Back
+        </button>
       </div>
 
       {/* Document progress indicator */}
@@ -303,12 +309,8 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
         })}
       </div>
 
-      <div className="flex flex-col gap-2 mb-4">
+      <div className="mb-4">
         <SalesContactButton formData={formData} />
-        <button onClick={onBack}
-          className="w-full py-3 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 transition-all hover:bg-gray-50">
-          ← Back to Review
-        </button>
       </div>
 
       <div className="rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 mb-4 text-sm text-gray-600">
