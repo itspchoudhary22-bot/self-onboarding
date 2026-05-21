@@ -44,7 +44,7 @@ export default function HomePage() {
               Takes 5–10 minutes to complete
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-5" style={{ color: "#111827", letterSpacing: "-0.03em" }}>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-5" style={{ color: "#111827", letterSpacing: "-0.03em" }}>
               Start Your{" "}
               <span style={{ background: "linear-gradient(135deg, #FFA500, #f97316)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 Bytescare
