@@ -208,7 +208,13 @@ export default function Step2Company({ formData, update, onNext, onBack }: Props
             <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>Pincode / ZIP <span style={{ color: "#FFA500" }}>*</span></label>
             <input type="text" placeholder={getPincodeHint(formData.country)} value={formData.companyPincode}
               onChange={(e) => { update({ companyPincode: e.target.value }); clr("companyPincode"); }}
-              className={inp} {...bs(errors.companyPincode)} {...fo(errors.companyPincode)} />
+              className={inp} {...bs(errors.companyPincode)}
+              onFocus={(e) => (e.target.style.borderColor = errors.companyPincode ? "#ef4444" : "#FFA500")}
+              onBlur={(e) => {
+                const err = validatePincode(e.target.value, formData.country);
+                e.target.style.borderColor = err ? "#ef4444" : "#e5e7eb";
+                setErrors((p) => ({ ...p, companyPincode: err }));
+              }} />
             {!errors.companyPincode && <FieldHint>{getPincodeHint(formData.country)}</FieldHint>}
             <FieldError msg={errors.companyPincode} />
           </div>
@@ -293,7 +299,13 @@ export default function Step2Company({ formData, update, onNext, onBack }: Props
           placeholder={"Website: https://www.yourcompany.com\n\nLinkedIn: https://linkedin.com/company/name\n\nTwitter: @handle"}
           value={formData.companySocialMedia}
           onChange={(e) => { update({ companySocialMedia: e.target.value }); clr("companySocialMedia"); }}
-          className={tea} {...bs(errors.companySocialMedia)} {...fo(errors.companySocialMedia)} />
+          className={tea} {...bs(errors.companySocialMedia)}
+          onFocus={(e) => (e.target.style.borderColor = errors.companySocialMedia ? "#ef4444" : "#FFA500")}
+          onBlur={(e) => {
+            const err = validateSocialMedia(e.target.value);
+            e.target.style.borderColor = err ? "#ef4444" : "#e5e7eb";
+            setErrors((p) => ({ ...p, companySocialMedia: err }));
+          }} />
         <FieldHint>Format — Platform: @handle | Link: https://…</FieldHint>
         <FieldError msg={errors.companySocialMedia} />
       </div>

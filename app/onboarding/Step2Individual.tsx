@@ -189,7 +189,13 @@ export default function Step2Individual({ formData, update, onNext, onBack }: Pr
             <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>Pincode / ZIP <span style={{ color: "#FFA500" }}>*</span></label>
             <input type="text" placeholder={getPincodeHint(formData.country)} value={formData.pincode}
               onChange={(e) => { update({ pincode: e.target.value }); clr("pincode"); }}
-              className={inp} {...bs(errors.pincode)} {...fo(errors.pincode)} />
+              className={inp} {...bs(errors.pincode)}
+              onFocus={(e) => (e.target.style.borderColor = errors.pincode ? "#ef4444" : "#FFA500")}
+              onBlur={(e) => {
+                const err = validatePincode(e.target.value, formData.country);
+                e.target.style.borderColor = err ? "#ef4444" : "#e5e7eb";
+                setErrors((p) => ({ ...p, pincode: err }));
+              }} />
             {!errors.pincode && <FieldHint>{getPincodeHint(formData.country)}</FieldHint>}
             <FieldError msg={errors.pincode} />
           </div>
@@ -253,7 +259,13 @@ export default function Step2Individual({ formData, update, onNext, onBack }: Pr
           placeholder={"Instagram: @handle\nLink: https://instagram.com/handle\n\nYouTube: @handle\nLink: https://youtube.com/channel"}
           value={formData.socialMediaHandles}
           onChange={(e) => { update({ socialMediaHandles: e.target.value }); clr("socialMediaHandles"); }}
-          className={tea} {...bs(errors.socialMediaHandles)} {...fo(errors.socialMediaHandles)} />
+          className={tea} {...bs(errors.socialMediaHandles)}
+          onFocus={(e) => (e.target.style.borderColor = errors.socialMediaHandles ? "#ef4444" : "#FFA500")}
+          onBlur={(e) => {
+            const err = validateSocialMedia(e.target.value);
+            e.target.style.borderColor = err ? "#ef4444" : "#e5e7eb";
+            setErrors((p) => ({ ...p, socialMediaHandles: err }));
+          }} />
         <FieldHint>Format — Platform: @handle | Link: https://…</FieldHint>
         <FieldError msg={errors.socialMediaHandles} />
       </div>
