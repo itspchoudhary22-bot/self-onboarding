@@ -233,9 +233,8 @@ export default function OnboardingPage() {
       {/* Header */}
       <header className="bg-white sticky top-0 z-50" style={{ borderBottom: "1px solid #f3f4f6" }}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-0.5 font-black text-xl tracking-tight" style={{ letterSpacing: "-0.02em" }}>
-            <span style={{ color: "#111827" }}>BYTES</span>
-            <span style={{ color: "#FFA500" }}>CARE</span>
+          <Link href="/">
+            <img src="/logo.svg" alt="Bytescare" height={22} style={{ height: 22 }} />
           </Link>
           <span className="text-sm font-medium" style={{ color: "#9ca3af" }}>Customer Onboarding</span>
         </div>
