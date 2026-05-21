@@ -12,7 +12,8 @@ interface Props {
   existingDocumentId?: string;
 }
 
-type SignStatus = "creating" | "ready" | "signing" | "completed" | "already_signed" | "error" | "not_configured";
+type SignStatus = "creating" | "ready" | "completed" | "already_signed" | "error" | "not_configured";
+type SignPhase = "sa" | "loa";
 
 function SalesContactButton({ formData }: { formData: FormData }) {
   const [sent, setSent] = useState(false);
@@ -50,27 +51,65 @@ function SalesContactButton({ formData }: { formData: FormData }) {
 
 export default function Step5Sign({ formData, sessionId, onBack, onComplete, isSubmitting, submitError, existingDocumentId }: Props) {
   const [status, setStatus] = useState<SignStatus>(existingDocumentId ? "already_signed" : "creating");
+  const [phase, setPhase] = useState<SignPhase>("sa");
   const [signingUrl, setSigningUrl] = useState("");
   const [documentId, setDocumentId] = useState(existingDocumentId || "");
   const [error, setError] = useState("");
+
+  // Refs so closures in useEffect & setInterval always see current values
   const pollRef = useRef<NodeJS.Timeout>();
   const docIdRef = useRef(existingDocumentId || "");
+  const phaseRef = useRef<SignPhase>("sa");
+  const loaUrlRef = useRef("");
+  const loaDocIdRef = useRef("");
+
+  const advanceToLoa = () => {
+    clearInterval(pollRef.current);
+    phaseRef.current = "loa";
+    setPhase("loa");
+    setSigningUrl(loaUrlRef.current);
+    startPolling(loaDocIdRef.current);
+  };
+
+  const finishSigning = () => {
+    clearInterval(pollRef.current);
+    setStatus("completed");
+    onComplete(docIdRef.current);
+  };
+
+  const startPolling = (docId: string) => {
+    clearInterval(pollRef.current);
+    pollRef.current = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/pandadoc/status?documentId=${docId}`);
+        const { status: docStatus, recipients } = await res.json();
+        const clientSigned = recipients?.some(
+          (r: { role: string; signing_status?: string }) =>
+            r.role?.toLowerCase() === "client" && r.signing_status === "signed"
+        );
+        if (clientSigned || docStatus === "document.completed") {
+          if (phaseRef.current === "sa" && loaDocIdRef.current) {
+            advanceToLoa();
+          } else {
+            finishSigning();
+          }
+        }
+      } catch {}
+    }, 5000);
+  };
 
   useEffect(() => {
     if (existingDocumentId) return;
 
     createDocuments();
 
-    // Listen for PandaDoc postMessage — fires when client signs, no need to wait for Bytescare
     const handleMessage = (e: MessageEvent) => {
       if (typeof e.data !== "object") return;
-      const event = e.data?.event;
-      if (event === "session_view.document.completed" || event === "session_view.document.exception") {
-        if (event === "session_view.document.completed") {
-          clearInterval(pollRef.current);
-          setStatus("completed");
-          onComplete(docIdRef.current);
-        }
+      if (e.data?.event !== "session_view.document.completed") return;
+      if (phaseRef.current === "sa" && loaDocIdRef.current) {
+        advanceToLoa();
+      } else {
+        finishSigning();
       }
     };
     window.addEventListener("message", handleMessage);
@@ -92,41 +131,21 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
       });
       const data = await res.json();
 
-      if (data.notConfigured) {
-        setStatus("not_configured");
-        return;
-      }
+      if (data.notConfigured) { setStatus("not_configured"); return; }
       if (!res.ok) throw new Error(data.error || "Failed to prepare documents");
 
       docIdRef.current = data.documentId;
+      loaDocIdRef.current = data.loaDocumentId || "";
+      loaUrlRef.current = data.loaSigningUrl || "";
+
       setDocumentId(data.documentId);
       setSigningUrl(data.signingUrl);
       setStatus("ready");
-      // Fallback poll in case postMessage doesn't fire
       startPolling(data.documentId);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Failed to prepare documents");
       setStatus("error");
     }
-  };
-
-  const startPolling = (docId: string) => {
-    pollRef.current = setInterval(async () => {
-      try {
-        const res = await fetch(`/api/pandadoc/status?documentId=${docId}`);
-        const { status: docStatus, recipients } = await res.json();
-        // Move forward once the client recipient has signed (not waiting for Bytescare)
-        const clientSigned = recipients?.some(
-          (r: { role: string; signing_status?: string }) =>
-            r.role?.toLowerCase() === "client" && r.signing_status === "signed"
-        );
-        if (clientSigned || docStatus === "document.completed") {
-          clearInterval(pollRef.current);
-          setStatus("completed");
-          onComplete(docId);
-        }
-      } catch {}
-    }, 5000);
   };
 
   const handleDownload = () => {
@@ -159,7 +178,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
             <span className="text-2xl">⚙️</span>
             <div>
               <p className="font-bold text-gray-800 mb-1">PandaDoc Not Yet Configured</p>
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-sm text-gray-600">
                 The document signing integration requires PandaDoc API credentials. Once configured, your Service Agreement and LOA will appear here for review and digital signing.
               </p>
             </div>
@@ -192,7 +211,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
           <span className="text-2xl">✅</span>
           <div>
             <p className="font-bold text-gray-800 mb-1">Documents Already Signed</p>
-            <p className="text-sm text-gray-600">You have already signed the Service Agreement. You can continue to the payment step.</p>
+            <p className="text-sm text-gray-600">You have already signed your documents. You can continue to the payment step.</p>
           </div>
         </div>
         <div className="flex gap-3">
@@ -242,19 +261,22 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
     );
   }
 
-  // status === "ready" | "signing"
+  // status === "ready" — show SA or LOA iframe depending on phase
+  const docLabel = phase === "sa" ? "Service Agreement" : "Letter of Authorization";
+  const docStep = phase === "sa" ? "1 of 2" : "2 of 2";
+
   return (
     <div>
-      {/* Header + action bar — always visible at the top */}
       <div className="mb-4">
         <h2 className="text-2xl font-black text-gray-900">Sign Your Documents</h2>
         <p className="text-gray-500 mt-1 text-sm">Review and digitally sign your Service Agreement &amp; LOA</p>
       </div>
 
+      {/* Document progress indicator */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2 text-sm text-gray-500">
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-          Document ready for signing
+          <span><strong style={{ color: "#111827" }}>{docLabel}</strong> — document {docStep}</span>
         </div>
         <button onClick={handleDownload}
           className="text-xs font-semibold flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all"
@@ -263,7 +285,24 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
         </button>
       </div>
 
-      {/* Buttons ABOVE iframe so they're always visible */}
+      {/* Mini progress pills */}
+      <div className="flex gap-2 mb-4">
+        {["Service Agreement", "Letter of Authorization"].map((label, i) => {
+          const isActive = (i === 0 && phase === "sa") || (i === 1 && phase === "loa");
+          const isDone = i === 0 && phase === "loa";
+          return (
+            <div key={label} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
+              style={{
+                background: isDone ? "#f0fdf4" : isActive ? "#fff8e6" : "#f3f4f6",
+                color: isDone ? "#166534" : isActive ? "#92400e" : "#9ca3af",
+                border: `1.5px solid ${isDone ? "#86efac" : isActive ? "rgba(255,165,0,0.4)" : "#e5e7eb"}`,
+              }}>
+              {isDone ? "✓" : isActive ? "●" : `${i + 1}`} {label}
+            </div>
+          );
+        })}
+      </div>
+
       <div className="flex flex-col gap-2 mb-4">
         <SalesContactButton formData={formData} />
         <button onClick={onBack}
@@ -274,7 +313,8 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
 
       <div className="rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 mb-4 text-sm text-gray-600">
         <span className="font-semibold text-gray-700">💡 Tip: </span>
-        Scroll through the document, fill any required fields, then click <strong>Sign</strong>. You&apos;ll automatically move to the next step.
+        Scroll through the document, fill any required fields, then click <strong>Sign</strong>.{" "}
+        {phase === "sa" ? "After signing, your LOA will load automatically." : "This is your last document — you'll move to payment after signing."}
       </div>
 
       {submitError && (
@@ -283,9 +323,8 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
         </div>
       )}
 
-      {/* Iframe below — scrollable */}
       <div className="rounded-xl overflow-hidden border border-gray-200" style={{ height: "600px" }}>
-        <iframe src={signingUrl} className="w-full h-full" title="Document Signing" allow="camera" />
+        <iframe src={signingUrl} className="w-full h-full" title={docLabel} allow="camera" />
       </div>
     </div>
   );

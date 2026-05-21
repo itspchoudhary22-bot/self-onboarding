@@ -17,7 +17,7 @@ export async function GET(request) {
     });
     if (!res.ok) return NextResponse.json({ status: 'error' });
     const doc = await res.json();
-    return NextResponse.json({ status: doc.status });
+    return NextResponse.json({ status: doc.status, recipients: doc.recipients ?? [] });
   } catch {
     return NextResponse.json({ status: 'error' });
   }

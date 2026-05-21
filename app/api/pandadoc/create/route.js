@@ -25,17 +25,13 @@ function buildSignerRecipient() {
   return { email: SIGNER_EMAIL, first_name: SIGNER_FIRST, last_name: SIGNER_LAST, role: SIGNER_ROLE };
 }
 
-// SA has both Client + Sender roles; LOA has only Sender role
+// Both SA and LOA are signed by the Client only (Sender signing removed from templates)
 function buildRecipientsForSA(formData) {
-  const recipients = [buildClientRecipient(formData)];
-  const signer = buildSignerRecipient();
-  if (signer) recipients.push(signer);
-  return recipients;
+  return [buildClientRecipient(formData)];
 }
 
-function buildRecipientsForLOA() {
-  const signer = buildSignerRecipient();
-  return signer ? [signer] : [];
+function buildRecipientsForLOA(formData) {
+  return [buildClientRecipient(formData)];
 }
 
 function buildTokens(formData) {
@@ -155,13 +151,15 @@ export async function POST(request) {
 
     const tokens = buildTokens(formData);
     const saDoc = await createPandaDocDocument(SERVICE_AGREEMENT_TEMPLATE_ID, buildRecipientsForSA(formData), tokens, `Service Agreement – ${clientName}`);
-    const loaDoc = await createPandaDocDocument(LOA_TEMPLATE_ID, buildRecipientsForLOA(), tokens, `Letter of Authorization – ${clientName}`);
+    const loaDoc = await createPandaDocDocument(LOA_TEMPLATE_ID, buildRecipientsForLOA(formData), tokens, `Letter of Authorization – ${clientName}`);
 
-    // Send SA so it moves from draft → sent, enabling embedded signing session
+    // Send both documents so they move draft → sent, enabling embedded signing sessions
     await sendDocument(saDoc.id);
+    await sendDocument(loaDoc.id);
 
-    // Get signing session for the service agreement (primary document)
-    const session = await getSigningSession(saDoc.id, recipientEmail);
+    // Get signing sessions for both documents
+    const saSession = await getSigningSession(saDoc.id, recipientEmail);
+    const loaSession = await getSigningSession(loaDoc.id, recipientEmail);
 
     await connectDB();
     await Draft.findOneAndUpdate(
@@ -176,8 +174,8 @@ export async function POST(request) {
     return NextResponse.json({
       documentId: saDoc.id,
       loaDocumentId: loaDoc.id,
-      signingUrl: `https://app.pandadoc.com/s/${session.id}`,
-      downloadUrl: `https://api.pandadoc.com/public/v1/documents/${saDoc.id}/download`,
+      signingUrl: `https://app.pandadoc.com/s/${saSession.id}`,
+      loaSigningUrl: `https://app.pandadoc.com/s/${loaSession.id}`,
     });
   } catch (err) {
     console.error('PandaDoc create error:', err);
