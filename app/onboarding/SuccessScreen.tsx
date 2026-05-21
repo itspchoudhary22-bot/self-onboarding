@@ -17,7 +17,7 @@ export default function SuccessScreen({ formData, documentSigned }: Props) {
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "#f9fafb" }}>
       <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+        <div className="w-full px-6 sm:px-10 h-14 flex items-center justify-between">
           <Link href="/">
             <img src="/logo.svg" alt="Bytescare" height={22} style={{ height: 22 }} />
           </Link>

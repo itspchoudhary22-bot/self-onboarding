@@ -232,7 +232,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex flex-col" style={{ background: "#f9fafb" }}>
       {/* Header */}
       <header className="bg-white sticky top-0 z-50" style={{ borderBottom: "1px solid #f3f4f6" }}>
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <div className="w-full px-6 sm:px-10 h-16 flex items-center justify-between">
           <Link href="/">
             <img src="/logo.svg" alt="Bytescare" height={22} style={{ height: 22 }} />
           </Link>

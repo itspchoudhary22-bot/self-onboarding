@@ -20,7 +20,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "linear-gradient(135deg, #fff8e6 0%, #fff 50%, #f5f3ff 100%)" }}>
       <nav style={{ background: "rgba(255,255,255,0.85)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(0,0,0,0.06)", position: "sticky", top: 0, zIndex: 40 }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <div className="w-full px-6 sm:px-10 h-16 flex items-center justify-between">
           <img src="/logo.svg" alt="Bytescare" height={24} style={{ height: 24 }} />
           <a href="https://bytescare.com" target="_blank" rel="noopener noreferrer"
             className="text-sm font-medium hidden sm:block transition-colors"
