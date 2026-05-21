@@ -12,7 +12,7 @@ interface Props {
   existingDocumentId?: string;
 }
 
-type SignStatus = "creating" | "ready" | "completed" | "already_signed" | "error" | "not_configured";
+type SignStatus = "creating" | "ready" | "transitioning" | "completed" | "already_signed" | "error" | "not_configured";
 type SignPhase = "sa" | "loa";
 
 function SalesContactButton({ formData }: { formData: FormData }) {
@@ -65,16 +65,20 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
 
   const advanceToLoa = () => {
     clearInterval(pollRef.current);
-    phaseRef.current = "loa";
-    setPhase("loa");
-    setSigningUrl(loaUrlRef.current);
-    startPolling(loaDocIdRef.current);
+    setStatus("transitioning");
+    setTimeout(() => {
+      phaseRef.current = "loa";
+      setPhase("loa");
+      setSigningUrl(loaUrlRef.current);
+      setStatus("ready");
+      startPolling(loaDocIdRef.current);
+    }, 1200);
   };
 
   const finishSigning = () => {
     clearInterval(pollRef.current);
     setStatus("completed");
-    onComplete(docIdRef.current);
+    setTimeout(() => onComplete(docIdRef.current), 1800);
   };
 
   const startPolling = (docId: string) => {
@@ -95,7 +99,7 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
           }
         }
       } catch {}
-    }, 5000);
+    }, 3000);
   };
 
   useEffect(() => {
@@ -242,6 +246,22 @@ export default function Step5Sign({ formData, sessionId, onBack, onComplete, isS
         <div className="flex gap-3">
           <button onClick={onBack} className="flex-1 py-3.5 rounded-xl font-semibold text-sm border-2 border-gray-200 text-gray-500 hover:bg-gray-50">← Back</button>
           <button onClick={createDocuments} className="flex-[2] py-3.5 rounded-xl font-bold text-sm hover:opacity-90" style={{ background: "#FFA500", color: "#111827" }}>Retry</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === "transitioning") {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 gap-4">
+        <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl" style={{ background: "#f0fdf4" }}>✅</div>
+        <p className="text-base font-bold text-gray-800">Service Agreement signed!</p>
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <svg className="animate-spin w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" style={{ color: "#FFA500" }}>
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          Loading Letter of Authorization…
         </div>
       </div>
     );

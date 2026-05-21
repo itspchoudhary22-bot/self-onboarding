@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import { FormData } from "./formTypes";
+import { validatePincode, validateSocialMedia, getPincodeHint } from "@/lib/validations";
 
 interface Props {
   formData: FormData;
@@ -106,13 +107,15 @@ export default function Step2Individual({ formData, update, onNext, onBack }: Pr
     if (!formData.nationalIdNumber.trim()) errs.nationalIdNumber = "National ID number is required.";
     if (!formData.idProofBase64) errs.idProof = "Please upload your National ID proof.";
     if (!formData.registeredAddress.trim()) errs.registeredAddress = "Registered address is required.";
-    if (!formData.pincode.trim()) errs.pincode = "Pincode / ZIP is required.";
+    const pincodeErr = validatePincode(formData.pincode, formData.country);
+    if (pincodeErr) errs.pincode = pincodeErr;
     if (!formData.mailingAddress.trim()) errs.mailingAddress = "Mailing address is required.";
     if (!formData.officialEmail.trim()) errs.officialEmail = "Official email is required.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.officialEmail)) errs.officialEmail = "Please enter a valid email.";
     if (!formData.designation.trim()) errs.designation = "Designation is required.";
     if (!formData.workDescription.trim()) errs.workDescription = "Nature of work is required.";
-    if (!formData.socialMediaHandles.trim()) errs.socialMediaHandles = "At least one social media handle or website is required.";
+    const socialErr = validateSocialMedia(formData.socialMediaHandles);
+    if (socialErr) errs.socialMediaHandles = socialErr;
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -184,9 +187,10 @@ export default function Step2Individual({ formData, update, onNext, onBack }: Pr
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>Pincode / ZIP <span style={{ color: "#FFA500" }}>*</span></label>
-            <input type="text" placeholder="110001" value={formData.pincode}
+            <input type="text" placeholder={getPincodeHint(formData.country)} value={formData.pincode}
               onChange={(e) => { update({ pincode: e.target.value }); clr("pincode"); }}
               className={inp} {...bs(errors.pincode)} {...fo(errors.pincode)} />
+            {!errors.pincode && <FieldHint>{getPincodeHint(formData.country)}</FieldHint>}
             <FieldError msg={errors.pincode} />
           </div>
           <div>

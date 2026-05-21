@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import { FormData } from "./formTypes";
+import { validatePincode, validateSocialMedia, getPincodeHint } from "@/lib/validations";
 
 interface Props {
   formData: FormData;
@@ -112,7 +113,8 @@ export default function Step2Company({ formData, update, onNext, onBack }: Props
     if (!formData.regCertBase64) errs.regCert = "Please upload your registration certificate.";
     if (!formData.gstin.trim()) errs.gstin = "GSTIN is required (type NA if not applicable).";
     if (!formData.companyRegisteredAddress.trim()) errs.companyRegisteredAddress = "Registered address is required.";
-    if (!formData.companyPincode.trim()) errs.companyPincode = "Pincode / ZIP is required.";
+    const pincodeErr = validatePincode(formData.companyPincode, formData.country);
+    if (pincodeErr) errs.companyPincode = pincodeErr;
     if (!formData.companyMailingAddress.trim()) errs.companyMailingAddress = "Mailing address is required.";
     if (!formData.companyDescription.trim()) errs.companyDescription = "Nature of business is required.";
     if (!formData.companyOfficialEmail.trim()) errs.companyOfficialEmail = "Official email is required.";
@@ -121,7 +123,8 @@ export default function Step2Company({ formData, update, onNext, onBack }: Props
     if (!formData.signatoryDesignation.trim()) errs.signatoryDesignation = "Signatory designation is required.";
     if (!formData.signatoryEmail.trim()) errs.signatoryEmail = "Signatory email is required.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.signatoryEmail)) errs.signatoryEmail = "Please enter a valid email.";
-    if (!formData.companySocialMedia.trim()) errs.companySocialMedia = "Social media / website info is required.";
+    const socialErr = validateSocialMedia(formData.companySocialMedia);
+    if (socialErr) errs.companySocialMedia = socialErr;
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -203,9 +206,10 @@ export default function Step2Company({ formData, update, onNext, onBack }: Props
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>Pincode / ZIP <span style={{ color: "#FFA500" }}>*</span></label>
-            <input type="text" placeholder="110001" value={formData.companyPincode}
+            <input type="text" placeholder={getPincodeHint(formData.country)} value={formData.companyPincode}
               onChange={(e) => { update({ companyPincode: e.target.value }); clr("companyPincode"); }}
               className={inp} {...bs(errors.companyPincode)} {...fo(errors.companyPincode)} />
+            {!errors.companyPincode && <FieldHint>{getPincodeHint(formData.country)}</FieldHint>}
             <FieldError msg={errors.companyPincode} />
           </div>
           <div>
