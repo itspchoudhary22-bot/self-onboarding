@@ -252,34 +252,35 @@ export default function OnboardingPage() {
         <div className="max-w-2xl mx-auto">
           {/* Progress */}
           <div className="mb-7">
-            <div className="flex items-start mb-4">
+            {/* Step circles with connector line */}
+            <div className="relative flex items-center justify-between mb-4">
+              {/* Full-width connector line sitting behind circles */}
+              <div className="absolute h-0.5 rounded-full" style={{ background: "#e5e7eb", left: 16, right: 16, top: 16, zIndex: 0 }} />
+              <div className="absolute h-0.5 rounded-full transition-all duration-500"
+                style={{ background: "#FFA500", left: 16, width: `calc(${pct}% * (100% - 32px) / 100)`, top: 16, zIndex: 0 }} />
+
               {steps.map((s, i) => {
                 const done = stepPosition > i + 1;
                 const active = stepPosition === i + 1;
                 return (
-                  <div key={s.key} className="flex-1 flex items-start">
-                    <div className="flex flex-col items-center flex-shrink-0">
-                      <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300"
-                        style={{
-                          background: done || active ? "#FFA500" : "#e5e7eb",
-                          color: done || active ? "#111827" : "#9ca3af",
-                          boxShadow: active ? "0 0 0 5px rgba(255,165,0,0.18)" : "none",
-                        }}>
-                        {done ? "✓" : i + 1}
-                      </div>
-                      <span className="text-xs mt-1.5 font-semibold hidden sm:block whitespace-nowrap"
-                        style={{ color: active ? "#FFA500" : done ? "#111827" : "#9ca3af" }}>
-                        {s.label}
-                      </span>
+                  <div key={s.key} className="relative z-10 flex flex-col items-center gap-1.5">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300"
+                      style={{
+                        background: done || active ? "#FFA500" : "#e5e7eb",
+                        color: done || active ? "#111827" : "#9ca3af",
+                        boxShadow: active ? "0 0 0 4px rgba(255,165,0,0.18)" : "none",
+                      }}>
+                      {done ? "✓" : i + 1}
                     </div>
-                    {i < steps.length - 1 && (
-                      <div className="flex-1 rounded transition-all duration-500 mt-4 mx-1"
-                        style={{ height: 2, background: done ? "#FFA500" : "#e5e7eb" }} />
-                    )}
+                    <span className="text-xs font-semibold hidden sm:block whitespace-nowrap"
+                      style={{ color: active ? "#FFA500" : done ? "#111827" : "#9ca3af" }}>
+                      {s.label}
+                    </span>
                   </div>
                 );
               })}
             </div>
+
             <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "#e5e7eb" }}>
               <div className="h-full rounded-full transition-all duration-500"
                 style={{ background: "linear-gradient(90deg, #FFA500, #7C3AED)", width: `${pct}%` }} />
