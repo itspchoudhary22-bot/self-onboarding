@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 
 const S3_BUCKET = process.env.AWS_S3_BUCKET_NAME;
-const S3_REGION = process.env.AWS_S3_REGION || 'us-east-1';
 const S3_ACCESS_KEY = process.env.AWS_ACCESS_KEY_ID;
 const S3_SECRET_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 
 export async function POST(request) {
   try {
-    const { base64, fileName } = await request.json();
+    await request.json();
 
     // S3 not configured — silently treat as uploaded with no URL
     if (!S3_BUCKET || !S3_ACCESS_KEY || !S3_SECRET_KEY) {
