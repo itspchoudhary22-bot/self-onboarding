@@ -7,22 +7,31 @@ const SERVICE_AGREEMENT_TEMPLATE_ID = process.env.PANDADOC_SERVICE_AGREEMENT_TEM
 const LOA_TEMPLATE_ID = process.env.PANDADOC_LOA_TEMPLATE_ID;
 const CLIENT_ROLE = process.env.PANDADOC_CLIENT_ROLE || 'client';
 
-function buildClientRecipient(formData) {
+function buildClientRecipient(formData, roleName) {
   const isCompany = formData.type === 'company';
   const clientEmail = isCompany ? formData.signatoryEmail : formData.officialEmail || formData.email;
   const clientFullName = isCompany ? formData.signatoryName : formData.individualName;
   const [clientFirst, ...rest] = clientFullName.split(' ');
   const clientLast = rest.join(' ') || '-';
-  return { email: clientEmail, first_name: clientFirst, last_name: clientLast, role: CLIENT_ROLE };
+  return { email: clientEmail, first_name: clientFirst, last_name: clientLast, role: roleName };
 }
 
-// Both SA and LOA are signed by the Client only (Sender signing removed from templates)
-function buildRecipientsForSA(formData) {
-  return [buildClientRecipient(formData)];
-}
-
-function buildRecipientsForLOA(formData) {
-  return [buildClientRecipient(formData)];
+// Fetch the role name from the template so we don't have to guess capitalisation
+async function resolveClientRole(templateId) {
+  try {
+    const res = await pandaDocRequest(`https://api.pandadoc.com/public/v1/templates/${templateId}/details`, 'GET');
+    if (!res.ok) return CLIENT_ROLE;
+    const { roles } = await res.json();
+    if (!roles?.length) return CLIENT_ROLE;
+    // Prefer an exact env-var match, then a case-insensitive match, then first role
+    return (
+      roles.find((r) => r.name === CLIENT_ROLE)?.name ||
+      roles.find((r) => r.name.toLowerCase() === CLIENT_ROLE.toLowerCase())?.name ||
+      roles[0].name
+    );
+  } catch {
+    return CLIENT_ROLE;
+  }
 }
 
 function buildTokens(formData) {
@@ -141,8 +150,15 @@ export async function POST(request) {
     const recipientEmail = isCompany ? formData.signatoryEmail : formData.officialEmail || formData.email;
 
     const tokens = buildTokens(formData);
-    const saDoc = await createPandaDocDocument(SERVICE_AGREEMENT_TEMPLATE_ID, buildRecipientsForSA(formData), tokens, `Service Agreement – ${clientName}`);
-    const loaDoc = await createPandaDocDocument(LOA_TEMPLATE_ID, buildRecipientsForLOA(formData), tokens, `Letter of Authorization – ${clientName}`);
+
+    // Resolve actual role names from each template (handles capitalisation mismatches)
+    const [saRole, loaRole] = await Promise.all([
+      resolveClientRole(SERVICE_AGREEMENT_TEMPLATE_ID),
+      resolveClientRole(LOA_TEMPLATE_ID),
+    ]);
+
+    const saDoc = await createPandaDocDocument(SERVICE_AGREEMENT_TEMPLATE_ID, [buildClientRecipient(formData, saRole)], tokens, `Service Agreement – ${clientName}`);
+    const loaDoc = await createPandaDocDocument(LOA_TEMPLATE_ID, [buildClientRecipient(formData, loaRole)], tokens, `Letter of Authorization – ${clientName}`);
 
     // Send both documents so they move draft → sent, enabling embedded signing sessions
     await sendDocument(saDoc.id);
