@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bytescare — Full Mockup</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9fafb; color: #111827; }
+
+  /* ─── SWITCHER BAR ─── */
+  #switcher {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+    background: #111827; color: #fff;
+    display: flex; align-items: center; gap: 0; overflow-x: auto;
+    height: 44px; padding: 0 8px;
+    scrollbar-width: thin; scrollbar-color: #374151 #111827;
+  }
+  #switcher label {
+    font-size: 11px; font-weight: 600; letter-spacing: .3px;
+    padding: 0 10px; height: 100%; display: flex; align-items: center;
+    cursor: pointer; white-space: nowrap; border-right: 1px solid #1f2937;
+    transition: background .15s;
+  }
+  #switcher label:hover { background: #1f2937; }
+  #switcher label.group-label {
+    background: #FFA500; color: #111827; pointer-events: none;
+    font-size: 10px; text-transform: uppercase; letter-spacing: .6px;
+    padding: 0 8px;
+  }
+  #switcher label.active-nav { background: #FFA500; color: #111827; }
+  #switcher input[type=radio] { display: none; }
+
+  /* ─── SCREENS ─── */
+  .screen { display: none; min-height: calc(100vh - 44px); margin-top: 44px; }
+  .screen.active { display: block; }
+
+  /* ─── SHARED UTILS ─── */
+  .btn-primary {
+    background: #FFA500; color: #111827; border: none; border-radius: 10px;
+    padding: 12px 24px; font-size: 15px; font-weight: 700; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; transition: opacity .15s;
+  }
+  .btn-primary:hover { opacity: .88; }
+  .btn-primary:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-outline {
+    background: transparent; color: #111827; border: 1.5px solid #d1d5db; border-radius: 10px;
+    padding: 11px 22px; font-size: 15px; font-weight: 600; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; transition: background .15s;
+  }
+  .btn-outline:hover { background: #f3f4f6; }
+  .card {
+    background: #fff; border-radius: 20px; border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .badge {
+    display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 600;
+  }
+  .badge-amber { background: #fef3c7; color: #92400e; }
+  .badge-blue  { background: #dbeafe; color: #1e40af; }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-purple{ background: #f3e8ff; color: #6b21a8; }
+  .badge-teal  { background: #ccfbf1; color: #0f766e; }
+  .badge-gray  { background: #f3f4f6; color: #374151; }
+  input, select, textarea {
+    width: 100%; border: 1.5px solid #d1d5db; border-radius: 10px;
+    padding: 10px 14px; font-size: 14px; font-family: inherit; color: #111827;
+    background: #fff; outline: none; transition: border-color .15s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: #FFA500; }
+  label.field-label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+
+  /* ─── CUSTOMER PORTAL HEADER ─── */
+  .cust-header {
+    background: #fff; border-bottom: 1px solid #e5e7eb;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 60px;
+  }
+  .cust-logo { font-size: 18px; font-weight: 800; color: #111827; }
+  .cust-logo span { color: #FFA500; }
+
+  /* ─── PROGRESS STEPPER ─── */
+  .stepper { display: flex; align-items: center; gap: 0; }
+  .step-item { display: flex; align-items: center; gap: 0; }
+  .step-dot {
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 13px; font-weight: 700;
+    border: 2px solid #d1d5db; color: #9ca3af; background: #fff;
+    flex-shrink: 0;
+  }
+  .step-dot.done { background: #FFA500; border-color: #FFA500; color: #fff; }
+  .step-dot.active { background: #fff; border-color: #FFA500; color: #FFA500; }
+  .step-line { width: 60px; height: 2px; background: #e5e7eb; }
+  .step-line.done { background: #FFA500; }
+  .step-label { font-size: 11px; color: #9ca3af; margin-top: 4px; text-align: center; white-space: nowrap; }
+  .step-label.active { color: #FFA500; font-weight: 600; }
+  .step-label.done { color: #374151; }
+  .step-col { display: flex; flex-direction: column; align-items: center; }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress-bar-track { background: #e5e7eb; border-radius: 999px; height: 6px; }
+  .progress-bar-fill { background: #FFA500; border-radius: 999px; height: 100%; transition: width .4s; }
+
+  /* ─── TIMELINE (vertical) ─── */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: flex; align-items: flex-start; gap: 16px; }
+  .tl-left { display: flex; flex-direction: column; align-items: center; }
+  .tl-dot {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; border: 2px solid #d1d5db; background: #fff; color: #9ca3af;
+  }
+  .tl-dot.done { background: #FFA500; border-color: #FFA500; color: #fff; }
+  .tl-dot.active { background: #fff; border-color: #FFA500; color: #FFA500;
+    box-shadow: 0 0 0 6px rgba(255,165,0,.18); animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(255,165,0,.18); } 50% { box-shadow: 0 0 0 10px rgba(255,165,0,.07); } }
+  .tl-line { width: 2px; height: 36px; background: #e5e7eb; margin: 4px 0; }
+  .tl-line.done { background: #FFA500; }
+  .tl-content { padding-top: 6px; }
+  .tl-title { font-size: 15px; font-weight: 700; color: #111827; }
+  .tl-title.done { color: #111827; }
+  .tl-title.active { color: #FFA500; }
+  .tl-desc { font-size: 13px; color: #6b7280; margin-top: 2px; }
+
+  /* ─── SALES LAYOUT ─── */
+  .sales-layout { display: flex; min-height: calc(100vh - 44px); }
+  .sales-sidebar {
+    width: 220px; background: #111827; flex-shrink: 0;
+    display: flex; flex-direction: column; padding: 0;
+    position: sticky; top: 44px; height: calc(100vh - 44px);
+  }
+  .sidebar-logo {
+    padding: 24px 20px 20px; border-bottom: 1px solid #1f2937;
+    font-size: 16px; font-weight: 800; color: #fff;
+  }
+  .sidebar-logo span { color: #FFA500; }
+  .sidebar-badge {
+    background: #FFA500; color: #111827; font-size: 9px; font-weight: 700;
+    padding: 2px 6px; border-radius: 4px; margin-left: 6px; letter-spacing: .4px;
+  }
+  .sidebar-nav { padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px;
+    font-size: 14px; font-weight: 500; color: #9ca3af; cursor: pointer; transition: all .15s;
+  }
+  .nav-item:hover { background: #1f2937; color: #fff; }
+  .nav-item.active { background: rgba(255,165,0,.15); color: #FFA500; font-weight: 700; }
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+  .sales-main { flex: 1; padding: 32px 40px; background: #f9fafb; overflow-y: auto; }
+  .sales-main-header {
+    display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px;
+  }
+  .sales-main-title { font-size: 24px; font-weight: 800; color: #111827; }
+  .sales-main-sub { font-size: 14px; color: #6b7280; margin-top: 4px; }
+
+  /* ─── TABS ─── */
+  .tab-bar { display: flex; border-bottom: 2px solid #e5e7eb; margin-bottom: 24px; }
+  .tab-btn {
+    padding: 10px 20px; font-size: 14px; font-weight: 600; color: #6b7280;
+    background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent;
+    margin-bottom: -2px; transition: color .15s;
+  }
+  .tab-btn:hover { color: #111827; }
+  .tab-btn.active { color: #FFA500; border-bottom-color: #FFA500; }
+
+  /* ─── STAT CARDS ─── */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
+  .stat-card { background: #fff; border-radius: 16px; border: 1px solid #e5e7eb; padding: 20px 24px; }
+  .stat-value { font-size: 32px; font-weight: 800; color: #111827; }
+  .stat-label { font-size: 13px; color: #6b7280; margin-top: 4px; }
+
+  /* ─── TABLE ─── */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase;
+    letter-spacing: .5px; padding: 12px 16px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+  .data-table td { padding: 14px 16px; font-size: 14px; color: #111827; border-bottom: 1px solid #f3f4f6; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #fafafa; }
+
+  /* ─── RADIO OPTION CARDS ─── */
+  .option-cards { display: flex; flex-direction: column; gap: 14px; }
+  .option-card {
+    border: 2px solid #e5e7eb; border-radius: 14px; padding: 18px 20px;
+    cursor: pointer; transition: all .15s; display: flex; align-items: flex-start; gap: 16px;
+  }
+  .option-card:hover { border-color: #FFA500; background: #fffbf2; }
+  .option-card.selected { border-color: #FFA500; background: #fffbf2; }
+  .option-card-icon { font-size: 24px; width: 40px; text-align: center; padding-top: 2px; }
+  .option-card-body { flex: 1; }
+  .option-card-title { font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 4px; }
+  .option-card-desc { font-size: 13px; color: #6b7280; }
+
+  /* ─── CHECKBOX GRID ─── */
+  .check-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .check-item {
+    border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 10px 14px;
+    display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all .15s;
+  }
+  .check-item.checked { border-color: #FFA500; background: #fffbf2; color: #92400e; }
+  .check-item input { display: none; }
+
+  /* ─── RADIO PILL GROUP ─── */
+  .radio-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .radio-pill {
+    border: 1.5px solid #d1d5db; border-radius: 8px; padding: 8px 18px;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; color: #374151;
+  }
+  .radio-pill.selected { border-color: #FFA500; background: #FFA500; color: #111827; }
+
+  /* ─── FORM ROW ─── */
+  .form-row { display: grid; gap: 16px; }
+  .form-row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .form-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* ─── BANNER ─── */
+  .banner {
+    border-radius: 14px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 24px;
+  }
+  .banner-orange { background: #fff7ed; border: 1px solid #fed7aa; }
+  .banner-green  { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .banner-blue   { background: #eff6ff; border: 1px solid #bfdbfe; }
+  .banner-icon { font-size: 22px; flex-shrink: 0; }
+  .banner-title { font-size: 15px; font-weight: 700; }
+  .banner-sub { font-size: 13px; color: #6b7280; margin-top: 3px; }
+
+  /* ─── DASHED BOX ─── */
+  .dashed-box {
+    border: 2px dashed #d1d5db; border-radius: 14px; padding: 28px 24px;
+    display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px;
+    color: #6b7280;
+  }
+  .dashed-box .box-icon { font-size: 36px; }
+
+  /* ─── FILE UPLOAD ─── */
+  .file-upload-area {
+    border: 2px dashed #d1d5db; border-radius: 12px; padding: 24px;
+    text-align: center; cursor: pointer; transition: border-color .15s;
+  }
+  .file-upload-area:hover { border-color: #FFA500; }
+
+  /* ─── SUCCESS SCREEN ─── */
+  .success-center { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 420px; text-align: center; }
+  .success-icon { font-size: 72px; margin-bottom: 20px; }
+
+  /* ─── INFO CHIPS ─── */
+  .info-chips { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+  .info-chip {
+    background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px;
+    padding: 10px 16px; display: flex; flex-direction: column; gap: 2px;
+  }
+  .info-chip-label { font-size: 11px; color: #9ca3af; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+  .info-chip-value { font-size: 14px; font-weight: 700; color: #111827; }
+
+  /* ─── PAYMENT FORM ─── */
+  .payment-method-toggle { display: flex; border: 1.5px solid #d1d5db; border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+  .pmtoggle-btn {
+    flex: 1; padding: 10px; font-size: 14px; font-weight: 600; border: none;
+    background: #fff; color: #6b7280; cursor: pointer; transition: all .15s;
+  }
+  .pmtoggle-btn.active { background: #FFA500; color: #111827; }
+
+  /* notice box */
+  .notice-box {
+    background: #fffbf2; border: 1.5px solid #fed7aa; border-radius: 12px; padding: 14px 18px;
+    font-size: 13px; color: #92400e; display: flex; align-items: flex-start; gap: 10px;
+  }
+
+  /* section heading */
+  .section-heading { font-size: 16px; font-weight: 800; color: #111827; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-divider { border: none; border-top: 1px solid #e5e7eb; margin: 24px 0; }
+
+  /* customer section wrapper */
+  .cust-body { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+  .cust-body-wide { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+  /* review grid */
+  .review-section { margin-bottom: 24px; }
+  .review-section-title { font-size: 13px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+  .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .review-item { }
+  .review-item-label { font-size: 12px; color: #9ca3af; font-weight: 600; margin-bottom: 2px; }
+  .review-item-value { font-size: 14px; color: #111827; font-weight: 600; }
+
+  .pill-tag {
+    display: inline-flex; align-items: center; background: #f3f4f6; border-radius: 999px;
+    padding: 4px 10px; font-size: 12px; font-weight: 600; color: #374151; margin: 2px;
+  }
+
+  /* filter tab row */
+  .filter-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .filter-tab {
+    padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    border: 1.5px solid #e5e7eb; background: #fff; color: #374151; cursor: pointer; transition: all .15s;
+  }
+  .filter-tab.active { border-color: #FFA500; background: #FFA500; color: #111827; }
+
+  /* customer summary card in sales detail */
+  .cust-summary { background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; padding: 24px 28px; margin-bottom: 24px; }
+  .cust-summary-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+  .cust-summary-name { font-size: 20px; font-weight: 800; color: #111827; }
+  .cust-summary-meta { font-size: 13px; color: #6b7280; margin-top: 4px; }
+  .cust-summary-chips { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+  /* completion bar */
+  .completion-bar { background: #f3f4f6; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
+  .completion-text { font-size: 13px; font-weight: 600; color: #374151; }
+
+  /* ops send button */
+  .ops-cta { width: 100%; margin-top: 32px; padding: 16px; font-size: 16px; border-radius: 14px; }
+
+  /* login page */
+  .login-page { min-height: calc(100vh - 44px); display: flex; align-items: center; justify-content: center; background: #f9fafb; }
+  .login-card { background: #fff; border-radius: 24px; border: 1px solid #e5e7eb; padding: 48px 40px; width: 100%; max-width: 440px; box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+  .login-logo { font-size: 22px; font-weight: 900; color: #111827; margin-bottom: 4px; }
+  .login-logo span { color: #FFA500; }
+
+  /* trust strip */
+  .trust-strip { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin: 40px 0; }
+  .trust-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px; text-align: center; }
+  .trust-icon { font-size: 28px; margin-bottom: 10px; }
+  .trust-title { font-size: 14px; font-weight: 700; color: #111827; }
+  .trust-desc { font-size: 12px; color: #9ca3af; margin-top: 4px; }
+
+  /* checklist */
+  .checklist { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+  .checklist-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #374151; }
+  .check-circle { width: 22px; height: 22px; border-radius: 50%; background: #FFA500; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; flex-shrink: 0; }
+
+  /* hero */
+  .hero-section { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; padding: 60px 0 40px; }
+  .hero-title { font-size: 48px; font-weight: 900; line-height: 1.1; color: #111827; margin-bottom: 20px; }
+  .hero-title .highlight { color: #FFA500; }
+  .hero-sub { font-size: 18px; color: #6b7280; margin-bottom: 32px; line-height: 1.6; }
+  .timeline-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; padding: 28px; }
+  .timeline-card-title { font-size: 14px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 20px; }
+
+  /* type selection cards */
+  .type-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .type-card {
+    border: 2px solid #e5e7eb; border-radius: 14px; padding: 20px; cursor: pointer; transition: all .15s;
+  }
+  .type-card:hover { border-color: #FFA500; }
+  .type-card.selected { border-color: #FFA500; background: #fffbf2; }
+  .type-card-icon { font-size: 28px; margin-bottom: 8px; }
+  .type-card-title { font-size: 15px; font-weight: 700; }
+  .type-card-desc { font-size: 12px; color: #9ca3af; margin-top: 3px; }
+
+  /* services pills selection */
+  .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 8px; }
+  .service-pill {
+    border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: all .15s;
+    font-size: 13px; font-weight: 600; color: #374151;
+  }
+  .service-pill.selected { border-color: #FFA500; background: #fffbf2; color: #92400e; }
+
+  .back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #6b7280; cursor: pointer; margin-bottom: 20px; transition: color .15s; }
+  .back-btn:hover { color: #111827; }
+
+  .ops-done-summary { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 14px; padding: 20px 24px; margin: 24px 0; text-align: left; max-width: 480px; width: 100%; }
+  .ops-done-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f3f4f6; font-size: 14px; }
+  .ops-done-row:last-child { border-bottom: none; }
+  .ops-done-row .label { color: #6b7280; }
+  .ops-done-row .value { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SWITCHER BAR                                         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="switcher">
+  <label class="group-label">CUSTOMER</label>
+  <label id="nav-home" onclick="show('home')">🏠 Home</label>
+  <label id="nav-step1" onclick="show('step1')">Step 1</label>
+  <label id="nav-step4" onclick="show('step4')">Step 4 (Review)</label>
+  <label id="nav-status-pending" onclick="show('status-pending')">Status: Pending</label>
+  <label id="nav-status-payment" onclick="show('status-payment')">Status: Payment</label>
+  <label id="nav-status-agreement" onclick="show('status-agreement')">Status: Agreement</label>
+  <label class="group-label">SALES</label>
+  <label id="nav-sales-login" onclick="show('sales-login')">Login</label>
+  <label id="nav-sales-dashboard" onclick="show('sales-dashboard')">Dashboard</label>
+  <label id="nav-sales-app-payment" onclick="show('sales-app-payment')">App: Payment</label>
+  <label id="nav-sales-app-agreement" onclick="show('sales-app-agreement')">App: Agreement</label>
+  <label id="nav-sales-app-ops" onclick="show('sales-app-ops')">App: Ops</label>
+  <label id="nav-sales-app-ops-done" onclick="show('sales-app-ops-done')">App: Ops Done</label>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: home                                         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-home" class="screen">
+  <header class="cust-header">
+    <div class="cust-logo">Bytes<span>care</span></div>
+    <nav style="display:flex;gap:24px;font-size:14px;font-weight:600;color:#6b7280;">
+      <span>Home</span><span>Services</span><span>About</span>
+    </nav>
+    <button class="btn-primary" style="font-size:13px;padding:9px 18px;">Start Onboarding →</button>
+  </header>
+
+  <div class="cust-body-wide">
+    <div class="hero-section">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;color:#92400e;margin-bottom:20px;">
+          ✦ Trusted by 1,200+ creators & brands
+        </div>
+        <h1 class="hero-title">Protect what<br>you <span class="highlight">create.</span></h1>
+        <p class="hero-sub">Bytescare monitors the web and takes action against copyright infringement, brand abuse, and digital piracy — automatically.</p>
+        <button class="btn-primary" style="font-size:16px;padding:14px 32px;" onclick="show('step1')">Start Onboarding →</button>
+        <div class="checklist">
+          <div class="checklist-item"><div class="check-circle">✓</div> Takes less than 5 minutes to complete</div>
+          <div class="checklist-item"><div class="check-circle">✓</div> Your progress is automatically saved</div>
+          <div class="checklist-item"><div class="check-circle">✓</div> Our sales team will contact you after submission</div>
+        </div>
+      </div>
+      <div>
+        <div class="timeline-card">
+          <div class="timeline-card-title">How it works</div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-left">
+                <div class="tl-dot done">1</div>
+                <div class="tl-line done"></div>
+              </div>
+              <div class="tl-content">
+                <div class="tl-title" style="color:#FFA500;">Basic Info</div>
+                <div class="tl-desc">Email, registration type, and country</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-left">
+                <div class="tl-dot" style="border-color:#d1d5db;">2</div>
+                <div class="tl-line"></div>
+              </div>
+              <div class="tl-content">
+                <div class="tl-title">Your Details</div>
+                <div class="tl-desc">Name, organization, contact info</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-left">
+                <div class="tl-dot" style="border-color:#d1d5db;">3</div>
+                <div class="tl-line"></div>
+              </div>
+              <div class="tl-content">
+                <div class="tl-title">Services</div>
+                <div class="tl-desc">Select the protection services you need</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-left">
+                <div class="tl-dot" style="border-color:#d1d5db;">4</div>
+              </div>
+              <div class="tl-content">
+                <div class="tl-title">Review &amp; Submit</div>
+                <div class="tl-desc">Verify details and submit your application</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trust-strip">
+      <div class="trust-card">
+        <div class="trust-icon">🛡️</div>
+        <div class="trust-title">Comprehensive Protection</div>
+        <div class="trust-desc">Monitor across 50+ platforms simultaneously</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">⚡</div>
+        <div class="trust-title">Fast Takedowns</div>
+        <div class="trust-desc">Average takedown in under 24 hours</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🔒</div>
+        <div class="trust-title">Secure &amp; Private</div>
+        <div class="trust-desc">Your data is encrypted and never shared</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">💬</div>
+        <div class="trust-title">Dedicated Support</div>
+        <div class="trust-desc">Expert team available 24/7</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: step1                                        -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-step1" class="screen">
+  <header class="cust-header">
+    <div class="cust-logo">Bytes<span>care</span></div>
+    <div style="font-size:13px;color:#6b7280;font-weight:600;">Step 1 of 4</div>
+  </header>
+
+  <div class="cust-body">
+    <!-- Progress stepper -->
+    <div style="display:flex;justify-content:center;margin-bottom:40px;">
+      <div class="stepper">
+        <div class="step-col">
+          <div class="step-dot active">1</div>
+          <div class="step-label active">Basic Info</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;padding-bottom:20px;">
+          <div class="step-line" style="margin: 0 4px;"></div>
+        </div>
+        <div class="step-col">
+          <div class="step-dot">2</div>
+          <div class="step-label">Your Details</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;padding-bottom:20px;">
+          <div class="step-line" style="margin: 0 4px;"></div>
+        </div>
+        <div class="step-col">
+          <div class="step-dot">3</div>
+          <div class="step-label">Services</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;padding-bottom:20px;">
+          <div class="step-line" style="margin: 0 4px;"></div>
+        </div>
+        <div class="step-col">
+          <div class="step-dot">4</div>
+          <div class="step-label">Review</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div style="margin-bottom:32px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:12px;font-weight:600;color:#9ca3af;">PROGRESS</span>
+        <span style="font-size:12px;font-weight:700;color:#FFA500;">5%</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" style="width:5%;"></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:36px;">
+      <h2 style="font-size:22px;font-weight:800;color:#111827;margin-bottom:6px;">Basic Information</h2>
+      <p style="font-size:14px;color:#6b7280;margin-bottom:28px;">Let's start with the basics to set up your account.</p>
+
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div>
+          <label class="field-label">Email Address</label>
+          <input type="email" placeholder="you@example.com" value="john.doe@example.com" />
+        </div>
+
+        <div>
+          <label class="field-label">Registration Type</label>
+          <div class="type-cards" style="margin-top:8px;">
+            <div class="type-card selected">
+              <div class="type-card-icon">👤</div>
+              <div class="type-card-title">Individual</div>
+              <div class="type-card-desc">For solo creators and freelancers</div>
+            </div>
+            <div class="type-card">
+              <div class="type-card-icon">🏢</div>
+              <div class="type-card-title">Company</div>
+              <div class="type-card-desc">For businesses and organizations</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label">Country</label>
+          <select>
+            <option>🇺🇸 United States</option>
+            <option>🇬🇧 United Kingdom</option>
+            <option>🇮🇳 India</option>
+            <option>🇩🇪 Germany</option>
+            <option>🇦🇺 Australia</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-top:32px;">
+        <button class="btn-primary">Continue to Step 2 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: step4 (Review & Submit)                      -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-step4" class="screen">
+  <header class="cust-header">
+    <div class="cust-logo">Bytes<span>care</span></div>
+    <div style="font-size:13px;color:#6b7280;font-weight:600;">Step 4 of 4</div>
+  </header>
+
+  <div class="cust-body">
+    <!-- Progress stepper -->
+    <div style="display:flex;justify-content:center;margin-bottom:40px;">
+      <div class="stepper">
+        <div class="step-col">
+          <div class="step-dot done">✓</div>
+          <div class="step-label done">Basic Info</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;padding-bottom:20px;">
+          <div class="step-line done" style="margin: 0 4px;"></div>
+        </div>
+        <div class="step-col">
+          <div class="step-dot done">✓</div>
+          <div class="step-label done">Your Details</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;padding-bottom:20px;">
+          <div class="step-line done" style="margin: 0 4px;"></div>
+        </div>
+        <div class="step-col">
+          <div class="step-dot done">✓</div>
+          <div class="step-label done">Services</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;padding-bottom:20px;">
+          <div class="step-line done" style="margin: 0 4px;"></div>
+        </div>
+        <div class="step-col">
+          <div class="step-dot active">4</div>
+          <div class="step-label active">Review</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div style="margin-bottom:32px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:12px;font-weight:600;color:#9ca3af;">PROGRESS</span>
+        <span style="font-size:12px;font-weight:700;color:#FFA500;">90%</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" style="width:90%;"></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:36px;">
+      <h2 style="font-size:22px;font-weight:800;color:#111827;margin-bottom:6px;">Review &amp; Submit</h2>
+      <p style="font-size:14px;color:#6b7280;margin-bottom:28px;">Please review your information before submitting.</p>
+
+      <!-- Review sections -->
+      <div class="review-section">
+        <div class="review-section-title">Basic Info</div>
+        <div class="review-grid">
+          <div class="review-item"><div class="review-item-label">Email</div><div class="review-item-value">john.doe@example.com</div></div>
+          <div class="review-item"><div class="review-item-label">Registration Type</div><div class="review-item-value">Individual</div></div>
+          <div class="review-item"><div class="review-item-label">Country</div><div class="review-item-value">United States</div></div>
+        </div>
+      </div>
+      <hr class="section-divider">
+      <div class="review-section">
+        <div class="review-section-title">Your Details</div>
+        <div class="review-grid">
+          <div class="review-item"><div class="review-item-label">Full Name</div><div class="review-item-value">John Doe</div></div>
+          <div class="review-item"><div class="review-item-label">Phone</div><div class="review-item-value">+1 (555) 000-1234</div></div>
+          <div class="review-item"><div class="review-item-label">Website</div><div class="review-item-value">johndoe.com</div></div>
+          <div class="review-item"><div class="review-item-label">Brand / Channel Name</div><div class="review-item-value">JohnDoe Official</div></div>
+        </div>
+      </div>
+      <hr class="section-divider">
+      <div class="review-section">
+        <div class="review-section-title">Services Selected</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="pill-tag">Copyright Protection</span>
+          <span class="pill-tag">Brand Monitoring</span>
+          <span class="pill-tag">YouTube Takedowns</span>
+          <span class="pill-tag">Social Media Monitoring</span>
+        </div>
+      </div>
+
+      <!-- Warning notice -->
+      <div class="notice-box" style="margin-top:28px;">
+        <span>⚠️</span>
+        <div>
+          <div style="font-weight:700;margin-bottom:3px;">Once submitted, this form will be locked.</div>
+          Our sales team will review your application and handle all next steps including plan setup, agreement, and payment configuration.
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:28px;">
+        <button class="btn-outline">← Edit Details</button>
+        <button class="btn-primary" style="font-size:16px;padding:14px 32px;" onclick="show('status-pending')">Submit Application →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: status-pending                               -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-status-pending" class="screen">
+  <header class="cust-header">
+    <div class="cust-logo">Bytes<span>care</span></div>
+    <div style="font-size:14px;font-weight:600;color:#6b7280;">Application Status</div>
+  </header>
+
+  <div class="cust-body" style="max-width:700px;">
+    <!-- Banner -->
+    <div class="banner banner-orange">
+      <div class="banner-icon">🔒</div>
+      <div>
+        <div class="banner-title" style="color:#92400e;">Application Submitted — Under Review</div>
+        <div class="banner-sub">Your application is being reviewed by our sales team. We'll notify you via email once the next step is ready.</div>
+      </div>
+    </div>
+
+    <!-- Info chips -->
+    <div class="info-chips">
+      <div class="info-chip">
+        <div class="info-chip-label">Application ID</div>
+        <div class="info-chip-value">#BC-2026-0042</div>
+      </div>
+      <div class="info-chip">
+        <div class="info-chip-label">Submitted On</div>
+        <div class="info-chip-value">June 2, 2026</div>
+      </div>
+      <div class="info-chip">
+        <div class="info-chip-label">Status</div>
+        <div class="info-chip-value"><span class="badge badge-amber">Pending Review</span></div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="card" style="padding:28px 32px;margin-bottom:20px;">
+      <div class="section-heading">Application Progress</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot done">✓</div>
+            <div class="tl-line done"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-title done">Application Submitted</div>
+            <div class="tl-desc">June 2, 2026 · Your details are on file</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot active">→</div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-title active">Under Sales Review</div>
+            <div class="tl-desc">Our team is reviewing your application</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot">3</div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-title" style="color:#9ca3af;">Agreement &amp; Payment</div>
+            <div class="tl-desc">Pending</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot">4</div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-title" style="color:#9ca3af;">Operations Setup</div>
+            <div class="tl-desc">Pending</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot">5</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-title" style="color:#9ca3af;">Account Activated</div>
+            <div class="tl-desc">Pending</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment locked -->
+    <div class="card" style="padding:28px 32px;">
+      <div class="section-heading">💳 Payment</div>
+      <div class="dashed-box">
+        <div class="box-icon">🔒</div>
+        <div style="font-size:15px;font-weight:700;color:#374151;">Payment Not Yet Enabled</div>
+        <div style="font-size:13px;color:#9ca3af;max-width:360px;">Our sales team will configure your plan and notify you by email when payment is ready.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: status-payment                               -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-status-payment" class="screen">
+  <header class="cust-header">
+    <div class="cust-logo">Bytes<span>care</span></div>
+    <div style="font-size:14px;font-weight:600;color:#6b7280;">Application Status</div>
+  </header>
+
+  <div class="cust-body" style="max-width:700px;">
+    <!-- Banner -->
+    <div class="banner banner-green">
+      <div class="banner-icon">💳</div>
+      <div>
+        <div class="banner-title" style="color:#166534;">Action Required: Complete Your Payment</div>
+        <div class="banner-sub">Your plan has been configured. Complete payment to activate your Bytescare account.</div>
+      </div>
+    </div>
+
+    <!-- Info chips -->
+    <div class="info-chips">
+      <div class="info-chip">
+        <div class="info-chip-label">Application ID</div>
+        <div class="info-chip-value">#BC-2026-0042</div>
+      </div>
+      <div class="info-chip">
+        <div class="info-chip-label">Submitted On</div>
+        <div class="info-chip-value">June 2, 2026</div>
+      </div>
+      <div class="info-chip">
+        <div class="info-chip-label">Status</div>
+        <div class="info-chip-value"><span class="badge badge-blue">Payment Pending</span></div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="card" style="padding:28px 32px;margin-bottom:20px;">
+      <div class="section-heading">Application Progress</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot done">✓</div><div class="tl-line done"></div></div>
+          <div class="tl-content"><div class="tl-title done">Application Submitted</div><div class="tl-desc">June 2, 2026</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot done">✓</div><div class="tl-line done"></div></div>
+          <div class="tl-content"><div class="tl-title done">Sales Review Complete</div><div class="tl-desc">Your plan has been configured</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot active">→</div><div class="tl-line"></div></div>
+          <div class="tl-content"><div class="tl-title active">Agreement &amp; Payment</div><div class="tl-desc">Complete payment to proceed</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot">4</div><div class="tl-line"></div></div>
+          <div class="tl-content"><div class="tl-title" style="color:#9ca3af;">Operations Setup</div><div class="tl-desc">Pending</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot">5</div></div>
+          <div class="tl-content"><div class="tl-title" style="color:#9ca3af;">Account Activated</div><div class="tl-desc">Pending</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment ENABLED -->
+    <div class="card" style="padding:28px 32px;">
+      <div class="section-heading">💳 Complete Payment</div>
+
+      <!-- Plan summary chips -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
+        <div class="info-chip"><div class="info-chip-label">Plan</div><div class="info-chip-value">Professional</div></div>
+        <div class="info-chip"><div class="info-chip-label">Amount</div><div class="info-chip-value">$299 / month</div></div>
+        <div class="info-chip"><div class="info-chip-label">Frequency</div><div class="info-chip-value">Monthly</div></div>
+        <div class="info-chip"><div class="info-chip-label">Duration</div><div class="info-chip-value">1 Year</div></div>
+      </div>
+
+      <!-- Payment method toggle -->
+      <div style="margin-bottom:20px;">
+        <label class="field-label">Payment Method</label>
+        <div class="payment-method-toggle" style="margin-top:8px;">
+          <button class="pmtoggle-btn active">Credit / Debit Card</button>
+          <button class="pmtoggle-btn">Bank Transfer</button>
+        </div>
+      </div>
+
+      <!-- Card form -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div>
+          <label class="field-label">Card Number</label>
+          <input type="text" placeholder="1234 5678 9012 3456" />
+        </div>
+        <div class="form-row cols-3">
+          <div>
+            <label class="field-label">Expiry Date</label>
+            <input type="text" placeholder="MM / YY" />
+          </div>
+          <div>
+            <label class="field-label">CVV</label>
+            <input type="text" placeholder="•••" />
+          </div>
+          <div>
+            <label class="field-label">Name on Card</label>
+            <input type="text" placeholder="John Doe" />
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width:100%;justify-content:center;margin-top:24px;font-size:16px;padding:15px;">Pay $299 &amp; Activate Account →</button>
+      <p style="text-align:center;font-size:12px;color:#9ca3af;margin-top:12px;">🔒 Secured by 256-bit SSL encryption</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: status-agreement                             -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-status-agreement" class="screen">
+  <header class="cust-header">
+    <div class="cust-logo">Bytes<span>care</span></div>
+    <div style="font-size:14px;font-weight:600;color:#6b7280;">Application Status</div>
+  </header>
+
+  <div class="cust-body" style="max-width:700px;">
+    <!-- Banner -->
+    <div class="banner banner-blue">
+      <div class="banner-icon">📋</div>
+      <div>
+        <div class="banner-title" style="color:#1e40af;">Action Required: Review &amp; Sign Your Agreement</div>
+        <div class="banner-sub">Your service agreement is ready. Please review and sign it to proceed.</div>
+      </div>
+    </div>
+
+    <!-- Info chips -->
+    <div class="info-chips">
+      <div class="info-chip"><div class="info-chip-label">Application ID</div><div class="info-chip-value">#BC-2026-0042</div></div>
+      <div class="info-chip"><div class="info-chip-label">Submitted On</div><div class="info-chip-value">June 2, 2026</div></div>
+      <div class="info-chip"><div class="info-chip-label">Status</div><div class="info-chip-value"><span class="badge badge-purple">Agreement Pending</span></div></div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="card" style="padding:28px 32px;margin-bottom:20px;">
+      <div class="section-heading">Application Progress</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot done">✓</div><div class="tl-line done"></div></div>
+          <div class="tl-content"><div class="tl-title done">Application Submitted</div><div class="tl-desc">June 2, 2026</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot done">✓</div><div class="tl-line done"></div></div>
+          <div class="tl-content"><div class="tl-title done">Sales Review Complete</div><div class="tl-desc">Plan configured</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot active">→</div><div class="tl-line"></div></div>
+          <div class="tl-content"><div class="tl-title active">Agreement &amp; Payment</div><div class="tl-desc">Sign agreement to unlock payment</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot">4</div><div class="tl-line"></div></div>
+          <div class="tl-content"><div class="tl-title" style="color:#9ca3af;">Operations Setup</div><div class="tl-desc">Pending</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot">5</div></div>
+          <div class="tl-content"><div class="tl-title" style="color:#9ca3af;">Account Activated</div><div class="tl-desc">Pending</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agreement section -->
+    <div class="card" style="padding:28px 32px;margin-bottom:20px;">
+      <div class="section-heading">📄 Your Agreement</div>
+
+      <!-- Document preview card -->
+      <div style="background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:14px;padding:18px 20px;display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+        <div style="font-size:36px;">📑</div>
+        <div style="flex:1;">
+          <div style="font-size:15px;font-weight:700;color:#111827;">Bytescare_Service_Agreement_BC-2026-0042.pdf</div>
+          <div style="font-size:12px;color:#9ca3af;margin-top:3px;">Uploaded June 2, 2026 · 2 pages · PDF</div>
+        </div>
+        <button class="btn-outline" style="font-size:13px;padding:8px 16px;">⬇ Download</button>
+      </div>
+
+      <button class="btn-primary" style="background:#f59e0b;width:100%;justify-content:center;font-size:15px;padding:14px;">
+        ✍️ Review &amp; Sign Document →
+      </button>
+      <p style="text-align:center;font-size:12px;color:#9ca3af;margin-top:12px;">After signing, your account setup will begin automatically</p>
+    </div>
+
+    <!-- Payment still locked -->
+    <div class="card" style="padding:28px 32px;">
+      <div class="section-heading">💳 Payment</div>
+      <div class="dashed-box">
+        <div class="box-icon">🔒</div>
+        <div style="font-size:15px;font-weight:700;color:#374151;">Payment Unlocks After Signing</div>
+        <div style="font-size:13px;color:#9ca3af;max-width:360px;">Complete the agreement signing above to enable payment.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: sales-login                                  -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-sales-login" class="screen">
+  <div class="login-page">
+    <div class="login-card">
+      <div style="text-align:center;margin-bottom:32px;">
+        <div class="login-logo">BYTES<span>CARE</span> <span style="font-size:11px;background:#FFA500;color:#111827;padding:3px 8px;border-radius:4px;font-weight:700;letter-spacing:.4px;vertical-align:middle;">SALES</span></div>
+        <div style="font-size:13px;color:#9ca3af;margin-top:6px;">Internal Portal — Authorized Personnel Only</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <div>
+          <label class="field-label">Email</label>
+          <input type="email" value="sales@bytescare.com" />
+        </div>
+        <div>
+          <label class="field-label">Password</label>
+          <input type="password" value="••••••••" />
+        </div>
+
+        <!-- Error state -->
+        <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:12px 16px;font-size:13px;color:#dc2626;display:flex;align-items:center;gap:8px;">
+          ⚠️ Incorrect password. Please try again.
+        </div>
+
+        <button class="btn-primary" style="width:100%;justify-content:center;font-size:15px;padding:13px;" onclick="show('sales-dashboard')">Sign In →</button>
+      </div>
+
+      <p style="text-align:center;font-size:12px;color:#9ca3af;margin-top:20px;">
+        Forgot password? Contact your administrator.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: sales-dashboard                              -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-sales-dashboard" class="screen">
+  <div class="sales-layout">
+    <aside class="sales-sidebar">
+      <div class="sidebar-logo">Bytes<span>care</span><span class="sidebar-badge">SALES</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-item active"><span class="nav-icon">📊</span> Dashboard</div>
+        <div class="nav-item" onclick="show('sales-app-payment')"><span class="nav-icon">📋</span> Applications</div>
+        <div class="nav-item"><span class="nav-icon">👥</span> Customers</div>
+        <div class="nav-item"><span class="nav-icon">⚙️</span> Settings</div>
+      </nav>
+    </aside>
+
+    <main class="sales-main">
+      <div class="sales-main-header">
+        <div>
+          <div class="sales-main-title">Good morning, Sales Team 👋</div>
+          <div class="sales-main-sub">Monday, June 2, 2026 · Here's your daily overview</div>
+        </div>
+        <button class="btn-primary" style="font-size:13px;padding:9px 18px;">+ New Application</button>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value">24</div>
+          <div class="stat-label">Total Applications</div>
+        </div>
+        <div class="stat-card" style="border-left:3px solid #f59e0b;">
+          <div class="stat-value" style="color:#f59e0b;">8</div>
+          <div class="stat-label">Pending Review</div>
+        </div>
+        <div class="stat-card" style="border-left:3px solid #3b82f6;">
+          <div class="stat-value" style="color:#3b82f6;">5</div>
+          <div class="stat-label">Payment Pending</div>
+        </div>
+        <div class="stat-card" style="border-left:3px solid #22c55e;">
+          <div class="stat-value" style="color:#22c55e;">11</div>
+          <div class="stat-label">Active</div>
+        </div>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="filter-tabs">
+        <div class="filter-tab active">All (24)</div>
+        <div class="filter-tab">Pending Review (8)</div>
+        <div class="filter-tab">Payment Pending (5)</div>
+        <div class="filter-tab">Agreement Pending (3)</div>
+        <div class="filter-tab">Active (11)</div>
+      </div>
+
+      <!-- Table -->
+      <div class="card" style="overflow:hidden;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>App ID</th>
+              <th>Customer</th>
+              <th>Type</th>
+              <th>Services</th>
+              <th>Submitted</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:700;">#BC-2026-0042</td>
+              <td>
+                <div style="font-weight:600;">John Doe</div>
+                <div style="font-size:12px;color:#9ca3af;">john.doe@example.com</div>
+              </td>
+              <td><span class="badge badge-gray">Individual</span></td>
+              <td>
+                <span class="pill-tag">Copyright</span>
+                <span class="pill-tag">Brand</span>
+              </td>
+              <td style="color:#6b7280;font-size:13px;">Jun 2, 2026</td>
+              <td><span class="badge badge-amber">Pending Review</span></td>
+              <td><button class="btn-outline" style="font-size:12px;padding:6px 14px;" onclick="show('sales-app-payment')">Review →</button></td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;">#BC-2026-0041</td>
+              <td>
+                <div style="font-weight:600;">Priya Sharma</div>
+                <div style="font-size:12px;color:#9ca3af;">priya@techcorp.in</div>
+              </td>
+              <td><span class="badge badge-gray">Company</span></td>
+              <td>
+                <span class="pill-tag">YouTube</span>
+                <span class="pill-tag">Social</span>
+                <span class="pill-tag">Dark Web</span>
+              </td>
+              <td style="color:#6b7280;font-size:13px;">Jun 1, 2026</td>
+              <td><span class="badge badge-blue">Payment Pending</span></td>
+              <td><button class="btn-outline" style="font-size:12px;padding:6px 14px;" onclick="show('sales-app-payment')">Review →</button></td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;">#BC-2026-0040</td>
+              <td>
+                <div style="font-weight:600;">Marcus Williams</div>
+                <div style="font-size:12px;color:#9ca3af;">mwilliams@studio.com</div>
+              </td>
+              <td><span class="badge badge-gray">Company</span></td>
+              <td><span class="pill-tag">Copyright</span></td>
+              <td style="color:#6b7280;font-size:13px;">May 30, 2026</td>
+              <td><span class="badge badge-purple">Agreement Pending</span></td>
+              <td><button class="btn-outline" style="font-size:12px;padding:6px 14px;" onclick="show('sales-app-agreement')">Review →</button></td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;">#BC-2026-0038</td>
+              <td>
+                <div style="font-weight:600;">Sofia Rossi</div>
+                <div style="font-size:12px;color:#9ca3af;">sofia@fashionlabel.it</div>
+              </td>
+              <td><span class="badge badge-gray">Company</span></td>
+              <td><span class="pill-tag">Brand</span><span class="pill-tag">Amazon</span></td>
+              <td style="color:#6b7280;font-size:13px;">May 28, 2026</td>
+              <td><span class="badge badge-teal">Operations Setup</span></td>
+              <td><button class="btn-outline" style="font-size:12px;padding:6px 14px;" onclick="show('sales-app-ops')">Review →</button></td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;">#BC-2026-0035</td>
+              <td>
+                <div style="font-weight:600;">Raj Patel</div>
+                <div style="font-size:12px;color:#9ca3af;">raj@musiclabel.com</div>
+              </td>
+              <td><span class="badge badge-gray">Individual</span></td>
+              <td><span class="pill-tag">YouTube</span><span class="pill-tag">Copyright</span></td>
+              <td style="color:#6b7280;font-size:13px;">May 22, 2026</td>
+              <td><span class="badge badge-green">Active</span></td>
+              <td><button class="btn-outline" style="font-size:12px;padding:6px 14px;">View →</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: sales-app-payment                            -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-sales-app-payment" class="screen">
+  <div class="sales-layout">
+    <aside class="sales-sidebar">
+      <div class="sidebar-logo">Bytes<span>care</span><span class="sidebar-badge">SALES</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-item" onclick="show('sales-dashboard')"><span class="nav-icon">📊</span> Dashboard</div>
+        <div class="nav-item active"><span class="nav-icon">📋</span> Applications</div>
+        <div class="nav-item"><span class="nav-icon">👥</span> Customers</div>
+        <div class="nav-item"><span class="nav-icon">⚙️</span> Settings</div>
+      </nav>
+    </aside>
+
+    <main class="sales-main">
+      <div class="back-btn" onclick="show('sales-dashboard')">← All Applications</div>
+
+      <!-- Customer summary -->
+      <div class="cust-summary">
+        <div class="cust-summary-row">
+          <div>
+            <div class="cust-summary-name">John Doe</div>
+            <div class="cust-summary-meta">john.doe@example.com · +1 (555) 000-1234 · United States</div>
+            <div class="cust-summary-chips">
+              <span class="badge badge-gray">Individual</span>
+              <span class="badge badge-amber">Pending Review</span>
+              <span style="font-size:13px;color:#6b7280;margin-left:4px;">App #BC-2026-0042 · Submitted Jun 2, 2026</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px;color:#9ca3af;margin-bottom:6px;">SERVICES</div>
+            <div>
+              <span class="pill-tag">Copyright Protection</span>
+              <span class="pill-tag">Brand Monitoring</span>
+              <span class="pill-tag">YouTube Takedowns</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion progress -->
+      <div class="completion-bar">
+        <div style="flex:1;">
+          <div class="completion-text">Sections Completed: 0 / 3</div>
+          <div class="progress-bar-track" style="margin-top:8px;">
+            <div class="progress-bar-fill" style="width:0%;"></div>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#9ca3af;">Complete all 3 sections to send to Ops</div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-bar">
+        <button class="tab-btn active">💳 Payment Details</button>
+        <button class="tab-btn" onclick="show('sales-app-agreement')">📄 Agreement</button>
+        <button class="tab-btn" onclick="show('sales-app-ops')">⚙️ Ops Requirements</button>
+      </div>
+
+      <!-- Payment form -->
+      <div class="card" style="padding:32px;">
+        <div class="section-heading">Configure Payment</div>
+
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div class="form-row cols-2">
+            <div>
+              <label class="field-label">Currency</label>
+              <select>
+                <option>USD — US Dollar</option>
+                <option>INR — Indian Rupee</option>
+                <option>GBP — British Pound</option>
+                <option>EUR — Euro</option>
+              </select>
+            </div>
+            <div>
+              <label class="field-label">Amount</label>
+              <input type="number" placeholder="e.g. 299" value="299" />
+            </div>
+          </div>
+
+          <div>
+            <label class="field-label">Billing Frequency</label>
+            <div class="radio-pills" style="margin-top:8px;">
+              <div class="radio-pill selected">Monthly</div>
+              <div class="radio-pill">Quarterly</div>
+              <div class="radio-pill">Bi-annually</div>
+              <div class="radio-pill">Annually</div>
+              <div class="radio-pill">Custom</div>
+            </div>
+          </div>
+
+          <div>
+            <label class="field-label">Service Duration</label>
+            <div class="radio-pills" style="margin-top:8px;">
+              <div class="radio-pill selected">1 Year</div>
+              <div class="radio-pill">6 Months</div>
+              <div class="radio-pill">3 Months</div>
+              <div class="radio-pill">Custom</div>
+            </div>
+          </div>
+
+          <div class="form-row cols-2">
+            <div>
+              <label class="field-label">Start Date</label>
+              <input type="date" value="2026-06-02" />
+            </div>
+            <div>
+              <label class="field-label">End Date <span style="color:#9ca3af;font-weight:400;">(auto-calculated)</span></label>
+              <input type="text" value="June 2, 2027" readonly style="background:#f9fafb;color:#6b7280;" />
+            </div>
+          </div>
+
+          <div>
+            <label class="field-label">Payment Method</label>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+              <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:14px 16px;border:2px solid #FFA500;border-radius:12px;background:#fffbf2;">
+                <input type="radio" name="pm" checked style="width:auto;margin-top:2px;" />
+                <div>
+                  <div style="font-size:14px;font-weight:700;color:#111827;">Via Onboarding Portal</div>
+                  <div style="font-size:12px;color:#6b7280;margin-top:2px;">Customer pays online via their status page</div>
+                </div>
+              </label>
+              <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:14px 16px;border:1.5px solid #e5e7eb;border-radius:12px;">
+                <input type="radio" name="pm" style="width:auto;margin-top:2px;" />
+                <div>
+                  <div style="font-size:14px;font-weight:700;color:#111827;">Offline / Manual</div>
+                  <div style="font-size:12px;color:#6b7280;margin-top:2px;">Payment handled outside the portal (bank transfer, cheque, etc.)</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Notice -->
+          <div class="notice-box">
+            <span>💡</span>
+            <div>Customer will receive an email notification and the payment section will unlock on their status page as soon as you save.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;margin-top:24px;">
+          <button class="btn-primary">Save Payment Details ✓</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: sales-app-agreement                          -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-sales-app-agreement" class="screen">
+  <div class="sales-layout">
+    <aside class="sales-sidebar">
+      <div class="sidebar-logo">Bytes<span>care</span><span class="sidebar-badge">SALES</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-item" onclick="show('sales-dashboard')"><span class="nav-icon">📊</span> Dashboard</div>
+        <div class="nav-item active"><span class="nav-icon">📋</span> Applications</div>
+        <div class="nav-item"><span class="nav-icon">👥</span> Customers</div>
+        <div class="nav-item"><span class="nav-icon">⚙️</span> Settings</div>
+      </nav>
+    </aside>
+
+    <main class="sales-main">
+      <div class="back-btn" onclick="show('sales-dashboard')">← All Applications</div>
+
+      <!-- Customer summary -->
+      <div class="cust-summary">
+        <div class="cust-summary-row">
+          <div>
+            <div class="cust-summary-name">John Doe</div>
+            <div class="cust-summary-meta">john.doe@example.com · +1 (555) 000-1234 · United States</div>
+            <div class="cust-summary-chips">
+              <span class="badge badge-gray">Individual</span>
+              <span class="badge badge-amber">Pending Review</span>
+              <span style="font-size:13px;color:#6b7280;margin-left:4px;">App #BC-2026-0042 · Submitted Jun 2, 2026</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px;color:#9ca3af;margin-bottom:6px;">SERVICES</div>
+            <div>
+              <span class="pill-tag">Copyright Protection</span>
+              <span class="pill-tag">Brand Monitoring</span>
+              <span class="pill-tag">YouTube Takedowns</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion progress -->
+      <div class="completion-bar">
+        <div style="flex:1;">
+          <div class="completion-text">Sections Completed: 1 / 3</div>
+          <div class="progress-bar-track" style="margin-top:8px;">
+            <div class="progress-bar-fill" style="width:33%;"></div>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#9ca3af;">Complete all 3 sections to send to Ops</div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-bar">
+        <button class="tab-btn" onclick="show('sales-app-payment')">💳 Payment Details <span style="color:#22c55e;margin-left:4px;">✓</span></button>
+        <button class="tab-btn active">📄 Agreement</button>
+        <button class="tab-btn" onclick="show('sales-app-ops')">⚙️ Ops Requirements</button>
+      </div>
+
+      <!-- Agreement form -->
+      <div class="card" style="padding:32px;">
+        <div class="section-heading">Agreement Type</div>
+        <p style="font-size:13px;color:#6b7280;margin-bottom:20px;">Choose how you want to handle the service agreement with this customer.</p>
+
+        <div class="option-cards">
+          <!-- Template -->
+          <div class="option-card" onclick="selectAgreement(this)">
+            <div class="option-card-icon">📝</div>
+            <div class="option-card-body">
+              <div class="option-card-title">Use Standard Template</div>
+              <div class="option-card-desc">Send our standard service agreement template to the customer for review and signature.</div>
+              <div style="margin-top:14px;display:flex;align-items:center;gap:12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px 14px;">
+                <span style="font-size:20px;">📄</span>
+                <div>
+                  <div style="font-size:13px;font-weight:600;">Bytescare_Standard_Agreement_v2.1.pdf</div>
+                  <div style="font-size:11px;color:#9ca3af;">Last updated May 2026</div>
+                </div>
+                <button class="btn-outline" style="font-size:12px;padding:6px 12px;margin-left:auto;">Preview</button>
+              </div>
+              <div style="margin-top:14px;">
+                <button class="btn-primary" style="font-size:13px;padding:9px 18px;">Send Template Link to Customer</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Unsigned Draft -->
+          <div class="option-card selected" onclick="selectAgreement(this)">
+            <div class="option-card-icon">✍️</div>
+            <div class="option-card-body">
+              <div class="option-card-title">Upload Unsigned Draft</div>
+              <div class="option-card-desc">Upload a custom agreement draft. The customer will be prompted to sign it digitally on their portal.</div>
+              <div class="file-upload-area" style="margin-top:14px;">
+                <div style="font-size:28px;margin-bottom:8px;">📎</div>
+                <div style="font-size:14px;font-weight:600;color:#374151;">Drop your file here or click to upload</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:4px;">PDF, DOCX — max 10 MB</div>
+              </div>
+              <div style="margin-top:14px;display:flex;gap:10px;align-items:center;">
+                <button class="btn-primary" style="font-size:13px;padding:9px 18px;">Upload &amp; Send for Signing</button>
+                <span style="font-size:12px;color:#6b7280;">Customer will be notified to sign on their portal</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Signed Document -->
+          <div class="option-card" onclick="selectAgreement(this)">
+            <div class="option-card-icon">✅</div>
+            <div class="option-card-body">
+              <div class="option-card-title">Upload Signed Agreement</div>
+              <div class="option-card-desc">Upload a fully signed agreement. No customer action needed — the agreement step will be marked as complete.</div>
+              <div class="file-upload-area" style="margin-top:14px;">
+                <div style="font-size:28px;margin-bottom:8px;">📎</div>
+                <div style="font-size:14px;font-weight:600;color:#374151;">Drop signed document here</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:4px;">PDF only — max 10 MB</div>
+              </div>
+              <div style="margin-top:14px;display:flex;gap:10px;align-items:center;">
+                <button class="btn-primary" style="font-size:13px;padding:9px 18px;">Upload &amp; Mark Complete</button>
+                <span style="font-size:12px;color:#6b7280;">No customer action needed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;margin-top:24px;">
+          <button class="btn-primary">Save Agreement Settings ✓</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: sales-app-ops                                -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-sales-app-ops" class="screen">
+  <div class="sales-layout">
+    <aside class="sales-sidebar">
+      <div class="sidebar-logo">Bytes<span>care</span><span class="sidebar-badge">SALES</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-item" onclick="show('sales-dashboard')"><span class="nav-icon">📊</span> Dashboard</div>
+        <div class="nav-item active"><span class="nav-icon">📋</span> Applications</div>
+        <div class="nav-item"><span class="nav-icon">👥</span> Customers</div>
+        <div class="nav-item"><span class="nav-icon">⚙️</span> Settings</div>
+      </nav>
+    </aside>
+
+    <main class="sales-main">
+      <div class="back-btn" onclick="show('sales-dashboard')">← All Applications</div>
+
+      <!-- Customer summary -->
+      <div class="cust-summary">
+        <div class="cust-summary-row">
+          <div>
+            <div class="cust-summary-name">John Doe</div>
+            <div class="cust-summary-meta">john.doe@example.com · +1 (555) 000-1234 · United States</div>
+            <div class="cust-summary-chips">
+              <span class="badge badge-gray">Individual</span>
+              <span class="badge badge-amber">Pending Review</span>
+              <span style="font-size:13px;color:#6b7280;margin-left:4px;">App #BC-2026-0042 · Submitted Jun 2, 2026</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px;color:#9ca3af;margin-bottom:6px;">SERVICES</div>
+            <div>
+              <span class="pill-tag">Copyright Protection</span>
+              <span class="pill-tag">Brand Monitoring</span>
+              <span class="pill-tag">YouTube Takedowns</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion progress -->
+      <div class="completion-bar">
+        <div style="flex:1;">
+          <div class="completion-text">Sections Completed: 2 / 3</div>
+          <div class="progress-bar-track" style="margin-top:8px;">
+            <div class="progress-bar-fill" style="width:66%;"></div>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#6b7280;">Complete Ops Requirements to send to team</div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-bar">
+        <button class="tab-btn" onclick="show('sales-app-payment')">💳 Payment Details <span style="color:#22c55e;margin-left:4px;">✓</span></button>
+        <button class="tab-btn" onclick="show('sales-app-agreement')">📄 Agreement <span style="color:#22c55e;margin-left:4px;">✓</span></button>
+        <button class="tab-btn active">⚙️ Ops Requirements</button>
+      </div>
+
+      <!-- Ops form -->
+      <div class="card" style="padding:32px;">
+        <div class="section-heading">Operations Handoff Requirements</div>
+        <p style="font-size:13px;color:#6b7280;margin-bottom:24px;">Fill in the details required by the operations team to begin monitoring setup.</p>
+
+        <div style="display:flex;flex-direction:column;gap:22px;">
+          <!-- Client Overview -->
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#374151;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f3f4f6;">👤 Client Overview</div>
+            <div class="form-row cols-2">
+              <div>
+                <label class="field-label">Primary Contact Name</label>
+                <input type="text" value="John Doe" />
+              </div>
+              <div>
+                <label class="field-label">Contact Email</label>
+                <input type="email" value="john.doe@example.com" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Assets to Protect -->
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#374151;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f3f4f6;">🎯 Assets to Protect</div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div>
+                <label class="field-label">Websites / URLs</label>
+                <textarea rows="2" placeholder="https://johndoe.com&#10;https://johndoeshop.com"></textarea>
+              </div>
+              <div>
+                <label class="field-label">YouTube Channels</label>
+                <textarea rows="2" placeholder="@JohnDoeOfficial&#10;Channel ID: UC..."></textarea>
+              </div>
+              <div class="form-row cols-2">
+                <div>
+                  <label class="field-label">Social Media Handles</label>
+                  <textarea rows="2" placeholder="@johndoe (Instagram)&#10;@johndoe (Twitter/X)"></textarea>
+                </div>
+                <div>
+                  <label class="field-label">Brand Names / Keywords</label>
+                  <textarea rows="2" placeholder="JohnDoe&#10;JD Official&#10;John Doe Music"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Monitoring Platforms -->
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#374151;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f3f4f6;">🌐 Monitoring Platforms</div>
+            <div class="check-grid">
+              <div class="check-item checked" onclick="this.classList.toggle('checked')"><span>▶</span> YouTube</div>
+              <div class="check-item checked" onclick="this.classList.toggle('checked')"><span>📷</span> Instagram</div>
+              <div class="check-item checked" onclick="this.classList.toggle('checked')"><span>👤</span> Facebook</div>
+              <div class="check-item" onclick="this.classList.toggle('checked')"><span>✕</span> Twitter / X</div>
+              <div class="check-item" onclick="this.classList.toggle('checked')"><span>🎵</span> TikTok</div>
+              <div class="check-item" onclick="this.classList.toggle('checked')"><span>📦</span> Amazon</div>
+              <div class="check-item" onclick="this.classList.toggle('checked')"><span>🛒</span> Flipkart</div>
+              <div class="check-item checked" onclick="this.classList.toggle('checked')"><span>🔍</span> Google Search</div>
+              <div class="check-item" onclick="this.classList.toggle('checked')"><span>📱</span> App Stores</div>
+              <div class="check-item" onclick="this.classList.toggle('checked')"><span>🕸️</span> Dark Web</div>
+            </div>
+          </div>
+
+          <!-- Priority Level -->
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#374151;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f3f4f6;">🚦 Priority Level</div>
+            <div class="radio-pills">
+              <div class="radio-pill selected">Standard</div>
+              <div class="radio-pill">High</div>
+              <div class="radio-pill">Critical</div>
+            </div>
+          </div>
+
+          <!-- Special Instructions -->
+          <div>
+            <label class="field-label">Special Instructions for Ops Team</label>
+            <textarea rows="3" placeholder="Any specific instructions, notes, or custom monitoring requirements..."></textarea>
+          </div>
+
+          <!-- SLA Start Date -->
+          <div style="max-width:300px;">
+            <label class="field-label">SLA Start Date</label>
+            <input type="date" value="2026-06-02" />
+          </div>
+        </div>
+
+        <!-- CTA — disabled state shown -->
+        <div style="margin-top:28px;position:relative;" id="ops-cta-wrapper">
+          <div title="Complete Payment and Agreement sections first" style="display:none;" id="ops-disabled-overlay"
+            style="position:absolute;inset:0;z-index:1;cursor:not-allowed;"></div>
+          <button class="btn-primary ops-cta" onclick="show('sales-app-ops-done')" style="width:100%;justify-content:center;font-size:16px;">
+            Send to Operations Team →
+          </button>
+          <p style="text-align:center;font-size:12px;color:#9ca3af;margin-top:8px;">This will notify the operations team and update the customer status to "Operations Setup"</p>
+        </div>
+
+        <!-- Disabled state example -->
+        <div style="margin-top:16px;padding:14px 16px;background:#f9fafb;border:1.5px dashed #d1d5db;border-radius:12px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:18px;">⚠️</span>
+          <div style="font-size:13px;color:#6b7280;">
+            <strong style="color:#374151;">Disabled state example:</strong> The button above would be disabled (grayed out) with tooltip <em>"Complete Payment and Agreement sections first"</em> if those sections were incomplete.
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SCREEN: sales-app-ops-done                           -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="screen-sales-app-ops-done" class="screen">
+  <div class="sales-layout">
+    <aside class="sales-sidebar">
+      <div class="sidebar-logo">Bytes<span>care</span><span class="sidebar-badge">SALES</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-item" onclick="show('sales-dashboard')"><span class="nav-icon">📊</span> Dashboard</div>
+        <div class="nav-item active"><span class="nav-icon">📋</span> Applications</div>
+        <div class="nav-item"><span class="nav-icon">👥</span> Customers</div>
+        <div class="nav-item"><span class="nav-icon">⚙️</span> Settings</div>
+      </nav>
+    </aside>
+
+    <main class="sales-main">
+      <div class="success-center">
+        <div class="success-icon">✅</div>
+        <h2 style="font-size:28px;font-weight:900;color:#111827;margin-bottom:8px;">Sent to Operations Team!</h2>
+        <p style="font-size:15px;color:#6b7280;margin-bottom:28px;max-width:440px;">The operations team has been notified. Customer status has been updated to <strong style="color:#0f766e;">Operations Setup</strong>.</p>
+
+        <div class="ops-done-summary">
+          <div class="ops-done-row"><span class="label">Customer</span><span class="value">John Doe</span></div>
+          <div class="ops-done-row"><span class="label">Application ID</span><span class="value">#BC-2026-0042</span></div>
+          <div class="ops-done-row"><span class="label">Plan</span><span class="value">Professional · $299/mo</span></div>
+          <div class="ops-done-row"><span class="label">Duration</span><span class="value">1 Year (Jun 2026 – Jun 2027)</span></div>
+          <div class="ops-done-row"><span class="label">Priority</span><span class="value">Standard</span></div>
+          <div class="ops-done-row"><span class="label">Platforms</span><span class="value">YouTube, Instagram, Facebook, Google</span></div>
+          <div class="ops-done-row"><span class="label">SLA Start</span><span class="value">June 2, 2026</span></div>
+          <div class="ops-done-row"><span class="label">New Status</span><span class="value"><span class="badge badge-teal">Operations Setup</span></span></div>
+        </div>
+
+        <div style="display:flex;gap:14px;margin-top:8px;">
+          <button class="btn-primary" onclick="show('sales-dashboard')">← Back to Dashboard</button>
+          <button class="btn-outline">View Application</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  JAVASCRIPT                                           -->
+<!-- ══════════════════════════════════════════════════════ -->
+<script>
+  const screens = [
+    'home','step1','step4',
+    'status-pending','status-payment','status-agreement',
+    'sales-login','sales-dashboard',
+    'sales-app-payment','sales-app-agreement','sales-app-ops','sales-app-ops-done'
+  ];
+
+  function show(id) {
+    screens.forEach(s => {
+      const el = document.getElementById('screen-' + s);
+      const nav = document.getElementById('nav-' + s);
+      if (el) el.classList.toggle('active', s === id);
+      if (nav) nav.classList.toggle('active-nav', s === id);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  // Agreement option card selection
+  function selectAgreement(clicked) {
+    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    clicked.classList.add('selected');
+  }
+
+  // Radio pill interactive behavior (generic)
+  document.querySelectorAll('.radio-pills').forEach(group => {
+    group.querySelectorAll('.radio-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        group.querySelectorAll('.radio-pill').forEach(p => p.classList.remove('selected'));
+        pill.classList.add('selected');
+      });
+    });
+  });
+
+  // Type card selection (step1)
+  document.querySelectorAll('.type-cards').forEach(group => {
+    group.querySelectorAll('.type-card').forEach(card => {
+      card.addEventListener('click', () => {
+        group.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+      });
+    });
+  });
+
+  // Payment method toggle
+  document.querySelectorAll('.payment-method-toggle').forEach(toggle => {
+    toggle.querySelectorAll('.pmtoggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        toggle.querySelectorAll('.pmtoggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  });
+
+  // Filter tabs
+  document.querySelectorAll('.filter-tabs').forEach(tabs => {
+    tabs.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+  });
+
+  // Default screen
+  show('home');
+</script>
+</body>
+</html>
