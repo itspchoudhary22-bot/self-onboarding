@@ -20,6 +20,7 @@ const STEPS = (type: string) => [
 const LS_SESSION = "bytescare_session_id";
 const LS_DATA = "bytescare_form_data";
 const LS_STEP = "bytescare_step";
+const LS_SUBMITTED = "bytescare_submitted";
 
 interface ResumeInfo {
   sessionId: string;
@@ -44,6 +45,19 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     const init = async () => {
+      // Check if already submitted — restore locked status screen
+      const submittedData = localStorage.getItem(LS_SUBMITTED);
+      if (submittedData) {
+        try {
+          const { sessionId: sid, applicationId, formData: fd } = JSON.parse(submittedData);
+          setSessionId(sid);
+          setSubmittedAppId(applicationId);
+          setFormData(fd);
+          setSubmitted(true);
+          return;
+        } catch {}
+      }
+
       // Check for ?session=TOKEN in URL (resume link from email)
       const urlParams = new URLSearchParams(window.location.search);
       const token = urlParams.get('session');
@@ -176,7 +190,9 @@ export default function OnboardingPage() {
         localStorage.removeItem(LS_SESSION);
         localStorage.removeItem(LS_DATA);
         localStorage.removeItem(LS_STEP);
-        setSubmittedAppId(data.applicationId || "");
+        const appId = data.applicationId || "";
+        localStorage.setItem(LS_SUBMITTED, JSON.stringify({ sessionId, applicationId: appId, formData }));
+        setSubmittedAppId(appId);
         setSubmitted(true);
       }
     } catch {
