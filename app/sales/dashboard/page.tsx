@@ -455,7 +455,8 @@ export default function SalesDashboardPage() {
             </div>
 
             {/* Mobile Card List */}
-            <div className="md:hidden" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div className="md:hidden">
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {filtered.map((app) => (
                 <div
                   key={app._id}
@@ -507,7 +508,7 @@ export default function SalesDashboardPage() {
                       {app.servicesCount} service{app.servicesCount !== 1 ? "s" : ""}
                     </span>
                     <span style={{ fontSize: 12, color: "#6b7280" }}>
-                      {new Date(app.createdAt).toLocaleDateString()}
+                      {new Date(app.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                     </span>
                   </div>
                   <a
@@ -529,6 +530,7 @@ export default function SalesDashboardPage() {
                   </a>
                 </div>
               ))}
+              </div>
             </div>
           </>
         )}
