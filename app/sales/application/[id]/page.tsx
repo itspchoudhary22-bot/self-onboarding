@@ -526,12 +526,10 @@ function AgreementTab({
 function PaymentTab({
   app,
   agreementDone,
-  onSaved,
   onSent,
 }: {
   app: Application;
   agreementDone: boolean;
-  onSaved: () => void;
   onSent: () => void;
 }) {
   const existing = app.paymentDetails;
@@ -1526,7 +1524,6 @@ export default function ApplicationDetailPage() {
             <PaymentTab
               app={app}
               agreementDone={agreementDone}
-              onSaved={loadApp}
               onSent={() => { loadApp(); setActiveTab("ops"); }}
             />
           )}
