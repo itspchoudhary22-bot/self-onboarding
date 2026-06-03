@@ -112,28 +112,33 @@ function AgreementTab({
 
   const existing = app.agreementDetails;
 
+  async function saveAgreement(body: Record<string, string>) {
+    const res = await fetch(`/api/sales/applications/${app._id}/agreement`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `Save failed (${res.status})`);
+    return data;
+  }
+
   async function handleSubmit() {
     if (!selectedType) return;
     setUploading(true);
     setError("");
     try {
       if (selectedType === "template") {
-        // Send template via PandaDoc
         const pandaRes = await fetch("/api/pandadoc/create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sessionId: app.sessionId, formData: app, useTemplate: true }),
         });
         const pandaData = await pandaRes.json();
-
-        await fetch(`/api/sales/applications/${app._id}/agreement`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            agreementType: "template",
-            pandadocDocumentId: pandaData?.id || pandaData?.document?.id || "",
-            pandadocSigningUrl: pandaData?.url || pandaData?.signingUrl || "",
-          }),
+        await saveAgreement({
+          agreementType: "template",
+          pandadocDocumentId: pandaData?.id || pandaData?.document?.id || "",
+          pandadocSigningUrl: pandaData?.url || pandaData?.signingUrl || "",
         });
       } else if (selectedType === "unsigned") {
         if (!file) { setError("Please select a PDF file"); setUploading(false); return; }
@@ -144,31 +149,21 @@ function AgreementTab({
           body: JSON.stringify({ applicationId: app._id, fileBase64: base64, fileName: file.name }),
         });
         const uploadData = await uploadRes.json();
-
-        await fetch(`/api/sales/applications/${app._id}/agreement`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            agreementType: "unsigned",
-            pandadocDocumentId: uploadData?.id || "",
-            pandadocSigningUrl: uploadData?.signingUrl || "",
-          }),
+        await saveAgreement({
+          agreementType: "unsigned",
+          pandadocDocumentId: uploadData?.id || "",
+          pandadocSigningUrl: uploadData?.signingUrl || "",
         });
       } else {
-        // signed — just record it
-        await fetch(`/api/sales/applications/${app._id}/agreement`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            agreementType: "signed",
-            uploadedFileName: file?.name || "signed-document.pdf",
-          }),
+        await saveAgreement({
+          agreementType: "signed",
+          uploadedFileName: file?.name || "signed-document.pdf",
         });
       }
       setSaved(true);
       onSaved();
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
       console.error(err);
     } finally {
       setUploading(false);
