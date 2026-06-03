@@ -114,6 +114,7 @@ function AgreementTab({
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const [removing, setRemoving] = useState<number | null>(null);
+  const [refreshingIdx, setRefreshingIdx] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [markingIdx, setMarkingIdx] = useState<number | null>(null);
 
@@ -152,6 +153,25 @@ function AgreementTab({
       setError("Network error");
     } finally {
       setRemoving(null);
+    }
+  }
+
+  async function refreshSigningUrl(idx: number) {
+    setRefreshingIdx(idx);
+    setError("");
+    try {
+      const res = await fetch("/api/pandadoc/refresh-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ applicationId: app._id, agreementIdx: idx }),
+      });
+      const data = await res.json();
+      if (res.ok) onSaved();
+      else setError(data.error || "Failed to refresh link");
+    } catch {
+      setError("Network error");
+    } finally {
+      setRefreshingIdx(null);
     }
   }
 
@@ -296,6 +316,12 @@ function AgreementTab({
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                    {!isSigned && a.pandadocDocumentId && (
+                      <button onClick={() => refreshSigningUrl(i)} disabled={refreshingIdx === i}
+                        style={{ fontSize: 12, color: "#2563eb", background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 6, padding: "4px 10px", cursor: "pointer", fontWeight: 600 }}>
+                        {refreshingIdx === i ? "…" : "Refresh Link"}
+                      </button>
+                    )}
                     {!isSigned && (
                       <button onClick={() => markSigned(i)} disabled={markingIdx === i}
                         style={{ fontSize: 12, color: "#16a34a", background: "#dcfce7", border: "1px solid #bbf7d0", borderRadius: 6, padding: "4px 10px", cursor: "pointer", fontWeight: 600 }}>
