@@ -6,7 +6,7 @@
     },
     {
       "path": "/api/cron/sync-pandadoc",
-      "schedule": "0 * * * *"
+      "schedule": "0 9 * * *"
     }
   ]
 }
