@@ -55,54 +55,13 @@ const ApplicationSchema = new mongoose.Schema({
   sessionId: { type: String, default: '' },
 
   // ── Agreement (filled by sales team) ─────────────────────────────────────
-  agreementDetails: {
-    type: {
-      agreementType: { type: String, enum: ['template', 'unsigned', 'signed'] },
-      pandadocDocumentId: { type: String, default: '' },
-      pandadocSigningUrl: { type: String, default: '' },
-      pandadocStatus: { type: String, default: '' },
-      uploadedFileName: { type: String, default: '' },
-      sentToCustomerAt: { type: Date },
-      signedAt: { type: Date },
-      completedAt: { type: Date },
-    },
-    default: null,
-  },
+  agreementDetails: { type: mongoose.Schema.Types.Mixed, default: null },
 
   // ── Payment (filled by sales team) ───────────────────────────────────────
-  paymentDetails: {
-    type: {
-      planName: { type: String, default: '' },
-      currency: { type: String, default: 'INR' },
-      amount: { type: Number, default: 0 },
-      frequency: { type: String, default: 'monthly' }, // monthly|quarterly|biannually|annually
-      serviceDuration: { type: String, default: '1year' }, // 3months|6months|1year|custom
-      startDate: { type: Date },
-      endDate: { type: Date },
-      method: { type: String, enum: ['portal', 'offline'], default: 'portal' },
-      enabledAt: { type: Date },
-      paidAt: { type: Date },
-      razorpayOrderId: { type: String, default: '' },
-      razorpayPaymentId: { type: String, default: '' },
-    },
-    default: null,
-  },
+  paymentDetails: { type: mongoose.Schema.Types.Mixed, default: null },
 
   // ── Operational Requirements (filled by sales team, sent to ops) ──────────
-  operationalRequirements: {
-    type: {
-      websites: { type: String, default: '' },
-      youtubeChannels: { type: String, default: '' },
-      socialHandles: { type: String, default: '' },
-      brandNames: { type: String, default: '' },
-      platforms: { type: [String], default: [] },
-      priority: { type: String, enum: ['standard', 'high', 'critical'], default: 'standard' },
-      instructions: { type: String, default: '' },
-      slaStartDate: { type: Date },
-      sentToOpsAt: { type: Date },
-    },
-    default: null,
-  },
+  operationalRequirements: { type: mongoose.Schema.Types.Mixed, default: null },
 
   // ── Sales notes ───────────────────────────────────────────────────────────
   salesNotes: { type: String, default: '' },
@@ -111,9 +70,8 @@ const ApplicationSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-ApplicationSchema.pre('save', function (next) {
+ApplicationSchema.pre('save', async function () {
   this.updatedAt = new Date();
-  next();
 });
 
 export default mongoose.models.Application || mongoose.model('Application', ApplicationSchema);
