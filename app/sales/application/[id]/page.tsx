@@ -192,16 +192,11 @@ function AgreementTab({
           const uploadRes = await fetch("/api/pandadoc/upload-for-signing", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ applicationId: app._id, fileBase64: base64, fileName: f.name }),
+            body: JSON.stringify({ applicationId: app._id, fileBase64: base64, fileName: f.name, label: files.length === 1 ? (label || f.name) : f.name }),
           });
           const uploadData = await uploadRes.json();
           if (!uploadRes.ok) throw new Error(uploadData?.error || `Upload failed for ${f.name}`);
-          await addAgreement({
-            agreementType: "unsigned",
-            label: files.length === 1 ? (label || f.name) : f.name,
-            pandadocDocumentId: uploadData?.id || "",
-            pandadocSigningUrl: uploadData?.signingUrl || "",
-          });
+          // File was saved directly in upload-for-signing — no separate addAgreement call needed
         }
       } else {
         if (!files.length) { setError("Please select at least one PDF file"); setUploading(false); return; }

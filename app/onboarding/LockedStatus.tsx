@@ -29,6 +29,7 @@ interface AgreementEntry {
   label?: string;
   pandadocSigningUrl?: string;
   uploadedFileName?: string;
+  downloadUrl?: string;
 }
 
 interface StatusData {
@@ -360,10 +361,21 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
                         title={a.label || `Agreement ${i + 1}`}
                         style={{ width: "100%", height: 500, border: "none", display: "block" }}
                       />
+                    ) : a.downloadUrl ? (
+                      <div className="px-5 py-5 text-center">
+                        <p className="text-sm mb-3" style={{ color: "#374151" }}>
+                          Please download, sign, and return this document to your account manager.
+                        </p>
+                        <a href={a.downloadUrl} download={a.uploadedFileName || "agreement"}
+                          className="inline-flex items-center gap-2 font-bold text-sm px-5 py-3 rounded-xl"
+                          style={{ background: "#FFA500", color: "#111827", textDecoration: "none" }}>
+                          ⬇ Download {a.uploadedFileName || "Document"}
+                        </a>
+                      </div>
                     ) : (
                       <div className="px-5 py-4 text-center">
                         <p className="text-sm" style={{ color: "#6b7280" }}>
-                          {a.uploadedFileName ? `📎 ${a.uploadedFileName}` : "Document prepared — no online signing required."}
+                          {a.uploadedFileName ? `📎 ${a.uploadedFileName}` : "Document prepared — your account manager will share the signing link."}
                         </p>
                       </div>
                     )}

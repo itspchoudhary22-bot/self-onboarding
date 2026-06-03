@@ -45,12 +45,14 @@ export async function GET(request) {
 
     // Include agreements array when status is agreement_pending
     if (application.status === 'agreement_pending' && application.agreements?.length) {
-      response.agreements = application.agreements.map((a) => ({
+      response.agreements = application.agreements.map((a, idx) => ({
         agreementType: a.agreementType,
         label: a.label || '',
         pandadocSigningUrl: a.pandadocSigningUrl || '',
         uploadedFileName: a.uploadedFileName || '',
         sentToCustomerAt: a.sentToCustomerAt,
+        // Provide download URL for files stored in MongoDB
+        downloadUrl: a.fileBase64 ? `/api/agreements/file/${application._id}/${idx}` : '',
       }));
     }
 
