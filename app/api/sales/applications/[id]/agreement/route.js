@@ -15,6 +15,30 @@ async function verifyAuth() {
   return true;
 }
 
+export async function DELETE(request, { params }) {
+  try {
+    await verifyAuth();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    await connectDB();
+    const { id } = await params;
+    const application = await Application.findById(id);
+    if (!application) {
+      return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+    }
+    application.agreementDetails = null;
+    application.status = 'pending_review';
+    await application.save();
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Agreement reset error:', error);
+    return NextResponse.json({ error: 'Failed to reset agreement' }, { status: 500 });
+  }
+}
+
 export async function POST(request, { params }) {
   try {
     await verifyAuth();

@@ -111,6 +111,21 @@ function AgreementTab({
   const fileRef = useRef<HTMLInputElement>(null);
 
   const existing = app.agreementDetails;
+  const [resetting, setResetting] = useState(false);
+
+  async function resetAgreement() {
+    if (!confirm("Reset agreement? This will clear the current agreement and set status back to pending_review.")) return;
+    setResetting(true);
+    try {
+      const res = await fetch(`/api/sales/applications/${app._id}/agreement`, { method: "DELETE" });
+      if (res.ok) onSaved();
+      else setError("Failed to reset agreement");
+    } catch {
+      setError("Network error");
+    } finally {
+      setResetting(false);
+    }
+  }
 
   async function saveAgreement(body: Record<string, string>) {
     const res = await fetch(`/api/sales/applications/${app._id}/agreement`, {
@@ -230,9 +245,23 @@ function AgreementTab({
             </div>
           )}
         </div>
-        <div style={{ color: "#6b7280", fontSize: 13 }}>
-          To change the agreement type, please contact engineering to reset this field.
-        </div>
+        <button
+          onClick={resetAgreement}
+          disabled={resetting}
+          style={{
+            marginTop: 12,
+            padding: "8px 16px",
+            background: "transparent",
+            border: "1.5px solid #e5e7eb",
+            borderRadius: 8,
+            fontSize: 13,
+            fontWeight: 600,
+            color: "#6b7280",
+            cursor: resetting ? "not-allowed" : "pointer",
+          }}
+        >
+          {resetting ? "Resetting…" : "Reset & Re-send Agreement"}
+        </button>
       </div>
     );
   }
