@@ -61,13 +61,14 @@ export async function POST(request) {
     });
 
     if (sessionId) {
-      await Draft.findOneAndUpdate({ sessionId }, { status: 'submitted' });
+      await Draft.findOneAndUpdate({ sessionId }, { status: 'submitted' }).catch(() => {});
     }
 
-    Promise.all([
-      sendSubmissionConfirmation(body),
-      sendSalesNewApplication(application),
-    ]).catch((err) => console.error('Email send error:', err));
+    // Fire emails — fully isolated so any failure never blocks or errors the response
+    setTimeout(() => {
+      try { sendSubmissionConfirmation(body).catch((e) => console.error('Email 1:', e)); } catch (e) { console.error('Email 1 init:', e); }
+      try { sendSalesNewApplication(application).catch((e) => console.error('Email 2:', e)); } catch (e) { console.error('Email 2 init:', e); }
+    }, 0);
 
     return NextResponse.json(
       { message: 'Application submitted successfully', id: application._id, applicationId: application.applicationId, sessionId: application.sessionId },
