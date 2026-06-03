@@ -561,9 +561,9 @@ export default function LockedStatus({ sessionId, applicationId, formData: rawFo
                 <IconCog size={18} color="#fff" />
               </div>
               <div>
-                <p className="font-bold text-base mb-1" style={{ color: "#0f766e" }}>Operations Setup in Progress</p>
+                <p className="font-bold text-base mb-1" style={{ color: "#0f766e" }}>Thank you! Setup in Progress</p>
                 <p className="text-sm" style={{ color: "#4b5563" }}>
-                  Our operations team is setting up your account. You&apos;ll receive your dashboard credentials within 1–2 business days.
+                  Our ops team is setting up your account and will share your details soon. This typically takes 1–2 business days.
                 </p>
               </div>
             </div>

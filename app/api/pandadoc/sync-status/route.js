@@ -70,11 +70,14 @@ export async function POST(request) {
     );
 
     if (allSigned && application.status === 'agreement_pending') {
-      application.status = 'payment_pending';
+      const nextStatus = application.paymentDetails?.method === 'offline' ? 'ops_setup' : 'payment_pending';
+      application.status = nextStatus;
       await application.save();
-      setTimeout(() => {
-        try { sendPaymentEnabled(application).catch((e) => console.error('Payment email error:', e)); } catch (e) { console.error('Payment email init:', e); }
-      }, 0);
+      if (nextStatus === 'payment_pending') {
+        setTimeout(() => {
+          try { sendPaymentEnabled(application).catch((e) => console.error('Payment email error:', e)); } catch (e) { console.error('Payment email init:', e); }
+        }, 0);
+      }
     } else {
       await application.save();
     }

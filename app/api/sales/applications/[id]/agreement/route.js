@@ -14,6 +14,10 @@ async function verifyAuth() {
   await jwtVerify(tokenCookie.value, secret);
 }
 
+function nextStatusAfterSigning(application) {
+  return application.paymentDetails?.method === 'offline' ? 'ops_setup' : 'payment_pending';
+}
+
 function checkAllSigned(agreements) {
   return agreements.length > 0 && agreements.every(
     (a) => a.agreementType === 'signed' || a.signed === true
@@ -46,7 +50,7 @@ export async function POST(request, { params }) {
       signedAt: agreementType === 'signed' ? new Date() : null,
     });
     application.markModified('agreements');
-    application.status = checkAllSigned(application.agreements) ? 'payment_pending' : 'agreement_pending';
+    application.status = checkAllSigned(application.agreements) ? nextStatusAfterSigning(application) : 'agreement_pending';
     await application.save();
 
     if (agreementType !== 'signed') {
@@ -83,7 +87,7 @@ export async function PATCH(request, { params }) {
     application.markModified('agreements');
 
     if (checkAllSigned(application.agreements)) {
-      application.status = 'payment_pending';
+      application.status = nextStatusAfterSigning(application);
     }
 
     await application.save();

@@ -46,13 +46,18 @@ export async function POST(request, { params }) {
       enabledAt: new Date(),
     };
 
-    // Both portal and offline go to payment_pending — sales decides
-    application.status = 'payment_pending';
+    // Recalculate status only if agreements are already all done
+    const allSigned = application.agreements?.length > 0 &&
+      application.agreements.every((a) => a.agreementType === 'signed' || a.signed === true);
+    if (allSigned) {
+      application.status = method === 'offline' ? 'ops_setup' : 'payment_pending';
+    }
+    // If agreements not done yet, status stays at agreement_pending until customer signs
 
     await application.save();
 
-    // Fire payment enabled email if method is portal
-    if (method === 'portal') {
+    // Notify customer only when online payment is now ready
+    if (method === 'portal' && allSigned) {
       sendPaymentEnabled(application).catch((err) =>
         console.error('sendPaymentEnabled email error:', err)
       );
