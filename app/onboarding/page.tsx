@@ -54,9 +54,9 @@ export default function OnboardingPage() {
       if (submittedData) {
         try {
           const { sessionId: sid, applicationId, formData: fd } = JSON.parse(submittedData);
-          setSessionId(sid);
-          setSubmittedAppId(applicationId);
-          setFormData(fd);
+          setSessionId(sid ?? "");
+          setSubmittedAppId(applicationId ?? "");
+          setFormData(fd && typeof fd === "object" ? { ...INITIAL_FORM_DATA, ...fd } : INITIAL_FORM_DATA);
           setSubmitted(true);
           return;
         } catch {}

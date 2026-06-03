@@ -168,7 +168,8 @@ declare global {
 
 // ---- Main component ----
 
-export default function LockedStatus({ sessionId, applicationId, formData }: Props) {
+export default function LockedStatus({ sessionId, applicationId, formData: rawFormData }: Props) {
+  const formData = rawFormData ?? ({} as FormData);
   const [appStatus, setAppStatus] = useState<AppStatus>("pending_review");
   const [statusData, setStatusData] = useState<StatusData | null>(null);
   const [checking, setChecking] = useState(false);
