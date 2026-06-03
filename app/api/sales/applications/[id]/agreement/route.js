@@ -12,49 +12,41 @@ async function verifyAuth() {
   if (!tokenCookie?.value) throw new Error('No token');
   const secret = new TextEncoder().encode(cfg.salesJwtSecret);
   await jwtVerify(tokenCookie.value, secret);
-  return true;
+}
+
+function checkAllSigned(agreements) {
+  return agreements.length > 0 && agreements.every(
+    (a) => a.agreementType === 'signed' || a.signed === true
+  );
 }
 
 // Add a new agreement document to the array
 export async function POST(request, { params }) {
-  try {
-    await verifyAuth();
-  } catch {
+  try { await verifyAuth(); } catch {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-
   try {
     await connectDB();
-
     const { id } = await params;
     const body = await request.json();
     const { agreementType, pandadocDocumentId, pandadocSigningUrl, uploadedFileName, label } = body;
 
     const application = await Application.findById(id);
-    if (!application) {
-      return NextResponse.json({ error: 'Application not found' }, { status: 404 });
-    }
+    if (!application) return NextResponse.json({ error: 'Application not found' }, { status: 404 });
 
-    const newAgreement = {
+    if (!application.agreements) application.agreements = [];
+    application.agreements.push({
       agreementType,
       label: label || '',
       pandadocDocumentId: pandadocDocumentId || '',
       pandadocSigningUrl: pandadocSigningUrl || '',
       uploadedFileName: uploadedFileName || '',
       sentToCustomerAt: new Date(),
-    };
-
-    if (!application.agreements) application.agreements = [];
-    application.agreements.push(newAgreement);
+      signed: agreementType === 'signed',
+      signedAt: agreementType === 'signed' ? new Date() : null,
+    });
     application.markModified('agreements');
-
-    // Status: payment_pending only if this is a pre-signed doc and it's the first/only one
-    if (agreementType === 'signed' && application.agreements.length === 1) {
-      application.status = 'payment_pending';
-    } else {
-      application.status = 'agreement_pending';
-    }
-
+    application.status = checkAllSigned(application.agreements) ? 'payment_pending' : 'agreement_pending';
     await application.save();
 
     if (agreementType !== 'signed') {
@@ -70,14 +62,43 @@ export async function POST(request, { params }) {
   }
 }
 
-// Remove a single agreement by index, or reset all if no index given
-export async function DELETE(request, { params }) {
-  try {
-    await verifyAuth();
-  } catch {
+// Manually mark a single agreement as signed
+export async function PATCH(request, { params }) {
+  try { await verifyAuth(); } catch {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  try {
+    await connectDB();
+    const { id } = await params;
+    const { searchParams } = new URL(request.url);
+    const idx = parseInt(searchParams.get('index') || '0');
 
+    const application = await Application.findById(id);
+    if (!application || !application.agreements?.[idx]) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+
+    application.agreements[idx].signed = true;
+    application.agreements[idx].signedAt = new Date();
+    application.markModified('agreements');
+
+    if (checkAllSigned(application.agreements)) {
+      application.status = 'payment_pending';
+    }
+
+    await application.save();
+    return NextResponse.json({ success: true, status: application.status, agreements: application.agreements });
+  } catch (error) {
+    console.error('Agreement mark-signed error:', error);
+    return NextResponse.json({ error: 'Failed to mark as signed' }, { status: 500 });
+  }
+}
+
+// Remove a single agreement by index, or reset all
+export async function DELETE(request, { params }) {
+  try { await verifyAuth(); } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     await connectDB();
     const { id } = await params;
@@ -85,23 +106,19 @@ export async function DELETE(request, { params }) {
     const indexParam = searchParams.get('index');
 
     const application = await Application.findById(id);
-    if (!application) {
-      return NextResponse.json({ error: 'Application not found' }, { status: 404 });
-    }
+    if (!application) return NextResponse.json({ error: 'Application not found' }, { status: 404 });
 
     if (indexParam !== null) {
-      const idx = parseInt(indexParam);
-      if (!isNaN(idx) && application.agreements?.[idx]) {
-        application.agreements.splice(idx, 1);
+      const i = parseInt(indexParam);
+      if (!isNaN(i) && application.agreements?.[i]) {
+        application.agreements.splice(i, 1);
         application.markModified('agreements');
       }
     } else {
       application.agreements = [];
     }
 
-    if (!application.agreements?.length) {
-      application.status = 'pending_review';
-    }
+    if (!application.agreements?.length) application.status = 'pending_review';
 
     await application.save();
     return NextResponse.json({ success: true, agreements: application.agreements });

@@ -30,6 +30,8 @@ interface AgreementEntry {
   pandadocSigningUrl?: string;
   uploadedFileName?: string;
   downloadUrl?: string;
+  signed?: boolean;
+  signedAt?: string;
 }
 
 interface StatusData {
@@ -341,13 +343,19 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
               <div className="flex flex-col gap-4 mb-4">
                 {statusData.agreements.map((a, i) => (
                   <div key={i} className="rounded-2xl overflow-hidden"
-                    style={{ border: "1.5px solid #e5e7eb", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
+                    style={{ border: `1.5px solid ${a.signed ? "#bbf7d0" : "#e5e7eb"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
                     <div className="px-4 py-3 flex items-center justify-between"
-                      style={{ background: "#f9fafb", borderBottom: "1px solid #f3f4f6" }}>
-                      <p className="text-xs font-bold uppercase tracking-wider" style={{ color: "#6b7280" }}>
-                        {a.label || `Agreement ${i + 1}`}
-                      </p>
-                      {a.pandadocSigningUrl && (
+                      style={{ background: a.signed ? "#f0fdf4" : "#f9fafb", borderBottom: "1px solid #f3f4f6" }}>
+                      <div className="flex items-center gap-2">
+                        <p className="text-xs font-bold uppercase tracking-wider" style={{ color: "#6b7280" }}>
+                          {a.label || `Agreement ${i + 1}`}
+                        </p>
+                        {a.signed
+                          ? <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "#dcfce7", color: "#16a34a" }}>✓ Signed</span>
+                          : <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ background: "#fef9c3", color: "#d97706" }}>Pending your signature</span>
+                        }
+                      </div>
+                      {a.pandadocSigningUrl && !a.signed && (
                         <a href={a.pandadocSigningUrl} target="_blank" rel="noopener noreferrer"
                           className="text-xs font-bold px-3 py-1.5 rounded-lg"
                           style={{ background: "#eff6ff", color: "#1d4ed8" }}>
@@ -355,7 +363,11 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
                         </a>
                       )}
                     </div>
-                    {a.pandadocSigningUrl ? (
+                    {a.signed ? (
+                      <div className="px-5 py-4 text-center">
+                        <p className="text-sm font-semibold" style={{ color: "#16a34a" }}>Document signed ✓</p>
+                      </div>
+                    ) : a.pandadocSigningUrl ? (
                       <iframe
                         src={a.pandadocSigningUrl}
                         title={a.label || `Agreement ${i + 1}`}

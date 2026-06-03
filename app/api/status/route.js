@@ -43,15 +43,16 @@ export async function GET(request) {
       resumeToken,
     };
 
-    // Include agreements array when status is agreement_pending
-    if (application.status === 'agreement_pending' && application.agreements?.length) {
+    // Include agreements for agreement_pending and payment_pending (show signed status)
+    if (['agreement_pending', 'payment_pending'].includes(application.status) && application.agreements?.length) {
       response.agreements = application.agreements.map((a, idx) => ({
         agreementType: a.agreementType,
         label: a.label || '',
         pandadocSigningUrl: a.pandadocSigningUrl || '',
         uploadedFileName: a.uploadedFileName || '',
         sentToCustomerAt: a.sentToCustomerAt,
-        // Provide download URL for files stored in MongoDB
+        signed: a.signed || a.agreementType === 'signed' || false,
+        signedAt: a.signedAt || null,
         downloadUrl: a.fileBase64 ? `/api/agreements/file/${application._id}/${idx}` : '',
       }));
     }

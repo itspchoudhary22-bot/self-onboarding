@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import Draft from '@/models/Draft';
 import Application from '@/models/Application';
+import { sendPaymentEnabled } from '@/lib/email';
 
 export async function POST(request) {
   try {
@@ -13,23 +13,44 @@ export async function POST(request) {
     for (const event of eventList) {
       if (event.event !== 'document_state_changed') continue;
       const { id: documentId, status } = event.data || {};
-      if (!documentId) continue;
+      if (!documentId || status !== 'document.completed') continue;
 
-      if (status === 'document.completed') {
-        const draft = await Draft.findOne({ pandadocDocumentId: documentId });
-        if (!draft || draft.status === 'submitted') continue;
+      // Find application that has this pandadocDocumentId in its agreements array
+      const application = await Application.findOne({
+        'agreements.pandadocDocumentId': documentId,
+      });
+      if (!application) continue;
 
-        try {
-          await Application.create({
-            ...draft.formData,
-            sessionId: draft.sessionId,
-            pandadocDocumentId: documentId,
-            pandadocStatus: 'completed',
-          });
-          await Draft.findByIdAndUpdate(draft._id, { status: 'submitted' });
-        } catch (err) {
-          if (err.code !== 11000) console.error('Webhook submit error:', err);
+      // Mark the matching agreement as signed
+      let changed = false;
+      (application.agreements || []).forEach((a) => {
+        if (a.pandadocDocumentId === documentId && !a.signed) {
+          a.signed = true;
+          a.signedAt = new Date();
+          changed = true;
         }
+      });
+
+      if (!changed) continue;
+
+      application.markModified('agreements');
+
+      // Check if all agreements that require signing are now signed
+      // agreementType 'signed' = pre-signed by sales, counts as done
+      const allSigned = application.agreements.every(
+        (a) => a.agreementType === 'signed' || a.signed === true
+      );
+
+      if (allSigned && application.status === 'agreement_pending') {
+        application.status = 'payment_pending';
+        await application.save();
+
+        // Notify customer that payment step is ready
+        setTimeout(() => {
+          try { sendPaymentEnabled(application).catch((e) => console.error('Payment email error:', e)); } catch (e) { console.error('Payment email init:', e); }
+        }, 0);
+      } else {
+        await application.save();
       }
     }
 

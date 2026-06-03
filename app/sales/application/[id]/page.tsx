@@ -12,6 +12,8 @@ interface AgreementEntry {
   pandadocSigningUrl?: string;
   uploadedFileName?: string;
   sentToCustomerAt?: string;
+  signed?: boolean;
+  signedAt?: string;
 }
 
 interface PaymentDetails {
@@ -113,6 +115,20 @@ function AgreementTab({
   const fileRef = useRef<HTMLInputElement>(null);
 
   const agreements = app.agreements || [];
+  const [markingIdx, setMarkingIdx] = useState<number | null>(null);
+
+  async function markSigned(idx: number) {
+    setMarkingIdx(idx);
+    try {
+      const res = await fetch(`/api/sales/applications/${app._id}/agreement?index=${idx}`, { method: "PATCH" });
+      if (res.ok) onSaved();
+      else setError("Failed to mark as signed");
+    } catch {
+      setError("Network error");
+    } finally {
+      setMarkingIdx(null);
+    }
+  }
 
   async function addAgreement(body: Record<string, string>) {
     const res = await fetch(`/api/sales/applications/${app._id}/agreement`, {
@@ -255,27 +271,45 @@ function AgreementTab({
               Reset all
             </button>
           </div>
-          {agreements.map((a, i) => (
-            <div key={i} style={{
-              display: "flex", alignItems: "center", justifyContent: "space-between",
-              padding: "10px 14px", marginBottom: 8, borderRadius: 10,
-              background: "#f9fafb", border: "1.5px solid #e5e7eb",
-            }}>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: "#111827" }}>
-                  {a.label || `Agreement ${i + 1}`}
-                </div>
-                <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 2 }}>
-                  {typeLabel(a.agreementType)}
-                  {a.sentToCustomerAt && ` · sent ${new Date(a.sentToCustomerAt).toLocaleDateString()}`}
+          {agreements.map((a, i) => {
+            const isSigned = a.signed || a.agreementType === "signed";
+            return (
+              <div key={i} style={{
+                padding: "10px 14px", marginBottom: 8, borderRadius: 10,
+                background: isSigned ? "#f0fdf4" : "#f9fafb",
+                border: `1.5px solid ${isSigned ? "#bbf7d0" : "#e5e7eb"}`,
+              }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "#111827", display: "flex", alignItems: "center", gap: 6 }}>
+                      {a.label || `Agreement ${i + 1}`}
+                      {isSigned
+                        ? <span style={{ fontSize: 11, fontWeight: 700, color: "#16a34a", background: "#dcfce7", borderRadius: 999, padding: "2px 8px" }}>✓ Signed</span>
+                        : <span style={{ fontSize: 11, fontWeight: 600, color: "#d97706", background: "#fef9c3", borderRadius: 999, padding: "2px 8px" }}>Pending</span>
+                      }
+                    </div>
+                    <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 2 }}>
+                      {typeLabel(a.agreementType)}
+                      {a.sentToCustomerAt && ` · sent ${new Date(a.sentToCustomerAt).toLocaleDateString()}`}
+                      {a.signedAt && ` · signed ${new Date(a.signedAt).toLocaleDateString()}`}
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                    {!isSigned && (
+                      <button onClick={() => markSigned(i)} disabled={markingIdx === i}
+                        style={{ fontSize: 12, color: "#16a34a", background: "#dcfce7", border: "1px solid #bbf7d0", borderRadius: 6, padding: "4px 10px", cursor: "pointer", fontWeight: 600 }}>
+                        {markingIdx === i ? "…" : "Mark Signed"}
+                      </button>
+                    )}
+                    <button onClick={() => removeAgreement(i)} disabled={removing === i}
+                      style={{ fontSize: 12, color: "#dc2626", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}>
+                      {removing === i ? "…" : "Remove"}
+                    </button>
+                  </div>
                 </div>
               </div>
-              <button onClick={() => removeAgreement(i)} disabled={removing === i}
-                style={{ fontSize: 12, color: "#dc2626", background: "none", border: "none", cursor: "pointer", fontWeight: 600, flexShrink: 0 }}>
-                {removing === i ? "…" : "Remove"}
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
