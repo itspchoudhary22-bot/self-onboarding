@@ -3,7 +3,6 @@ name: Deploy to Vercel
 on:
   push:
     branches:
-      - claude/bytescare-onboarding-app-5hRLa
       - main
 
 jobs:
