@@ -344,18 +344,18 @@ function AgreementTab({
               <span style={{ fontSize: 11, color: "#9ca3af", fontWeight: 500 }}>Customer will sign</span>
             </div>
             <p style={{ fontSize: 13, color: "#6b7280", marginTop: 6, lineHeight: 1.5 }}>
-              Upload a PDF — customer signs it via PandaDoc on their portal.
+              Upload a PDF or DOCX — customer signs it via PandaDoc on their portal.
             </p>
             {selectedType === "unsigned" && (
               <div
                 style={{ marginTop: 10, border: "2px dashed #fed7aa", borderRadius: 10, padding: 16, textAlign: "center", background: "#fffbf5", cursor: "pointer" }}
                 onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}
               >
-                <input ref={fileRef} type="file" accept=".pdf" multiple style={{ display: "none" }}
+                <input ref={fileRef} type="file" accept=".pdf,.docx" multiple style={{ display: "none" }}
                   onChange={(e) => setFiles(Array.from(e.target.files || []))} />
                 {files.length > 0
                   ? <span style={{ fontSize: 13, color: "#374151" }}>📎 {files.map(f => f.name).join(", ")}</span>
-                  : <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF(s) — select multiple at once</span>}
+                  : <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF or DOCX — select multiple at once</span>}
               </div>
             )}
           </div>
@@ -383,11 +383,11 @@ function AgreementTab({
                 style={{ marginTop: 10, border: "2px dashed #d1d5db", borderRadius: 10, padding: 16, textAlign: "center", background: "#f9fafb", cursor: "pointer" }}
                 onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}
               >
-                <input ref={fileRef} type="file" accept=".pdf" multiple style={{ display: "none" }}
+                <input ref={fileRef} type="file" accept=".pdf,.docx" multiple style={{ display: "none" }}
                   onChange={(e) => setFiles(Array.from(e.target.files || []))} />
                 {files.length > 0
                   ? <span style={{ fontSize: 13, color: "#374151" }}>📎 {files.map(f => f.name).join(", ")}</span>
-                  : <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF(s) — select multiple at once</span>}
+                  : <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF or DOCX — select multiple at once</span>}
               </div>
             )}
           </div>
