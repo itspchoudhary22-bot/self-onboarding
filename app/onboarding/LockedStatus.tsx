@@ -385,7 +385,7 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
             {/* Agreements list */}
             {statusData?.agreements?.length ? (
               <div className="flex flex-col gap-4 mb-4">
-                {statusData.agreements.map((a, i) => (
+                {(statusData?.agreements ?? []).map((a, i) => (
                   <div key={i} className="rounded-2xl overflow-hidden"
                     style={{ border: `1.5px solid ${a.signed ? "#bbf7d0" : "#e5e7eb"}`, boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
                     <div className="px-4 py-3 flex items-center justify-between"
@@ -595,12 +595,12 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
             </div>
 
             {/* Services */}
-            {formData.services.length > 0 && (
+            {(formData.services ?? []).length > 0 && (
               <div className="rounded-2xl px-5 py-5 mb-5"
                 style={{ background: "#fff", border: "1.5px solid #f3f4f6", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
                 <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "#9ca3af" }}>Services Enrolled</p>
                 <div className="flex flex-wrap gap-2">
-                  {formData.services.map((s) => (
+                  {(formData.services ?? []).map((s) => (
                     <span key={s} className="text-xs px-3 py-1.5 rounded-full font-medium"
                       style={{ background: "#fff8e6", color: "#92400e", border: "1px solid rgba(255,165,0,0.3)" }}>
                       {s}
