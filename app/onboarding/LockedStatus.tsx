@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { FormData } from "./formTypes";
+import { FormData, INITIAL_FORM_DATA } from "./formTypes";
 import {
   IconLock,
   IconCheckCircle,
@@ -169,7 +169,7 @@ declare global {
 // ---- Main component ----
 
 export default function LockedStatus({ sessionId, applicationId, formData: rawFormData }: Props) {
-  const formData = rawFormData ?? ({} as FormData);
+  const formData = rawFormData ?? { ...INITIAL_FORM_DATA };
   const [appStatus, setAppStatus] = useState<AppStatus>("pending_review");
   const [statusData, setStatusData] = useState<StatusData | null>(null);
   const [checking, setChecking] = useState(false);
