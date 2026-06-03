@@ -16,9 +16,13 @@ export async function POST(request) {
 
     await connectDB();
 
-    const counterValue = await Counter.nextValue('application_counter');
     const year = new Date().getFullYear();
-    const applicationId = `BC-${year}-${String(counterValue).padStart(4, '0')}`;
+    const counterDoc = await Counter.findOneAndUpdate(
+      { name: 'application_counter' },
+      { $inc: { value: 1 } },
+      { upsert: true, new: true }
+    );
+    const applicationId = `BC-${year}-${String(counterDoc.value).padStart(4, '0')}`;
 
     // Only pass schema-known fields — avoid spreading unknown keys
     const application = await Application.create({
