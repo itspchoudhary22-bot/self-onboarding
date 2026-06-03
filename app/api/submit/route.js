@@ -6,7 +6,9 @@ import Counter from '@/models/Counter';
 import { sendSubmissionConfirmation, sendSalesNewApplication } from '@/lib/email';
 
 export async function POST(request) {
+  let _step = 'init';
   try {
+    _step = 'parse';
     const body = await request.json();
     const { email, type, country, services, sessionId } = body;
 
@@ -14,8 +16,10 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    _step = 'connectDB';
     await connectDB();
 
+    _step = 'counter';
     const year = new Date().getFullYear();
     const counterDoc = await Counter.findOneAndUpdate(
       { name: 'application_counter' },
@@ -24,7 +28,7 @@ export async function POST(request) {
     );
     const applicationId = `BC-${year}-${String(counterDoc.value).padStart(4, '0')}`;
 
-    // Only pass schema-known fields — avoid spreading unknown keys
+    _step = 'create';
     const application = await Application.create({
       email, type, country, sessionId: sessionId || '',
       applicationId, status: 'pending_review',
@@ -83,10 +87,10 @@ export async function POST(request) {
       return NextResponse.json({ error: 'An application with this email already exists.' }, { status: 409 });
     }
     const detail = error?.errors
-      ? Object.values(error.errors).map(e => e.message).join(', ')
+      ? Object.values(error.errors).map((e) => e.message).join(', ')
       : (error?.message || String(error));
-    console.error('Submit error:', error);
-    return NextResponse.json({ error: detail }, { status: 500 });
+    console.error(`Submit error at [${_step}]:`, error);
+    return NextResponse.json({ error: `[${_step}] ${detail}` }, { status: 500 });
   }
 }
 
