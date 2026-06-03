@@ -171,6 +171,8 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
   const [appStatus, setAppStatus] = useState<AppStatus>("pending_review");
   const [statusData, setStatusData] = useState<StatusData | null>(null);
   const [checking, setChecking] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMsg, setSyncMsg] = useState("");
   const [payError, setPayError] = useState("");
   const [payLoading, setPayLoading] = useState(false);
   const pollRef = useRef<NodeJS.Timeout>();
@@ -285,6 +287,38 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
       setPayError("Network error. Please try again.");
     } finally {
       setPayLoading(false);
+    }
+  };
+
+  // Manually trigger a PandaDoc status sync (for when webhook didn't fire)
+  const handleSyncSigned = async () => {
+    setSyncing(true);
+    setSyncMsg("");
+    try {
+      const payload = sessionId
+        ? { sessionId }
+        : formData.email
+        ? { email: formData.email }
+        : null;
+      if (!payload) return;
+      const res = await fetch("/api/pandadoc/sync-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (res.ok && data.changed) {
+        setAppStatus(data.status);
+        setSyncMsg("Status updated!");
+      } else if (res.ok) {
+        setSyncMsg("Documents not yet marked as complete in PandaDoc. Please wait a moment and try again.");
+      } else {
+        setSyncMsg(data.error || "Sync failed. Please try again.");
+      }
+    } catch {
+      setSyncMsg("Network error. Please try again.");
+    } finally {
+      setSyncing(false);
     }
   };
 
@@ -408,7 +442,25 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
               </div>
             )}
 
-            <p className="text-xs text-center" style={{ color: "#9ca3af" }}>
+            {/* Signed but status not updated yet? Let customer trigger a sync */}
+            {statusData?.agreements?.some(a => !a.signed && a.pandadocSigningUrl) && (
+              <div className="mt-4 text-center">
+                <button
+                  onClick={handleSyncSigned}
+                  disabled={syncing}
+                  className="text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
+                  style={{ background: syncing ? "#e5e7eb" : "#eff6ff", color: syncing ? "#9ca3af" : "#1d4ed8", border: "1.5px solid #bfdbfe", cursor: syncing ? "not-allowed" : "pointer" }}>
+                  {syncing ? "Checking…" : "I've signed all documents — check my status"}
+                </button>
+                {syncMsg && (
+                  <p className="text-xs mt-2" style={{ color: syncMsg === "Status updated!" ? "#16a34a" : "#6b7280" }}>
+                    {syncMsg}
+                  </p>
+                )}
+              </div>
+            )}
+
+            <p className="text-xs text-center mt-3" style={{ color: "#9ca3af" }}>
               Once signed, our team will activate your payment step.
             </p>
           </>

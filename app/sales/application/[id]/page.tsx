@@ -115,6 +115,7 @@ function AgreementTab({
   const [error, setError] = useState("");
   const [removing, setRemoving] = useState<number | null>(null);
   const [refreshingIdx, setRefreshingIdx] = useState<number | null>(null);
+  const [syncing, setSyncing] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const [markingIdx, setMarkingIdx] = useState<number | null>(null);
 
@@ -153,6 +154,25 @@ function AgreementTab({
       setError("Network error");
     } finally {
       setRemoving(null);
+    }
+  }
+
+  async function syncFromPandadoc() {
+    setSyncing(true);
+    setError("");
+    try {
+      const res = await fetch("/api/pandadoc/sync-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ applicationId: app._id }),
+      });
+      const data = await res.json();
+      if (res.ok) onSaved();
+      else setError(data.error || "Sync failed");
+    } catch {
+      setError("Network error");
+    } finally {
+      setSyncing(false);
     }
   }
 
@@ -287,10 +307,16 @@ function AgreementTab({
             <span style={{ fontSize: 13, fontWeight: 700, color: "#374151" }}>
               Agreements sent ({agreements.length})
             </span>
-            <button onClick={resetAll} disabled={removing === -1}
-              style={{ fontSize: 12, color: "#dc2626", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}>
-              Reset all
-            </button>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button onClick={syncFromPandadoc} disabled={syncing}
+                style={{ fontSize: 12, color: "#2563eb", background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 6, padding: "4px 10px", cursor: "pointer", fontWeight: 600 }}>
+                {syncing ? "Syncing…" : "Sync from PandaDoc"}
+              </button>
+              <button onClick={resetAll} disabled={removing === -1}
+                style={{ fontSize: 12, color: "#dc2626", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}>
+                Reset all
+              </button>
+            </div>
           </div>
           {agreements.map((a, i) => {
             const isSigned = a.signed || a.agreementType === "signed";
