@@ -59,7 +59,7 @@ export async function POST(request) {
     }
     console.error('Submit error:', error);
     return NextResponse.json(
-      { error: 'Failed to submit application. Please try again.' },
+      { error: error?.message || 'Failed to submit application. Please try again.' },
       { status: 500 }
     );
   }

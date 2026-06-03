@@ -48,7 +48,7 @@ const ApplicationSchema = new mongoose.Schema({
   copyrightCertBase64: { type: String, default: '' },
 
   // ── Services ──────────────────────────────────────────────────────────────
-  services: { type: [String], required: true },
+  services: { type: [String], default: [] },
   serviceDetails: { type: mongoose.Schema.Types.Mixed, default: {} },
 
   // ── Session / Draft link ──────────────────────────────────────────────────
