@@ -1,11 +1,27 @@
 import { NextResponse } from 'next/server';
+import crypto from 'crypto';
 import connectDB from '@/lib/mongodb';
 import Application from '@/models/Application';
 import { sendPaymentEnabled } from '@/lib/email';
 
 export async function POST(request) {
   try {
-    const events = await request.json();
+    const rawBody = await request.text();
+
+    // Verify PandaDoc webhook signature if key is configured
+    const webhookKey = process.env.PANDADOC_WEBHOOK_KEY;
+    if (webhookKey) {
+      const signature = request.headers.get('x-pandadoc-signature');
+      if (!signature) {
+        return NextResponse.json({ error: 'Missing signature' }, { status: 401 });
+      }
+      const expected = crypto.createHmac('sha256', webhookKey).update(rawBody).digest('hex');
+      if (signature !== expected) {
+        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+      }
+    }
+
+    const events = JSON.parse(rawBody);
     const eventList = Array.isArray(events) ? events : [events];
 
     await connectDB();
