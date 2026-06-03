@@ -102,9 +102,11 @@ function StatusBadge({ status }: { status: string }) {
 function AgreementTab({
   app,
   onSaved,
+  onSent,
 }: {
   app: Application;
   onSaved: () => void;
+  onSent: () => void;
 }) {
   const agreements = app.agreements || [];
   const [showAddForm, setShowAddForm] = useState(agreements.length === 0);
@@ -268,7 +270,7 @@ function AgreementTab({
       setLabel("");
       setFiles([]);
       setShowAddForm(false);
-      onSaved();
+      onSent();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
@@ -525,10 +527,12 @@ function PaymentTab({
   app,
   agreementDone,
   onSaved,
+  onSent,
 }: {
   app: Application;
   agreementDone: boolean;
   onSaved: () => void;
+  onSent: () => void;
 }) {
   const existing = app.paymentDetails;
 
@@ -579,7 +583,7 @@ function PaymentTab({
         setError(d.error || "Failed to save");
       } else {
         setSaved(true);
-        onSaved();
+        onSent();
       }
     } catch {
       setError("Network error. Please try again.");
@@ -1512,10 +1516,19 @@ export default function ApplicationDetailPage() {
           </h2>
 
           {activeTab === "agreement" && (
-            <AgreementTab app={app} onSaved={loadApp} />
+            <AgreementTab
+              app={app}
+              onSaved={loadApp}
+              onSent={() => { loadApp(); setActiveTab("payment"); }}
+            />
           )}
           {activeTab === "payment" && (
-            <PaymentTab app={app} agreementDone={agreementDone} onSaved={loadApp} />
+            <PaymentTab
+              app={app}
+              agreementDone={agreementDone}
+              onSaved={loadApp}
+              onSent={() => { loadApp(); setActiveTab("ops"); }}
+            />
           )}
           {activeTab === "ops" && (
             <OpsTab app={app} onSaved={loadApp} />
