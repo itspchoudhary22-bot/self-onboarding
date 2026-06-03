@@ -31,13 +31,19 @@ export async function POST(request) {
         ? application.signatoryEmail || application.email
         : application.officialEmail || application.email;
 
+    // Determine MIME type from file extension
+    const ext = fileName.split('.').pop()?.toLowerCase();
+    const mimeType = ext === 'docx'
+      ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      : 'application/pdf';
+
     // Convert base64 to buffer
     const base64Data = fileBase64.replace(/^data:.+;base64,/, '');
     const fileBuffer = Buffer.from(base64Data, 'base64');
 
-    // Create FormData and upload PDF to PandaDoc
+    // Create FormData and upload to PandaDoc
     const formData = new FormData();
-    formData.append('file', new Blob([fileBuffer], { type: 'application/pdf' }), fileName);
+    formData.append('file', new Blob([fileBuffer], { type: mimeType }), fileName);
     formData.append(
       'data',
       JSON.stringify({
@@ -64,7 +70,8 @@ export async function POST(request) {
 
     if (!uploadRes.ok) {
       console.error('PandaDoc upload failed:', doc);
-      return NextResponse.json({ error: 'Failed to upload document to PandaDoc' }, { status: 502 });
+      const detail = doc?.detail?.message || doc?.message || JSON.stringify(doc);
+      return NextResponse.json({ error: `PandaDoc upload failed: ${detail}` }, { status: 502 });
     }
 
     // Wait for document to process
