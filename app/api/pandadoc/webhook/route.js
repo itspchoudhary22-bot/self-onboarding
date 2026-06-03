@@ -13,13 +13,17 @@ export async function POST(request) {
     if (webhookKey) {
       const signature = request.headers.get('x-pandadoc-signature');
       if (!signature) {
+        console.error('PandaDoc webhook: missing x-pandadoc-signature header');
         return NextResponse.json({ error: 'Missing signature' }, { status: 401 });
       }
       const expected = crypto.createHmac('sha256', webhookKey).update(rawBody).digest('hex');
       if (signature !== expected) {
+        console.error('PandaDoc webhook: signature mismatch — check PANDADOC_WEBHOOK_KEY in Vercel env vars');
         return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
       }
     }
+
+    console.log('PandaDoc webhook received:', rawBody.slice(0, 200));
 
     const events = JSON.parse(rawBody);
     const eventList = Array.isArray(events) ? events : [events];
