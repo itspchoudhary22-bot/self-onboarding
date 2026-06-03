@@ -31,11 +31,9 @@ export default function OnboardingError({
         <p style={{ fontSize: 14, color: "#6b7280", marginBottom: 6 }}>
           {error?.message || "An unexpected error occurred."}
         </p>
-        {error?.digest && (
-          <p style={{ fontSize: 11, color: "#9ca3af", fontFamily: "monospace", marginBottom: 16 }}>
-            Error ID: {error.digest}
-          </p>
-        )}
+        <pre style={{ fontSize: 11, color: "#9ca3af", fontFamily: "monospace", marginBottom: 16, whiteSpace: "pre-wrap", wordBreak: "break-all", background: "#f9fafb", padding: 8, borderRadius: 8, maxHeight: 200, overflow: "auto" }}>
+          {error?.stack || error?.digest || "No stack trace available"}
+        </pre>
         <div style={{ display: "flex", gap: 10, flexDirection: "column" }}>
           <button
             onClick={reset}
