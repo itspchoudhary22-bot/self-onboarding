@@ -24,12 +24,17 @@ type AppStatus =
   | "ops_setup"
   | "active";
 
+interface AgreementEntry {
+  agreementType: string;
+  label?: string;
+  pandadocSigningUrl?: string;
+  uploadedFileName?: string;
+}
+
 interface StatusData {
   status: AppStatus;
   submittedAt?: string;
-  agreementDetails?: {
-    pandadocSigningUrl?: string;
-  };
+  agreements?: AgreementEntry[];
   paymentDetails?: {
     razorpayKeyId?: string;
     razorpayOrderId?: string;
@@ -330,24 +335,40 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
               <span className="text-xs font-semibold" style={{ color: "#166534" }}>Sales review complete</span>
             </div>
 
-            {/* PandaDoc embed or fallback */}
-            {statusData?.agreementDetails?.pandadocSigningUrl ? (
-              <div className="rounded-2xl overflow-hidden mb-4"
-                style={{ border: "1.5px solid #e5e7eb", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
-                <div className="px-4 py-3 flex items-center justify-between"
-                  style={{ background: "#f9fafb", borderBottom: "1px solid #f3f4f6" }}>
-                  <p className="text-xs font-bold uppercase tracking-wider" style={{ color: "#6b7280" }}>Agreement Document</p>
-                  <a href={statusData.agreementDetails.pandadocSigningUrl} target="_blank" rel="noopener noreferrer"
-                    className="text-xs font-bold px-3 py-1.5 rounded-lg"
-                    style={{ background: "#eff6ff", color: "#1d4ed8" }}>
-                    Open in new tab
-                  </a>
-                </div>
-                <iframe
-                  src={statusData.agreementDetails.pandadocSigningUrl}
-                  title="Agreement Document"
-                  style={{ width: "100%", height: 500, border: "none", display: "block" }}
-                />
+            {/* Agreements list */}
+            {statusData?.agreements?.length ? (
+              <div className="flex flex-col gap-4 mb-4">
+                {statusData.agreements.map((a, i) => (
+                  <div key={i} className="rounded-2xl overflow-hidden"
+                    style={{ border: "1.5px solid #e5e7eb", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
+                    <div className="px-4 py-3 flex items-center justify-between"
+                      style={{ background: "#f9fafb", borderBottom: "1px solid #f3f4f6" }}>
+                      <p className="text-xs font-bold uppercase tracking-wider" style={{ color: "#6b7280" }}>
+                        {a.label || `Agreement ${i + 1}`}
+                      </p>
+                      {a.pandadocSigningUrl && (
+                        <a href={a.pandadocSigningUrl} target="_blank" rel="noopener noreferrer"
+                          className="text-xs font-bold px-3 py-1.5 rounded-lg"
+                          style={{ background: "#eff6ff", color: "#1d4ed8" }}>
+                          Open in new tab
+                        </a>
+                      )}
+                    </div>
+                    {a.pandadocSigningUrl ? (
+                      <iframe
+                        src={a.pandadocSigningUrl}
+                        title={a.label || `Agreement ${i + 1}`}
+                        style={{ width: "100%", height: 500, border: "none", display: "block" }}
+                      />
+                    ) : (
+                      <div className="px-5 py-4 text-center">
+                        <p className="text-sm" style={{ color: "#6b7280" }}>
+                          {a.uploadedFileName ? `📎 ${a.uploadedFileName}` : "Document prepared — no online signing required."}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="px-5 py-5 rounded-2xl mb-4 text-center"

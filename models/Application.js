@@ -54,7 +54,9 @@ const ApplicationSchema = new mongoose.Schema({
   // ── Session / Draft link ──────────────────────────────────────────────────
   sessionId: { type: String, default: '' },
 
-  // ── Agreement (filled by sales team) ─────────────────────────────────────
+  // ── Agreements (filled by sales team, array to support multiple docs) ───────
+  agreements: { type: [mongoose.Schema.Types.Mixed], default: [] },
+  // Legacy field kept for backward compat — new code uses agreements[]
   agreementDetails: { type: mongoose.Schema.Types.Mixed, default: null },
 
   // ── Payment (filled by sales team) ───────────────────────────────────────

@@ -5,8 +5,9 @@ import { useRouter, useParams } from "next/navigation";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-interface AgreementDetails {
+interface AgreementEntry {
   agreementType: "template" | "unsigned" | "signed";
+  label?: string;
   pandadocDocumentId?: string;
   pandadocSigningUrl?: string;
   uploadedFileName?: string;
@@ -48,7 +49,7 @@ interface Application {
   country: string;
   individualName?: string;
   companyName?: string;
-  agreementDetails?: AgreementDetails;
+  agreements?: AgreementEntry[];
   paymentDetails?: PaymentDetails;
   operationalRequirements?: OperationalRequirements;
   sessionId?: string;
@@ -104,30 +105,16 @@ function AgreementTab({
   onSaved: () => void;
 }) {
   const [selectedType, setSelectedType] = useState<"template" | "unsigned" | "signed" | null>(null);
+  const [label, setLabel] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [removing, setRemoving] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const existing = app.agreementDetails;
-  const [resetting, setResetting] = useState(false);
+  const agreements = app.agreements || [];
 
-  async function resetAgreement() {
-    if (!confirm("Reset agreement? This will clear the current agreement and set status back to pending_review.")) return;
-    setResetting(true);
-    try {
-      const res = await fetch(`/api/sales/applications/${app._id}/agreement`, { method: "DELETE" });
-      if (res.ok) onSaved();
-      else setError("Failed to reset agreement");
-    } catch {
-      setError("Network error");
-    } finally {
-      setResetting(false);
-    }
-  }
-
-  async function saveAgreement(body: Record<string, string>) {
+  async function addAgreement(body: Record<string, string>) {
     const res = await fetch(`/api/sales/applications/${app._id}/agreement`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -136,6 +123,34 @@ function AgreementTab({
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `Save failed (${res.status})`);
     return data;
+  }
+
+  async function removeAgreement(idx: number) {
+    if (!confirm(`Remove agreement #${idx + 1}?`)) return;
+    setRemoving(idx);
+    try {
+      const res = await fetch(`/api/sales/applications/${app._id}/agreement?index=${idx}`, { method: "DELETE" });
+      if (res.ok) onSaved();
+      else setError("Failed to remove");
+    } catch {
+      setError("Network error");
+    } finally {
+      setRemoving(null);
+    }
+  }
+
+  async function resetAll() {
+    if (!confirm("Remove all agreements and reset status to pending_review?")) return;
+    setRemoving(-1);
+    try {
+      const res = await fetch(`/api/sales/applications/${app._id}/agreement`, { method: "DELETE" });
+      if (res.ok) onSaved();
+      else setError("Failed to reset");
+    } catch {
+      setError("Network error");
+    } finally {
+      setRemoving(null);
+    }
   }
 
   async function handleSubmit() {
@@ -150,14 +165,11 @@ function AgreementTab({
           body: JSON.stringify({ sessionId: app.sessionId, formData: app, useTemplate: true }),
         });
         const pandaData = await pandaRes.json();
-        if (!pandaRes.ok) {
-          throw new Error(pandaData?.error || `PandaDoc failed (${pandaRes.status})`);
-        }
-        if (!pandaData?.signingUrl) {
-          throw new Error("PandaDoc did not return a signing URL. Check template configuration.");
-        }
-        await saveAgreement({
+        if (!pandaRes.ok) throw new Error(pandaData?.error || `PandaDoc failed (${pandaRes.status})`);
+        if (!pandaData?.signingUrl) throw new Error("PandaDoc did not return a signing URL. Check template configuration.");
+        await addAgreement({
           agreementType: "template",
+          label: label || "Service Agreement (Template)",
           pandadocDocumentId: pandaData?.documentId || pandaData?.id || "",
           pandadocSigningUrl: pandaData.signingUrl,
         });
@@ -170,22 +182,26 @@ function AgreementTab({
           body: JSON.stringify({ applicationId: app._id, fileBase64: base64, fileName: file.name }),
         });
         const uploadData = await uploadRes.json();
-        await saveAgreement({
+        if (!uploadRes.ok) throw new Error(uploadData?.error || "Upload failed");
+        await addAgreement({
           agreementType: "unsigned",
+          label: label || file.name,
           pandadocDocumentId: uploadData?.id || "",
           pandadocSigningUrl: uploadData?.signingUrl || "",
         });
       } else {
-        await saveAgreement({
+        await addAgreement({
           agreementType: "signed",
+          label: label || file?.name || "Signed Document",
           uploadedFileName: file?.name || "signed-document.pdf",
         });
       }
-      setSaved(true);
+      setSelectedType(null);
+      setLabel("");
+      setFile(null);
       onSaved();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
-      console.error(err);
     } finally {
       setUploading(false);
     }
@@ -200,71 +216,8 @@ function AgreementTab({
     });
   }
 
-  if (saved) {
-    return (
-      <div style={{ padding: 32, textAlign: "center" }}>
-        <div style={{ fontSize: 40, marginBottom: 12 }}>✅</div>
-        <div style={{ fontWeight: 700, fontSize: 18, color: "#16a34a", marginBottom: 8 }}>
-          Agreement saved successfully
-        </div>
-        <div style={{ color: "#6b7280", fontSize: 14 }}>
-          The application status has been updated.
-        </div>
-      </div>
-    );
-  }
-
-  if (existing) {
-    return (
-      <div>
-        <div
-          style={{
-            background: "#f0fdf4",
-            border: "1.5px solid #bbf7d0",
-            borderRadius: 12,
-            padding: 20,
-            marginBottom: 24,
-          }}
-        >
-          <div style={{ fontWeight: 700, color: "#16a34a", marginBottom: 4 }}>
-            ✓ Agreement already configured
-          </div>
-          <div style={{ fontSize: 13, color: "#166534" }}>
-            Type:{" "}
-            <strong>
-              {existing.agreementType === "template"
-                ? "Standard Template"
-                : existing.agreementType === "unsigned"
-                ? "Unsigned Draft (sent for signing)"
-                : "Signed Document (uploaded)"}
-            </strong>
-          </div>
-          {existing.sentToCustomerAt && (
-            <div style={{ fontSize: 12, color: "#6b7280", marginTop: 4 }}>
-              Sent: {new Date(existing.sentToCustomerAt).toLocaleString()}
-            </div>
-          )}
-        </div>
-        <button
-          onClick={resetAgreement}
-          disabled={resetting}
-          style={{
-            marginTop: 12,
-            padding: "8px 16px",
-            background: "transparent",
-            border: "1.5px solid #e5e7eb",
-            borderRadius: 8,
-            fontSize: 13,
-            fontWeight: 600,
-            color: "#6b7280",
-            cursor: resetting ? "not-allowed" : "pointer",
-          }}
-        >
-          {resetting ? "Resetting…" : "Reset & Re-send Agreement"}
-        </button>
-      </div>
-    );
-  }
+  const typeLabel = (t: string) =>
+    t === "template" ? "Standard Template" : t === "unsigned" ? "Unsigned (sent for signing)" : "Pre-signed";
 
   const cardStyle = (type: string) => ({
     border: selectedType === type ? "2px solid #FFA500" : "2px solid #e5e7eb",
@@ -278,54 +231,84 @@ function AgreementTab({
 
   return (
     <div>
-      <h3 style={{ fontWeight: 700, color: "#111827", marginBottom: 16, fontSize: 15 }}>
-        Choose Agreement Type
+      {/* Existing agreements list */}
+      {agreements.length > 0 && (
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#374151" }}>
+              Agreements sent ({agreements.length})
+            </span>
+            <button onClick={resetAll} disabled={removing === -1}
+              style={{ fontSize: 12, color: "#dc2626", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}>
+              Reset all
+            </button>
+          </div>
+          {agreements.map((a, i) => (
+            <div key={i} style={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              padding: "10px 14px", marginBottom: 8, borderRadius: 10,
+              background: "#f9fafb", border: "1.5px solid #e5e7eb",
+            }}>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: "#111827" }}>
+                  {a.label || `Agreement ${i + 1}`}
+                </div>
+                <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 2 }}>
+                  {typeLabel(a.agreementType)}
+                  {a.sentToCustomerAt && ` · sent ${new Date(a.sentToCustomerAt).toLocaleDateString()}`}
+                </div>
+              </div>
+              <button onClick={() => removeAgreement(i)} disabled={removing === i}
+                style={{ fontSize: 12, color: "#dc2626", background: "none", border: "none", cursor: "pointer", fontWeight: 600, flexShrink: 0 }}>
+                {removing === i ? "…" : "Remove"}
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Add new agreement */}
+      <h3 style={{ fontWeight: 700, color: "#111827", marginBottom: 4, fontSize: 15 }}>
+        {agreements.length > 0 ? "Add Another Agreement" : "Send Agreement"}
       </h3>
+      <p style={{ fontSize: 13, color: "#9ca3af", marginBottom: 16 }}>
+        You can send multiple documents — e.g. Service Agreement + LOA.
+      </p>
+
+      {/* Label input */}
+      <div style={{ marginBottom: 14 }}>
+        <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#374151", marginBottom: 6 }}>
+          Document Label (optional)
+        </label>
+        <input
+          type="text"
+          value={label}
+          onChange={(e) => setLabel(e.target.value)}
+          placeholder="e.g. Service Agreement, Letter of Authorization"
+          style={{
+            width: "100%", padding: "9px 12px", borderRadius: 10,
+            border: "1.5px solid #e5e7eb", fontSize: 13, color: "#111827",
+            background: "#f9fafb", boxSizing: "border-box",
+          }}
+        />
+      </div>
 
       {/* Card 1: Template */}
       <div onClick={() => setSelectedType("template")} style={cardStyle("template")}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-          <div
-            style={{
-              width: 20,
-              height: 20,
-              borderRadius: "50%",
-              border: "2px solid",
-              borderColor: selectedType === "template" ? "#FFA500" : "#d1d5db",
-              background: selectedType === "template" ? "#FFA500" : "transparent",
-              flexShrink: 0,
-              marginTop: 2,
-            }}
-          />
+          <div style={{
+            width: 20, height: 20, borderRadius: "50%", border: "2px solid", flexShrink: 0, marginTop: 2,
+            borderColor: selectedType === "template" ? "#FFA500" : "#d1d5db",
+            background: selectedType === "template" ? "#FFA500" : "transparent",
+          }} />
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontWeight: 700, fontSize: 14, color: "#111827" }}>
-                📄 Use Standard Template
-              </span>
-              <span style={{ fontSize: 11, color: "#9ca3af", fontWeight: 500 }}>
-                No upload needed
-              </span>
+              <span style={{ fontWeight: 700, fontSize: 14, color: "#111827" }}>📄 Use Standard Template</span>
+              <span style={{ fontSize: 11, color: "#9ca3af", fontWeight: 500 }}>No upload needed</span>
             </div>
             <p style={{ fontSize: 13, color: "#6b7280", marginTop: 6, lineHeight: 1.5 }}>
-              Send the standard Bytescare service agreement template via PandaDoc. Customer will be
-              notified by email to sign on their portal.
+              Send the standard Bytescare service agreement via PandaDoc. Customer signs on their portal.
             </p>
-            {selectedType === "template" && (
-              <div
-                style={{
-                  marginTop: 10,
-                  padding: "8px 12px",
-                  background: "#fff7ed",
-                  borderRadius: 8,
-                  fontSize: 12,
-                  color: "#92400e",
-                  border: "1px solid #fed7aa",
-                }}
-              >
-                Customer will receive an email with a signing link and can sign directly on their
-                status page.
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -333,56 +316,28 @@ function AgreementTab({
       {/* Card 2: Unsigned Draft */}
       <div onClick={() => setSelectedType("unsigned")} style={cardStyle("unsigned")}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-          <div
-            style={{
-              width: 20,
-              height: 20,
-              borderRadius: "50%",
-              border: "2px solid",
-              borderColor: selectedType === "unsigned" ? "#FFA500" : "#d1d5db",
-              background: selectedType === "unsigned" ? "#FFA500" : "transparent",
-              flexShrink: 0,
-              marginTop: 2,
-            }}
-          />
+          <div style={{
+            width: 20, height: 20, borderRadius: "50%", border: "2px solid", flexShrink: 0, marginTop: 2,
+            borderColor: selectedType === "unsigned" ? "#FFA500" : "#d1d5db",
+            background: selectedType === "unsigned" ? "#FFA500" : "transparent",
+          }} />
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontWeight: 700, fontSize: 14, color: "#111827" }}>
-                ⬆️ Upload Unsigned Draft
-              </span>
-              <span style={{ fontSize: 11, color: "#9ca3af", fontWeight: 500 }}>
-                Customer will sign
-              </span>
+              <span style={{ fontWeight: 700, fontSize: 14, color: "#111827" }}>⬆️ Upload Unsigned Draft</span>
+              <span style={{ fontSize: 11, color: "#9ca3af", fontWeight: 500 }}>Customer will sign</span>
             </div>
             <p style={{ fontSize: 13, color: "#6b7280", marginTop: 6, lineHeight: 1.5 }}>
-              Upload a custom agreement PDF. Customer will receive an email and sign it on their
-              portal via PandaDoc.
+              Upload a PDF — customer signs it via PandaDoc on their portal.
             </p>
             {selectedType === "unsigned" && (
               <div
-                style={{
-                  marginTop: 10,
-                  border: "2px dashed #fed7aa",
-                  borderRadius: 10,
-                  padding: 16,
-                  textAlign: "center",
-                  background: "#fffbf5",
-                  cursor: "pointer",
-                }}
+                style={{ marginTop: 10, border: "2px dashed #fed7aa", borderRadius: 10, padding: 16, textAlign: "center", background: "#fffbf5", cursor: "pointer" }}
                 onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}
               >
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept=".pdf"
-                  style={{ display: "none" }}
-                  onChange={(e) => setFile(e.target.files?.[0] || null)}
-                />
-                {file ? (
-                  <span style={{ fontSize: 13, color: "#374151" }}>📎 {file.name}</span>
-                ) : (
-                  <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF</span>
-                )}
+                <input ref={fileRef} type="file" accept=".pdf" style={{ display: "none" }}
+                  onChange={(e) => setFile(e.target.files?.[0] || null)} />
+                {file ? <span style={{ fontSize: 13, color: "#374151" }}>📎 {file.name}</span>
+                  : <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF</span>}
               </div>
             )}
           </div>
@@ -392,88 +347,47 @@ function AgreementTab({
       {/* Card 3: Signed */}
       <div onClick={() => setSelectedType("signed")} style={cardStyle("signed")}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-          <div
-            style={{
-              width: 20,
-              height: 20,
-              borderRadius: "50%",
-              border: "2px solid",
-              borderColor: selectedType === "signed" ? "#FFA500" : "#d1d5db",
-              background: selectedType === "signed" ? "#FFA500" : "transparent",
-              flexShrink: 0,
-              marginTop: 2,
-            }}
-          />
+          <div style={{
+            width: 20, height: 20, borderRadius: "50%", border: "2px solid", flexShrink: 0, marginTop: 2,
+            borderColor: selectedType === "signed" ? "#FFA500" : "#d1d5db",
+            background: selectedType === "signed" ? "#FFA500" : "transparent",
+          }} />
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontWeight: 700, fontSize: 14, color: "#111827" }}>
-                ✅ Upload Signed Document
-              </span>
-              <span style={{ fontSize: 11, color: "#9ca3af", fontWeight: 500 }}>
-                Already complete
-              </span>
+              <span style={{ fontWeight: 700, fontSize: 14, color: "#111827" }}>✅ Upload Signed Document</span>
+              <span style={{ fontSize: 11, color: "#9ca3af", fontWeight: 500 }}>Already complete</span>
             </div>
             <p style={{ fontSize: 13, color: "#6b7280", marginTop: 6, lineHeight: 1.5 }}>
-              Upload a document that has already been signed offline. No customer action needed.
+              Upload an already-signed document. No customer action needed.
             </p>
             {selectedType === "signed" && (
               <div
-                style={{
-                  marginTop: 10,
-                  border: "2px dashed #d1d5db",
-                  borderRadius: 10,
-                  padding: 16,
-                  textAlign: "center",
-                  background: "#f9fafb",
-                  cursor: "pointer",
-                }}
+                style={{ marginTop: 10, border: "2px dashed #d1d5db", borderRadius: 10, padding: 16, textAlign: "center", background: "#f9fafb", cursor: "pointer" }}
                 onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}
               >
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept=".pdf"
-                  style={{ display: "none" }}
-                  onChange={(e) => setFile(e.target.files?.[0] || null)}
-                />
-                {file ? (
-                  <span style={{ fontSize: 13, color: "#374151" }}>📎 {file.name}</span>
-                ) : (
-                  <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF</span>
-                )}
+                <input ref={fileRef} type="file" accept=".pdf" style={{ display: "none" }}
+                  onChange={(e) => setFile(e.target.files?.[0] || null)} />
+                {file ? <span style={{ fontSize: 13, color: "#374151" }}>📎 {file.name}</span>
+                  : <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF</span>}
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {error && (
-        <p style={{ color: "#dc2626", fontSize: 13, marginBottom: 12 }}>{error}</p>
-      )}
+      {error && <p style={{ color: "#dc2626", fontSize: 13, marginBottom: 12 }}>{error}</p>}
 
       {selectedType && (
-        <button
-          onClick={handleSubmit}
-          disabled={uploading}
+        <button onClick={handleSubmit} disabled={uploading}
           style={{
-            marginTop: 8,
-            width: "100%",
-            padding: "12px",
+            marginTop: 8, width: "100%", padding: "12px",
             background: uploading ? "#fbbf24" : "#FFA500",
-            color: "#fff",
-            fontWeight: 700,
-            fontSize: 15,
-            border: "none",
-            borderRadius: 10,
+            color: "#fff", fontWeight: 700, fontSize: 15, border: "none", borderRadius: 10,
             cursor: uploading ? "not-allowed" : "pointer",
-          }}
-        >
-          {uploading
-            ? "Processing..."
-            : selectedType === "template"
-            ? "Send Template for Signing →"
-            : selectedType === "unsigned"
-            ? "Upload & Send for Signing →"
+          }}>
+          {uploading ? "Processing…"
+            : selectedType === "template" ? "Send Template for Signing →"
+            : selectedType === "unsigned" ? "Upload & Send for Signing →"
             : "Upload & Mark Complete →"}
         </button>
       )}
@@ -1218,7 +1132,7 @@ export default function ApplicationDetailPage() {
     );
   }
 
-  const agreementDone = !!app.agreementDetails;
+  const agreementDone = (app.agreements?.length ?? 0) > 0;
   const paymentDone = !!app.paymentDetails;
   const opsDone = !!app.operationalRequirements;
   const allDone = agreementDone && paymentDone && opsDone;

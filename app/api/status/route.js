@@ -43,14 +43,15 @@ export async function GET(request) {
       resumeToken,
     };
 
-    // Only include agreementDetails (with signingUrl) when status is agreement_pending
-    if (application.status === 'agreement_pending' && application.agreementDetails) {
-      response.agreementDetails = {
-        agreementType: application.agreementDetails.agreementType,
-        pandadocSigningUrl: application.agreementDetails.pandadocSigningUrl,
-        uploadedFileName: application.agreementDetails.uploadedFileName,
-        sentToCustomerAt: application.agreementDetails.sentToCustomerAt,
-      };
+    // Include agreements array when status is agreement_pending
+    if (application.status === 'agreement_pending' && application.agreements?.length) {
+      response.agreements = application.agreements.map((a) => ({
+        agreementType: a.agreementType,
+        label: a.label || '',
+        pandadocSigningUrl: a.pandadocSigningUrl || '',
+        uploadedFileName: a.uploadedFileName || '',
+        sentToCustomerAt: a.sentToCustomerAt,
+      }));
     }
 
     // Only include paymentDetails when status is payment_pending
