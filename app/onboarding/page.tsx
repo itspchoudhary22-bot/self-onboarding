@@ -41,6 +41,10 @@ export default function OnboardingPage() {
   const [showResumeBanner, setShowResumeBanner] = useState(false);
   const [resumeLink, setResumeLink] = useState("");
   const [linkCopied, setLinkCopied] = useState(false);
+  const [lookupEmail, setLookupEmail] = useState("");
+  const [lookupLoading, setLookupLoading] = useState(false);
+  const [lookupError, setLookupError] = useState("");
+  const [showLookup, setShowLookup] = useState(false);
   const draftTimer = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -202,6 +206,31 @@ export default function OnboardingPage() {
     }
   };
 
+  const handleLookup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!lookupEmail) return;
+    setLookupLoading(true);
+    setLookupError("");
+    try {
+      const res = await fetch(`/api/status?email=${encodeURIComponent(lookupEmail)}`);
+      const data = await res.json();
+      if (data.status && data.status !== "not_found") {
+        const fd = { ...INITIAL_FORM_DATA, email: lookupEmail, sessionId: "" };
+        localStorage.setItem(LS_SUBMITTED, JSON.stringify({ sessionId: "", applicationId: data.applicationId || "", formData: fd }));
+        setFormData(fd);
+        setSubmittedAppId(data.applicationId || "");
+        setSessionId("");
+        setSubmitted(true);
+      } else {
+        setLookupError("No application found for this email address.");
+      }
+    } catch {
+      setLookupError("Something went wrong. Please try again.");
+    } finally {
+      setLookupLoading(false);
+    }
+  };
+
   if (submitted) return <LockedStatus sessionId={sessionId} applicationId={submittedAppId} formData={formData} />;
 
   const steps = STEPS(formData.type);
@@ -330,6 +359,42 @@ export default function OnboardingPage() {
           ) : formData.email ? (
             <p className="text-center text-xs mt-3" style={{ color: "#9ca3af" }}>💾 Progress saved automatically</p>
           ) : null}
+
+          {/* Already applied lookup */}
+          {!showLookup ? (
+            <p className="text-center text-xs mt-4" style={{ color: "#9ca3af" }}>
+              Already applied?{" "}
+              <button onClick={() => setShowLookup(true)} className="font-semibold underline" style={{ color: "#FFA500" }}>
+                Check your application status
+              </button>
+            </p>
+          ) : (
+            <form onSubmit={handleLookup} className="mt-4 p-4 rounded-2xl" style={{ background: "#fff", border: "1.5px solid #e5e7eb" }}>
+              <p className="text-sm font-semibold mb-3" style={{ color: "#111827" }}>Find your application</p>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={lookupEmail}
+                  onChange={(e) => setLookupEmail(e.target.value)}
+                  className="flex-1 px-3 py-2 rounded-xl border-2 text-sm outline-none"
+                  style={{ borderColor: "#e5e7eb", color: "#111827" }}
+                  onFocus={(e) => (e.target.style.borderColor = "#FFA500")}
+                  onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
+                />
+                <button type="submit" disabled={lookupLoading}
+                  className="px-4 py-2 rounded-xl text-sm font-bold transition-all hover:opacity-90"
+                  style={{ background: "#FFA500", color: "#111827" }}>
+                  {lookupLoading ? "..." : "Find"}
+                </button>
+              </div>
+              {lookupError && <p className="text-xs mt-2" style={{ color: "#dc2626" }}>{lookupError}</p>}
+              <button type="button" onClick={() => { setShowLookup(false); setLookupError(""); }}
+                className="text-xs mt-2" style={{ color: "#9ca3af" }}>
+                Cancel
+              </button>
+            </form>
+          )}
         </div>
       </main>
 

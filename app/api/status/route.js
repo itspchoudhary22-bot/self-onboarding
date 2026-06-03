@@ -8,18 +8,23 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const sessionId = searchParams.get('sessionId');
+    const email = searchParams.get('email');
 
-    if (!sessionId) {
-      return NextResponse.json({ error: 'sessionId is required' }, { status: 400 });
+    if (!sessionId && !email) {
+      return NextResponse.json({ error: 'sessionId or email is required' }, { status: 400 });
     }
 
     await connectDB();
 
-    // Get resumeToken from draft
-    const draft = await Draft.findOne({ sessionId }).select('resumeToken').lean();
-    const resumeToken = draft?.resumeToken || null;
+    let application, resumeToken = null;
 
-    const application = await Application.findOne({ sessionId }).lean();
+    if (email) {
+      application = await Application.findOne({ email: email.toLowerCase().trim() }).lean();
+    } else {
+      const draft = await Draft.findOne({ sessionId }).select('resumeToken').lean();
+      resumeToken = draft?.resumeToken || null;
+      application = await Application.findOne({ sessionId }).lean();
+    }
 
     if (!application) {
       return NextResponse.json({ status: 'not_found', resumeToken });

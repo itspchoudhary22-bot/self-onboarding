@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import connectDB from '@/lib/mongodb';
 import Application from '@/models/Application';
 import cfg from '@/lib/config';
+import { sendAgreementReady } from '@/lib/email';
 
 async function verifyAuth() {
   const cookieStore = await cookies();
@@ -16,7 +17,7 @@ async function verifyAuth() {
 
 export async function POST(request, { params }) {
   try {
-    await verifyAuth(request);
+    await verifyAuth();
   } catch {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -41,8 +42,6 @@ export async function POST(request, { params }) {
       sentToCustomerAt: new Date(),
     };
 
-    // 'template' or 'unsigned' → needs signing → agreement_pending
-    // 'signed' → skip signing, go straight to payment_pending
     if (agreementType === 'signed') {
       application.status = 'payment_pending';
     } else {
@@ -50,6 +49,13 @@ export async function POST(request, { params }) {
     }
 
     await application.save();
+
+    // Notify customer by email
+    if (agreementType !== 'signed') {
+      setTimeout(() => {
+        try { sendAgreementReady(application).catch((e) => console.error('Agreement email error:', e)); } catch (e) { console.error('Agreement email init:', e); }
+      }, 0);
+    }
 
     return NextResponse.json({ success: true, status: application.status });
   } catch (error) {
