@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FormData } from "./formTypes";
 import {
   IconShieldCheck, IconFingerprint, IconEye, IconIdCard,
-  IconChartBar, IconTag, IconStar, IconScale, IconDocument, IconInfo, IconWarning,
+  IconChartBar, IconTag, IconStar, IconScale, IconInfo, IconWarning,
 } from "./Icons";
 
 interface Props {
@@ -213,8 +213,6 @@ export default function Step3Services({ formData, update, onNext, onBack }: Prop
     onNext();
   };
 
-  const selectedServices = SERVICES.filter((s) => formData.services.includes(s.name));
-
   return (
     <div>
       {activeInfo && <InfoModal svc={activeInfo} onClose={() => setActiveInfo(null)} />}
@@ -257,14 +255,16 @@ export default function Step3Services({ formData, update, onNext, onBack }: Prop
         {SERVICES.map((svc) => {
           const sel = formData.services.includes(svc.name);
           return (
-            <div key={svc.name} className="relative">
+            <div key={svc.name} className="rounded-2xl border-2 transition-all duration-200 overflow-hidden"
+              style={{
+                borderColor: sel ? "#FFA500" : "#e5e7eb",
+                background: sel ? "#fffbeb" : "#fff",
+                boxShadow: sel ? "0 0 0 4px rgba(255,165,0,0.1)" : "none",
+              }}>
+
+              {/* Toggle row */}
               <button type="button" onClick={() => toggle(svc.name)}
-                className="text-left flex items-start gap-3 p-4 rounded-2xl border-2 transition-all duration-200 w-full pr-10"
-                style={{
-                  borderColor: sel ? "#FFA500" : "#e5e7eb",
-                  background: sel ? "#fffbeb" : "#fff",
-                  boxShadow: sel ? "0 0 0 4px rgba(255,165,0,0.1)" : "none",
-                }}>
+                className="text-left flex items-start gap-3 px-4 pt-4 pb-2 w-full">
                 <div className="w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 mt-0.5"
                   style={{ borderColor: sel ? "#FFA500" : "#d1d5db", background: sel ? "#FFA500" : "#fff" }}>
                   {sel && (
@@ -282,67 +282,41 @@ export default function Step3Services({ formData, update, onNext, onBack }: Prop
                 </div>
               </button>
 
-              {/* Info button — absolutely positioned so it doesn't trigger toggle */}
-              <button
-                type="button"
-                onClick={(e) => { e.stopPropagation(); setActiveInfo(svc); }}
-                title="Learn more"
-                className="absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center transition-all hover:scale-110"
-                style={{ background: sel ? "rgba(255,165,0,0.15)" : "#f3f4f6", color: sel ? "#92400e" : "#9ca3af", fontSize: 11, fontWeight: 700 }}>
-                i
-              </button>
+              {/* Know more button */}
+              <div className="px-4 pb-3">
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); setActiveInfo(svc); }}
+                  className="text-xs font-semibold transition-all hover:opacity-70"
+                  style={{ color: "#FFA500" }}>
+                  Know more →
+                </button>
+              </div>
+
+              {/* Inline textarea — shown immediately when selected */}
+              {sel && (
+                <div className="px-4 pb-4" onClick={(e) => e.stopPropagation()}>
+                  <div style={{ borderTop: "1px solid rgba(255,165,0,0.2)", paddingTop: 12 }}>
+                    <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: "#92400e" }}>
+                      {svc.prompt}
+                    </label>
+                    <textarea
+                      rows={3}
+                      placeholder={`Describe what you need…`}
+                      value={formData.serviceDetails[svc.name] || ""}
+                      onChange={(e) => updateDetail(svc.name, e.target.value)}
+                      className="w-full px-3 py-2.5 rounded-xl border-2 text-sm outline-none resize-none transition-all bg-white"
+                      style={{ borderColor: "#e5e7eb", color: "#111827" }}
+                      onFocus={(e) => (e.target.style.borderColor = "#FFA500")}
+                      onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
       </div>
-
-      {/* Per-service detail textareas */}
-      {selectedServices.length > 0 && (
-        <div className="mb-7">
-          <div className="flex items-start gap-3 px-5 py-4 rounded-2xl mb-5"
-            style={{ background: "linear-gradient(135deg, #fff8e6, #fff)", border: "1.5px solid rgba(255,165,0,0.2)" }}>
-            <IconDocument size={20} color="#FFA500" className="flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="font-bold text-sm mb-1" style={{ color: "#111827" }}>Tell us more about your needs</p>
-              <p className="text-xs leading-relaxed" style={{ color: "#9ca3af" }}>
-                For each selected service, briefly describe what you&apos;re looking to protect or achieve. This helps us tailor our approach.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {selectedServices.map((svc) => (
-              <div key={svc.name} className="rounded-2xl overflow-hidden"
-                style={{ border: "1.5px solid #FFA500", background: "#fffbeb" }}>
-                <div className="flex items-center gap-3 px-5 py-3.5"
-                  style={{ borderBottom: "1px solid rgba(255,165,0,0.2)" }}>
-                  <span style={{ color: "#FFA500" }}>{svc.icon}</span>
-                  <span className="font-bold text-sm flex-1" style={{ color: "#111827" }}>{svc.name}</span>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                    style={{ background: "rgba(255,165,0,0.15)", color: "#92400e" }}>
-                    Selected
-                  </span>
-                </div>
-                <div className="px-5 py-4">
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: "#9ca3af" }}>
-                    {svc.prompt}
-                  </label>
-                  <textarea
-                    rows={3}
-                    placeholder={`Describe what you need for ${svc.name.toLowerCase()}…`}
-                    value={formData.serviceDetails[svc.name] || ""}
-                    onChange={(e) => updateDetail(svc.name, e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border-2 text-sm outline-none resize-none transition-all bg-white"
-                    style={{ borderColor: "#e5e7eb", color: "#111827" }}
-                    onFocus={(e) => (e.target.style.borderColor = "#FFA500")}
-                    onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       <div className="flex gap-3">
         <button onClick={onBack}
