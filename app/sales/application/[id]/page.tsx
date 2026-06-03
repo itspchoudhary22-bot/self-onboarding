@@ -135,10 +135,16 @@ function AgreementTab({
           body: JSON.stringify({ sessionId: app.sessionId, formData: app, useTemplate: true }),
         });
         const pandaData = await pandaRes.json();
+        if (!pandaRes.ok) {
+          throw new Error(pandaData?.error || `PandaDoc failed (${pandaRes.status})`);
+        }
+        if (!pandaData?.signingUrl) {
+          throw new Error("PandaDoc did not return a signing URL. Check template configuration.");
+        }
         await saveAgreement({
           agreementType: "template",
-          pandadocDocumentId: pandaData?.id || pandaData?.document?.id || "",
-          pandadocSigningUrl: pandaData?.url || pandaData?.signingUrl || "",
+          pandadocDocumentId: pandaData?.documentId || pandaData?.id || "",
+          pandadocSigningUrl: pandaData.signingUrl,
         });
       } else if (selectedType === "unsigned") {
         if (!file) { setError("Please select a PDF file"); setUploading(false); return; }
