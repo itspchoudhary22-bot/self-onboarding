@@ -37,6 +37,7 @@ interface AgreementEntry {
 interface StatusData {
   status: AppStatus;
   submittedAt?: string;
+  createdAt?: string;
   agreements?: AgreementEntry[];
   paymentDetails?: {
     razorpayKeyId?: string;
@@ -57,14 +58,14 @@ function formatDate(iso?: string) {
 }
 
 function StatusBadge({ status }: { status: AppStatus }) {
-  const map: Record<AppStatus, { label: string; bg: string; color: string }> = {
+  const map: Record<string, { label: string; bg: string; color: string }> = {
     pending_review:   { label: "Under Review",         bg: "#fff8e6", color: "#92400e" },
     agreement_pending:{ label: "Action Required",       bg: "#eff6ff", color: "#1d4ed8" },
     payment_pending:  { label: "Payment Required",      bg: "#fff8e6", color: "#92400e" },
     ops_setup:        { label: "Setup in Progress",     bg: "#f0fdfa", color: "#0f766e" },
     active:           { label: "Active",                bg: "#f0fdf4", color: "#166534" },
   };
-  const { label, bg, color } = map[status];
+  const { label, bg, color } = map[status] ?? { label: "Pending", bg: "#f3f4f6", color: "#6b7280" };
   return (
     <span className="text-xs font-bold px-3 py-1 rounded-full"
       style={{ background: bg, color }}>
@@ -178,7 +179,7 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
   const pollRef = useRef<NodeJS.Timeout>();
 
   const displayName = formData.type === "company" ? formData.companyName : formData.individualName;
-  const submittedAt = formatDate(statusData?.submittedAt);
+  const submittedAt = formatDate(statusData?.createdAt || statusData?.submittedAt);
 
   // Load Razorpay script
   useEffect(() => {
@@ -205,10 +206,13 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
         const res = await fetch(`/api/status?${pollParam}`);
         if (res.ok) {
           const data: StatusData = await res.json();
-          setStatusData(data);
-          setAppStatus(data.status);
-          if (data.status === "active") {
-            clearInterval(pollRef.current);
+          const knownStatuses: string[] = ["pending_review", "agreement_pending", "payment_pending", "ops_setup", "active"];
+          if (knownStatuses.includes(data.status as string)) {
+            setStatusData(data);
+            setAppStatus(data.status);
+            if (data.status === "active") {
+              clearInterval(pollRef.current);
+            }
           }
         }
       } catch {
