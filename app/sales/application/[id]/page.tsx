@@ -167,12 +167,24 @@ function AgreementTab({
         const pandaData = await pandaRes.json();
         if (!pandaRes.ok) throw new Error(pandaData?.error || `PandaDoc failed (${pandaRes.status})`);
         if (!pandaData?.signingUrl) throw new Error("PandaDoc did not return a signing URL. Check template configuration.");
+
+        // Add Service Agreement
         await addAgreement({
           agreementType: "template",
-          label: label || "Service Agreement (Template)",
-          pandadocDocumentId: pandaData?.documentId || pandaData?.id || "",
+          label: "Service Agreement",
+          pandadocDocumentId: pandaData?.documentId || "",
           pandadocSigningUrl: pandaData.signingUrl,
         });
+
+        // Add LOA if returned
+        if (pandaData?.loaSigningUrl) {
+          await addAgreement({
+            agreementType: "template",
+            label: "Letter of Authorization",
+            pandadocDocumentId: pandaData?.loaDocumentId || "",
+            pandadocSigningUrl: pandaData.loaSigningUrl,
+          });
+        }
       } else if (selectedType === "unsigned") {
         if (!file) { setError("Please select a PDF file"); setUploading(false); return; }
         const base64 = await fileToBase64(file);
