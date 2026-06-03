@@ -119,7 +119,7 @@ async function getSigningSession(documentId, recipientEmail) {
 
   const res = await pandaDocRequest(`https://api.pandadoc.com/public/v1/documents/${documentId}/session`, 'POST', {
     recipient: recipientEmail,
-    lifetime: 3600,
+    lifetime: 2592000,
   });
   if (!res.ok) {
     const err = await res.text();

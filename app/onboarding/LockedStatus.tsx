@@ -187,14 +187,20 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
     document.body.appendChild(s);
   }, []);
 
-  // Poll /api/status
+  // Poll /api/status — works for both sessionId flow and email-lookup flow
   useEffect(() => {
-    if (!sessionId) return;
+    const pollParam = sessionId
+      ? `sessionId=${encodeURIComponent(sessionId)}`
+      : formData.email
+      ? `email=${encodeURIComponent(formData.email)}`
+      : null;
+
+    if (!pollParam) return;
 
     const poll = async () => {
       setChecking(true);
       try {
-        const res = await fetch(`/api/status?sessionId=${sessionId}`);
+        const res = await fetch(`/api/status?${pollParam}`);
         if (res.ok) {
           const data: StatusData = await res.json();
           setStatusData(data);
@@ -213,7 +219,7 @@ export default function LockedStatus({ sessionId, applicationId, formData }: Pro
     poll();
     pollRef.current = setInterval(poll, 5000);
     return () => clearInterval(pollRef.current);
-  }, [sessionId]);
+  }, [sessionId, formData.email]);
 
   // Razorpay payment
   const handleRazorpayPay = async () => {

@@ -106,6 +106,8 @@ function AgreementTab({
   app: Application;
   onSaved: () => void;
 }) {
+  const agreements = app.agreements || [];
+  const [showAddForm, setShowAddForm] = useState(agreements.length === 0);
   const [selectedType, setSelectedType] = useState<"template" | "unsigned" | "signed" | null>(null);
   const [label, setLabel] = useState("");
   const [files, setFiles] = useState<File[]>([]);
@@ -113,8 +115,6 @@ function AgreementTab({
   const [error, setError] = useState("");
   const [removing, setRemoving] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-
-  const agreements = app.agreements || [];
   const [markingIdx, setMarkingIdx] = useState<number | null>(null);
 
   async function markSigned(idx: number) {
@@ -227,6 +227,7 @@ function AgreementTab({
       setSelectedType(null);
       setLabel("");
       setFiles([]);
+      setShowAddForm(false);
       onSaved();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -313,13 +314,34 @@ function AgreementTab({
         </div>
       )}
 
-      {/* Add new agreement */}
-      <h3 style={{ fontWeight: 700, color: "#111827", marginBottom: 4, fontSize: 15 }}>
-        {agreements.length > 0 ? "Add Another Agreement" : "Send Agreement"}
-      </h3>
-      <p style={{ fontSize: 13, color: "#9ca3af", marginBottom: 16 }}>
-        You can send multiple documents — e.g. Service Agreement + LOA.
-      </p>
+      {/* Add new agreement — toggle */}
+      {agreements.length > 0 && !showAddForm ? (
+        <button
+          onClick={() => setShowAddForm(true)}
+          style={{
+            width: "100%", padding: "10px", marginTop: 4,
+            background: "#f9fafb", border: "2px dashed #e5e7eb", borderRadius: 10,
+            fontSize: 13, fontWeight: 600, color: "#6b7280", cursor: "pointer",
+          }}
+        >
+          + Add Another Agreement
+        </button>
+      ) : (
+        <>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+            <h3 style={{ fontWeight: 700, color: "#111827", fontSize: 15, margin: 0 }}>
+              {agreements.length > 0 ? "Add Another Agreement" : "Send Agreement"}
+            </h3>
+            {agreements.length > 0 && (
+              <button onClick={() => { setShowAddForm(false); setSelectedType(null); setFiles([]); setError(""); }}
+                style={{ fontSize: 12, color: "#9ca3af", background: "none", border: "none", cursor: "pointer" }}>
+                Cancel
+              </button>
+            )}
+          </div>
+          <p style={{ fontSize: 13, color: "#9ca3af", marginBottom: 16 }}>
+            You can send multiple documents — e.g. Service Agreement + LOA.
+          </p>
 
       {/* Label input */}
       <div style={{ marginBottom: 14 }}>
@@ -438,6 +460,8 @@ function AgreementTab({
             : selectedType === "unsigned" ? `Upload & Send for Signing${files.length > 1 ? ` (${files.length} files)` : ""} →`
             : `Upload & Mark Complete${files.length > 1 ? ` (${files.length} files)` : ""} →`}
         </button>
+      )}
+        </>
       )}
     </div>
   );
