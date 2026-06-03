@@ -106,7 +106,7 @@ function AgreementTab({
 }) {
   const [selectedType, setSelectedType] = useState<"template" | "unsigned" | "signed" | null>(null);
   const [label, setLabel] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const [removing, setRemoving] = useState<number | null>(null);
@@ -186,31 +186,36 @@ function AgreementTab({
           });
         }
       } else if (selectedType === "unsigned") {
-        if (!file) { setError("Please select a PDF file"); setUploading(false); return; }
-        const base64 = await fileToBase64(file);
-        const uploadRes = await fetch("/api/pandadoc/upload-for-signing", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ applicationId: app._id, fileBase64: base64, fileName: file.name }),
-        });
-        const uploadData = await uploadRes.json();
-        if (!uploadRes.ok) throw new Error(uploadData?.error || "Upload failed");
-        await addAgreement({
-          agreementType: "unsigned",
-          label: label || file.name,
-          pandadocDocumentId: uploadData?.id || "",
-          pandadocSigningUrl: uploadData?.signingUrl || "",
-        });
+        if (!files.length) { setError("Please select at least one PDF file"); setUploading(false); return; }
+        for (const f of files) {
+          const base64 = await fileToBase64(f);
+          const uploadRes = await fetch("/api/pandadoc/upload-for-signing", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ applicationId: app._id, fileBase64: base64, fileName: f.name }),
+          });
+          const uploadData = await uploadRes.json();
+          if (!uploadRes.ok) throw new Error(uploadData?.error || `Upload failed for ${f.name}`);
+          await addAgreement({
+            agreementType: "unsigned",
+            label: files.length === 1 ? (label || f.name) : f.name,
+            pandadocDocumentId: uploadData?.id || "",
+            pandadocSigningUrl: uploadData?.signingUrl || "",
+          });
+        }
       } else {
-        await addAgreement({
-          agreementType: "signed",
-          label: label || file?.name || "Signed Document",
-          uploadedFileName: file?.name || "signed-document.pdf",
-        });
+        if (!files.length) { setError("Please select at least one PDF file"); setUploading(false); return; }
+        for (const f of files) {
+          await addAgreement({
+            agreementType: "signed",
+            label: files.length === 1 ? (label || f.name) : f.name,
+            uploadedFileName: f.name,
+          });
+        }
       }
       setSelectedType(null);
       setLabel("");
-      setFile(null);
+      setFiles([]);
       onSaved();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -346,10 +351,11 @@ function AgreementTab({
                 style={{ marginTop: 10, border: "2px dashed #fed7aa", borderRadius: 10, padding: 16, textAlign: "center", background: "#fffbf5", cursor: "pointer" }}
                 onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}
               >
-                <input ref={fileRef} type="file" accept=".pdf" style={{ display: "none" }}
-                  onChange={(e) => setFile(e.target.files?.[0] || null)} />
-                {file ? <span style={{ fontSize: 13, color: "#374151" }}>📎 {file.name}</span>
-                  : <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF</span>}
+                <input ref={fileRef} type="file" accept=".pdf" multiple style={{ display: "none" }}
+                  onChange={(e) => setFiles(Array.from(e.target.files || []))} />
+                {files.length > 0
+                  ? <span style={{ fontSize: 13, color: "#374151" }}>📎 {files.map(f => f.name).join(", ")}</span>
+                  : <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF(s) — select multiple at once</span>}
               </div>
             )}
           </div>
@@ -377,10 +383,11 @@ function AgreementTab({
                 style={{ marginTop: 10, border: "2px dashed #d1d5db", borderRadius: 10, padding: 16, textAlign: "center", background: "#f9fafb", cursor: "pointer" }}
                 onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}
               >
-                <input ref={fileRef} type="file" accept=".pdf" style={{ display: "none" }}
-                  onChange={(e) => setFile(e.target.files?.[0] || null)} />
-                {file ? <span style={{ fontSize: 13, color: "#374151" }}>📎 {file.name}</span>
-                  : <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF</span>}
+                <input ref={fileRef} type="file" accept=".pdf" multiple style={{ display: "none" }}
+                  onChange={(e) => setFiles(Array.from(e.target.files || []))} />
+                {files.length > 0
+                  ? <span style={{ fontSize: 13, color: "#374151" }}>📎 {files.map(f => f.name).join(", ")}</span>
+                  : <span style={{ fontSize: 13, color: "#9ca3af" }}>Click to upload PDF(s) — select multiple at once</span>}
               </div>
             )}
           </div>
@@ -399,8 +406,8 @@ function AgreementTab({
           }}>
           {uploading ? "Processing…"
             : selectedType === "template" ? "Send Template for Signing →"
-            : selectedType === "unsigned" ? "Upload & Send for Signing →"
-            : "Upload & Mark Complete →"}
+            : selectedType === "unsigned" ? `Upload & Send for Signing${files.length > 1 ? ` (${files.length} files)` : ""} →`
+            : `Upload & Mark Complete${files.length > 1 ? ` (${files.length} files)` : ""} →`}
         </button>
       )}
     </div>
