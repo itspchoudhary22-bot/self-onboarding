@@ -7,9 +7,7 @@ import Step2Individual from "./Step2Individual";
 import Step2Company from "./Step2Company";
 import Step3Services from "./Step3Services";
 import Step4Review from "./Step4Review";
-import Step5Sign from "./Step5Sign";
-import Step6Payment from "./Step6Payment";
-import SuccessScreen from "./SuccessScreen";
+import LockedStatus from "./LockedStatus";
 import { IconLink } from "./Icons";
 
 const STEPS = (type: string) => [
@@ -17,36 +15,31 @@ const STEPS = (type: string) => [
   { key: 2, label: type === "company" ? "Company Details" : "Your Details" },
   { key: 3, label: "Services" },
   { key: 4, label: "Review" },
-  { key: 5, label: "Sign" },
-  { key: 6, label: "Payment" },
 ];
 
 const LS_SESSION = "bytescare_session_id";
 const LS_DATA = "bytescare_form_data";
 const LS_STEP = "bytescare_step";
-const LS_PANDADOC = "bytescare_pandadoc_id";
 
 interface ResumeInfo {
   sessionId: string;
   step: number;
   email: string;
   formData: FormData;
-  pandadocDocId: string;
 }
 
 export default function OnboardingPage() {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
-  const [documentSigned, setDocumentSigned] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
   const [sessionId, setSessionId] = useState("");
+  const [submittedAppId, setSubmittedAppId] = useState("");
   const [resumeInfo, setResumeInfo] = useState<ResumeInfo | null>(null);
   const [showResumeBanner, setShowResumeBanner] = useState(false);
   const [resumeLink, setResumeLink] = useState("");
   const [linkCopied, setLinkCopied] = useState(false);
-  const [pandadocDocId, setPandadocDocId] = useState("");
   const draftTimer = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -60,13 +53,10 @@ export default function OnboardingPage() {
           const { draft } = await res.json();
           if (draft?.formData?.email) {
             window.history.replaceState({}, '', '/onboarding');
-            const docId = draft.pandadocDocumentId || '';
-            const resumeStep = draft.step === 5 && !docId ? 4 : draft.step;
+            const resumeStep = Math.min(draft.step, 4);
             localStorage.setItem(LS_SESSION, draft.sessionId);
-            if (docId) localStorage.setItem(LS_PANDADOC, docId);
             setSessionId(draft.sessionId);
             setFormData({ ...draft.formData, sessionId: draft.sessionId });
-            setPandadocDocId(docId);
             setStep(resumeStep);
             return;
           }
@@ -81,14 +71,12 @@ export default function OnboardingPage() {
         try {
           const parsed: FormData = JSON.parse(savedData);
           if (parsed.email) {
-            const savedDocId = localStorage.getItem(LS_PANDADOC) || '';
             const savedStepNum = parseInt(savedStep || "1");
             setResumeInfo({
               sessionId: savedId,
               step: savedStepNum,
               email: parsed.email,
               formData: parsed,
-              pandadocDocId: savedDocId,
             });
             setShowResumeBanner(true);
             return;
@@ -150,13 +138,11 @@ export default function OnboardingPage() {
 
   const handleResume = () => {
     if (!resumeInfo) return;
-    const { sessionId: sid, step: savedStep, formData: savedData, pandadocDocId: savedDocId } = resumeInfo;
-    // If they were mid-signing (step 5) with no doc ID, drop back to review
-    const resumeStep = savedStep === 5 && !savedDocId ? 4 : savedStep;
+    const { sessionId: sid, step: savedStep, formData: savedData } = resumeInfo;
+    const resumeStep = Math.min(savedStep, 4);
     localStorage.setItem(LS_SESSION, sid);
     setSessionId(sid);
     setFormData({ ...savedData, sessionId: sid });
-    setPandadocDocId(savedDocId);
     setStep(resumeStep);
     setShowResumeBanner(false);
   };
@@ -165,7 +151,6 @@ export default function OnboardingPage() {
     localStorage.removeItem(LS_SESSION);
     localStorage.removeItem(LS_DATA);
     localStorage.removeItem(LS_STEP);
-    localStorage.removeItem(LS_PANDADOC);
     const newId = crypto.randomUUID();
     localStorage.setItem(LS_SESSION, newId);
     setSessionId(newId);
@@ -175,12 +160,6 @@ export default function OnboardingPage() {
     setResumeInfo(null);
   };
 
-  const handleStep5Complete = (docId: string) => {
-    setPandadocDocId(docId);
-    if (docId) localStorage.setItem(LS_PANDADOC, docId);
-    goNext();
-  };
-
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setSubmitError("");
@@ -188,7 +167,7 @@ export default function OnboardingPage() {
       const res = await fetch("/api/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, sessionId, pandadocDocumentId: pandadocDocId }),
+        body: JSON.stringify({ ...formData, sessionId }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -197,8 +176,7 @@ export default function OnboardingPage() {
         localStorage.removeItem(LS_SESSION);
         localStorage.removeItem(LS_DATA);
         localStorage.removeItem(LS_STEP);
-        localStorage.removeItem(LS_PANDADOC);
-        setDocumentSigned(!!pandadocDocId);
+        setSubmittedAppId(data.applicationId || "");
         setSubmitted(true);
       }
     } catch {
@@ -208,7 +186,7 @@ export default function OnboardingPage() {
     }
   };
 
-  if (submitted) return <SuccessScreen formData={formData} documentSigned={documentSigned} />;
+  if (submitted) return <LockedStatus sessionId={sessionId} applicationId={submittedAppId} formData={formData} />;
 
   const steps = STEPS(formData.type);
   const currentIdx = steps.findIndex((s) => s.key === step);
@@ -222,9 +200,7 @@ export default function OnboardingPage() {
       case 1: return <Step1Basic {...common} />;
       case 2: return formData.type === "company" ? <Step2Company {...common} /> : <Step2Individual {...common} />;
       case 3: return <Step3Services {...common} />;
-      case 4: return <Step4Review formData={formData} onBack={goBack} onNext={goNext} goToStep={goToStep} />;
-      case 5: return <Step5Sign formData={formData} sessionId={sessionId} onBack={goBack} onComplete={handleStep5Complete} existingDocumentId={pandadocDocId || undefined} />;
-      case 6: return <Step6Payment formData={formData} update={update} onBack={goBack} onSubmit={handleSubmit} isSubmitting={isSubmitting} submitError={submitError} />;
+      case 4: return <Step4Review formData={formData} onBack={goBack} onNext={handleSubmit} goToStep={goToStep} isSubmitting={isSubmitting} submitError={submitError} />;
       default: return null;
     }
   };

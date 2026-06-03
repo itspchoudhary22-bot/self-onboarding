@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FormData } from "./formTypes";
-import { IconEnvelope, IconCog, IconKey, IconUserCircle, IconCheckCircle, IconLink } from "./Icons";
+import { IconEnvelope, IconCog, IconKey, IconUserCircle, IconCheckCircle } from "./Icons";
 
 interface Props {
   formData: FormData;

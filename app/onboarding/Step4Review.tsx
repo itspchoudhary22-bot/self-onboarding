@@ -1,12 +1,14 @@
 "use client";
 import { FormData } from "./formTypes";
-import { IconClipboard, IconBuilding, IconUser, IconShieldCheck, IconDocument } from "./Icons";
+import { IconClipboard, IconBuilding, IconUser, IconShieldCheck, IconDocument, IconWarning } from "./Icons";
 
 interface Props {
   formData: FormData;
   onBack: () => void;
   onNext: () => void;
   goToStep: (s: number) => void;
+  isSubmitting?: boolean;
+  submitError?: string;
 }
 
 function Row({ label, value }: { label: string; value: string }) {
@@ -39,7 +41,7 @@ function Section({ icon, title, step, goToStep, children }: {
   );
 }
 
-export default function Step4Review({ formData, onBack, onNext, goToStep }: Props) {
+export default function Step4Review({ formData, onBack, onNext, goToStep, isSubmitting, submitError }: Props) {
   const isCompany = formData.type === "company";
   const hasServiceDetails = Object.values(formData.serviceDetails || {}).some(Boolean);
 
@@ -50,7 +52,7 @@ export default function Step4Review({ formData, onBack, onNext, goToStep }: Prop
           Review Your Details
         </h2>
         <p className="text-sm sm:text-base" style={{ color: "#9ca3af" }}>
-          Check everything before proceeding to document signing.
+          Check everything before submitting your application.
         </p>
       </div>
 
@@ -126,23 +128,41 @@ export default function Step4Review({ formData, onBack, onNext, goToStep }: Prop
         style={{ border: "1.5px solid #fed7aa", background: "linear-gradient(135deg, #fff8f0, #fff)" }}>
         <IconDocument size={22} color="#FFA500" className="flex-shrink-0" />
         <div>
-          <p className="font-bold text-sm mb-1" style={{ color: "#111827" }}>Next: Sign your documents</p>
+          <p className="font-bold text-sm mb-1" style={{ color: "#111827" }}>Ready to submit</p>
           <p className="text-xs leading-relaxed" style={{ color: "#6b7280" }}>
-            Your <strong>Service Agreement</strong> and <strong>Letter of Authorization (LOA)</strong> will be prepared and shown for review and digital signing.
+            Once submitted, this form will be locked. Our sales team will review and contact you about agreement signing and payment.
           </p>
         </div>
       </div>
 
+      {submitError && (
+        <div className="mb-4 flex items-start gap-2 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
+          <IconWarning size={14} color="#b91c1c" /> <span>{submitError}</span>
+        </div>
+      )}
+
       <div className="flex gap-3">
         <button onClick={onBack}
-          className="flex-1 py-4 rounded-2xl font-semibold text-sm transition-all hover:bg-gray-50"
+          disabled={isSubmitting}
+          className="flex-1 py-4 rounded-2xl font-semibold text-sm transition-all hover:bg-gray-50 disabled:opacity-50"
           style={{ border: "2px solid #e5e7eb", color: "#6b7280" }}>
           ← Back
         </button>
         <button onClick={onNext}
-          className="py-4 rounded-2xl font-extrabold text-sm transition-all hover:opacity-90 active:scale-95"
+          disabled={isSubmitting}
+          className="py-4 rounded-2xl font-extrabold text-sm transition-all hover:opacity-90 active:scale-95 disabled:opacity-60 flex items-center justify-center gap-2"
           style={{ flex: 2, background: "#FFA500", color: "#111827", boxShadow: "0 4px 14px rgba(255,165,0,0.3)" }}>
-          Proceed to Sign Documents →
+          {isSubmitting ? (
+            <>
+              <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              Submitting…
+            </>
+          ) : (
+            "Submit Application →"
+          )}
         </button>
       </div>
     </div>

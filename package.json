@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "jose": "^6.2.3",
     "mongoose": "^9.6.2",
     "next": "14.2.35",
     "react": "^18",

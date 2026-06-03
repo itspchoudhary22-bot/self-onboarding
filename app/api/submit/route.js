@@ -2,12 +2,14 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Application from '@/models/Application';
 import Draft from '@/models/Draft';
-import { sendClientConfirmation, sendOpsNotification } from '@/lib/email';
+import Counter from '@/models/Counter';
+// sendSubmissionConfirmation is the new name for sendClientConfirmation
+import { sendSubmissionConfirmation, sendSalesNewApplication } from '@/lib/email';
 
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { email, type, country, services, sessionId, pandadocDocumentId, paymentPlan, paymentMethod } = body;
+    const { email, type, country, services, sessionId } = body;
 
     if (!email || !type || !country || !services || services.length === 0) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -15,13 +17,16 @@ export async function POST(request) {
 
     await connectDB();
 
+    // Generate applicationId: BC-{YYYY}-{padded 4 digits}
+    const counterValue = await Counter.nextValue('application_counter');
+    const year = new Date().getFullYear();
+    const applicationId = `BC-${year}-${String(counterValue).padStart(4, '0')}`;
+
     const application = await Application.create({
       ...body,
+      applicationId,
       sessionId: sessionId || '',
-      pandadocDocumentId: pandadocDocumentId || '',
-      pandadocStatus: pandadocDocumentId ? 'completed' : 'pending',
-      paymentPlan: paymentPlan || '',
-      paymentMethod: paymentMethod || '',
+      status: 'pending_review',
     });
 
     // Mark draft as submitted
@@ -30,13 +35,19 @@ export async function POST(request) {
     }
 
     // Fire emails in background (don't block response)
+    // sendSubmissionConfirmation is the updated name (previously sendClientConfirmation)
     Promise.all([
-      sendClientConfirmation(body),
-      sendOpsNotification(body),
+      sendSubmissionConfirmation(body),
+      sendSalesNewApplication(application),
     ]).catch((err) => console.error('Email send error:', err));
 
     return NextResponse.json(
-      { message: 'Application submitted successfully', id: application._id },
+      {
+        message: 'Application submitted successfully',
+        id: application._id,
+        applicationId: application.applicationId,
+        sessionId: application.sessionId,
+      },
       { status: 201 }
     );
   } catch (error) {
