@@ -7,7 +7,10 @@ import cfg from '@/lib/config';
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { razorpayOrderId, razorpayPaymentId, razorpaySignature, sessionId } = body;
+    const razorpayOrderId = body.razorpayOrderId || body.razorpay_order_id;
+    const razorpayPaymentId = body.razorpayPaymentId || body.razorpay_payment_id;
+    const razorpaySignature = body.razorpaySignature || body.razorpay_signature;
+    const { sessionId } = body;
 
     if (!razorpayOrderId || !razorpayPaymentId || !razorpaySignature || !sessionId) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
