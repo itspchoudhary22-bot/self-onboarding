@@ -252,7 +252,7 @@ export default function LockedStatus({ sessionId, applicationId, formData: rawFo
         currency: order.currency || currency || "INR",
         name: "Bytescare",
         description: plan || "Subscription",
-        order_id: order.id,
+        order_id: order.orderId || order.id,
         prefill: {
           name: displayName,
           email: formData.type === "company"
