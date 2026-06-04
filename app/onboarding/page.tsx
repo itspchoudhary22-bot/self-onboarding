@@ -49,17 +49,34 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     const init = async () => {
-      // Check if already submitted — restore locked status screen
+      // Check if already submitted — verify application still exists before showing locked screen
       const submittedData = localStorage.getItem(LS_SUBMITTED);
       if (submittedData) {
         try {
           const { sessionId: sid, applicationId, formData: fd } = JSON.parse(submittedData);
-          setSessionId(sid ?? "");
-          setSubmittedAppId(applicationId ?? "");
-          setFormData(fd && typeof fd === "object" ? { ...INITIAL_FORM_DATA, ...fd } : INITIAL_FORM_DATA);
-          setSubmitted(true);
-          return;
-        } catch {}
+          const email = fd?.email;
+          const verifyParam = sid ? `sessionId=${sid}` : email ? `email=${encodeURIComponent(email)}` : null;
+          let appExists = false;
+          if (verifyParam) {
+            try {
+              const res = await fetch(`/api/status?${verifyParam}`);
+              const json = await res.json();
+              appExists = json.status !== 'not_found' && !json.error;
+            } catch {}
+          }
+          if (appExists) {
+            setSessionId(sid ?? "");
+            setSubmittedAppId(applicationId ?? "");
+            setFormData(fd && typeof fd === "object" ? { ...INITIAL_FORM_DATA, ...fd } : INITIAL_FORM_DATA);
+            setSubmitted(true);
+            return;
+          } else {
+            // Application deleted from DB — clear stale localStorage and show fresh form
+            localStorage.removeItem(LS_SUBMITTED);
+          }
+        } catch {
+          localStorage.removeItem(LS_SUBMITTED);
+        }
       }
 
       // Check for ?session=TOKEN in URL (resume link from email)
