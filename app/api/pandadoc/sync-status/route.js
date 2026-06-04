@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Application from '@/models/Application';
-import { sendPaymentEnabled } from '@/lib/email';
+import { sendPaymentEnabled, sendAgreementSignedNotification } from '@/lib/email';
 
 const PANDADOC_API_KEY = process.env.PANDADOC_API_KEY;
 
@@ -73,6 +73,7 @@ export async function POST(request) {
       const nextStatus = application.paymentDetails?.method === 'offline' ? 'ops_setup' : 'payment_pending';
       application.status = nextStatus;
       await application.save();
+      sendAgreementSignedNotification(application).catch((e) => console.error('Agreement signed notification error:', e));
       if (nextStatus === 'payment_pending') {
         setTimeout(() => {
           try { sendPaymentEnabled(application).catch((e) => console.error('Payment email error:', e)); } catch (e) { console.error('Payment email init:', e); }

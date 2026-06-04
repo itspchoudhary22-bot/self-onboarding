@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import connectDB from '@/lib/mongodb';
 import Application from '@/models/Application';
 import cfg from '@/lib/config';
+import { sendPaymentReceivedNotification, sendOpsRequirements } from '@/lib/email';
 
 export async function POST(request) {
   try {
@@ -38,6 +39,10 @@ export async function POST(request) {
     application.status = 'ops_setup';
 
     await application.save();
+
+    // Notify sales and ops asynchronously
+    sendPaymentReceivedNotification(application).catch((e) => console.error('Payment notification email error:', e));
+    sendOpsRequirements(application).catch((e) => console.error('Ops requirements email error:', e));
 
     return NextResponse.json({
       success: true,

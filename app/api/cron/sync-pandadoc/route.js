@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Application from '@/models/Application';
-import { sendPaymentEnabled } from '@/lib/email';
+import { sendPaymentEnabled, sendAgreementSignedNotification } from '@/lib/email';
 
 const PANDADOC_API_KEY = process.env.PANDADOC_API_KEY;
 
@@ -66,6 +66,7 @@ export async function GET(request) {
       application.status = nextStatus;
       await application.save();
       updated++;
+      sendAgreementSignedNotification(application).catch((e) => console.error('Agreement signed notification error:', e));
       if (nextStatus === 'payment_pending') {
         setTimeout(() => {
           try { sendPaymentEnabled(application).catch((e) => console.error('Payment email error:', e)); } catch (e) { console.error('Payment email init:', e); }
