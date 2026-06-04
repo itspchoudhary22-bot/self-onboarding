@@ -35,7 +35,7 @@ export async function POST(request) {
 
     application.paymentDetails.razorpayPaymentId = razorpayPaymentId;
     application.paymentDetails.paidAt = new Date();
-    application.status = 'active';
+    application.status = 'ops_setup';
 
     await application.save();
 

@@ -268,7 +268,7 @@ export default function LockedStatus({ sessionId, applicationId, formData: rawFo
               body: JSON.stringify({ sessionId, ...response }),
             });
             if (verRes.ok) {
-              setAppStatus("active");
+              setAppStatus("ops_setup");
             } else {
               const ve = await verRes.json();
               setPayError(ve.error || "Payment verification failed.");
