@@ -222,13 +222,20 @@
   <h2>Bytescare Mockups</h2>
   <div class="section-label">Overview</div>
   <a href="#flow">Complete Flow Diagram</a>
+  <div class="section-label">DB Schema</div>
+  <a href="#db-schema">All Collections</a>
   <div class="section-label">Sales Portal</div>
   <a href="#sales-dashboard">Dashboard</a>
   <a href="#sales-agreement">Agreement Tab</a>
   <a href="#sales-payment-portal">Payment Tab – Online</a>
   <a href="#sales-payment-offline">Payment Tab – Offline</a>
   <a href="#sales-ops">Ops Requirements Tab</a>
-  <div class="section-label">Customer Portal</div>
+  <div class="section-label">Customer Onboarding</div>
+  <a href="#ob-step1">Step 1 – Basic Info</a>
+  <a href="#ob-step2i">Step 2 – Individual</a>
+  <a href="#ob-step2c">Step 2 – Company</a>
+  <a href="#ob-step3">Step 3 – Services</a>
+  <a href="#ob-step4">Step 4 – Review</a>
   <a href="#ob-pending">Under Review</a>
   <a href="#ob-agreement">Sign Agreement</a>
   <a href="#ob-payment">Complete Payment</a>
@@ -321,6 +328,222 @@
             📄 <strong>Template</strong> — PandaDoc template auto-generated, customer signs in portal<br/>
             📁 <strong>Unsigned</strong> — Sales uploads doc, customer signs via PandaDoc<br/>
             ✅ <strong>Pre-signed</strong> — Sales uploads already-signed doc, skips customer signing
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- DB SCHEMA -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div id="db-schema" class="screen-group">
+    <div class="screen-group-title">MongoDB Schema — All Collections</div>
+
+    <div class="flow-wrap">
+      <div class="flow-title">Collection Overview</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px">
+        <div style="background:#fff8e6;border:2px solid #FFA500;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:6px">📋</div>
+          <div style="font-weight:800;color:#92400e">applications</div>
+          <div style="font-size:11px;color:#9ca3af;margin-top:4px">Main entity — one per customer</div>
+        </div>
+        <div style="background:#eff6ff;border:2px solid #3b82f6;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:6px">📝</div>
+          <div style="font-weight:800;color:#1d4ed8">drafts</div>
+          <div style="font-size:11px;color:#9ca3af;margin-top:4px">In-progress forms (pre-submit)</div>
+        </div>
+        <div style="background:#f0fdf4;border:2px solid #16a34a;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:6px">🔢</div>
+          <div style="font-weight:800;color:#166534">counters</div>
+          <div style="font-size:11px;color:#9ca3af;margin-top:4px">Auto-increment for App IDs</div>
+        </div>
+        <div style="background:#f5f3ff;border:2px solid #7c3aed;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:6px">🔐</div>
+          <div style="font-weight:800;color:#5b21b6">salesconfigs</div>
+          <div style="font-size:11px;color:#9ca3af;margin-top:4px">Sales portal password hash</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Applications Collection -->
+    <div class="flow-wrap" style="padding:0;overflow:hidden">
+      <div style="background:#fff8e6;padding:16px 20px;border-bottom:2px solid #FFA500;display:flex;align-items:center;gap:10px">
+        <span style="font-size:18px">📋</span>
+        <div>
+          <div style="font-weight:800;color:#92400e;font-size:15px">applications</div>
+          <div style="font-size:12px;color:#b45309">One document per customer. Created on form submission, enriched by sales team.</div>
+        </div>
+      </div>
+      <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:0">
+
+        <!-- Identity & Status -->
+        <div style="padding-right:20px;border-right:1px solid #f3f4f6">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin-bottom:10px">Identity &amp; Status</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <thead><tr><th style="text-align:left;padding:5px 8px;background:#f9fafb;color:#6b7280;font-size:10px;border:1px solid #f3f4f6">Field</th><th style="text-align:left;padding:5px 8px;background:#f9fafb;color:#6b7280;font-size:10px;border:1px solid #f3f4f6">Type</th><th style="text-align:left;padding:5px 8px;background:#f9fafb;color:#6b7280;font-size:10px;border:1px solid #f3f4f6">Notes</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">applicationId</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">BC-YYYY-XXXX, unique</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">email</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Required, unique, lowercase</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">type</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">"individual" | "company"</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">country</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr style="background:#fff8e6"><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#92400e;font-weight:700">status</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">pending_review → agreement_pending → payment_pending → ops_setup → active</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">sessionId</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Links to Draft doc</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">salesNotes</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Internal sales notes</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">createdAt / updatedAt</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">Date</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Auto-managed</td></tr>
+            </tbody>
+          </table>
+
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin:16px 0 10px">Individual Fields</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">individualName</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Full legal name</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">nationalIdNumber</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Aadhar / Passport / etc.</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">idProofName / idProofBase64</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Uploaded ID document</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">contactNumber</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">registeredAddress / pincode</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">mailingAddress</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">officialEmail</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Work/official email</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">designation / workDescription</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">socialMediaHandles</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+            </tbody>
+          </table>
+
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin:16px 0 10px">Services</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">services</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">[String] — list of selected services</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">serviceDetails</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Mixed — { serviceName: "description" }</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Company + Sales-filled fields -->
+        <div style="padding-left:20px">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin-bottom:10px">Company Fields</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyName</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Legal company name</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyRegNumber</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Registration number</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">regCertName / regCertBase64</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Registration certificate upload</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">gstin</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">GST number</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyContact / companyOfficialEmail</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyRegisteredAddress / companyPincode</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyMailingAddress</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyDescription</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Nature of business</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">signatoryName / signatoryDesignation / signatoryEmail</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Authorized signatory</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companySocialMedia</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">copyrightCertName / copyrightCertBase64</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Optional copyright doc</td></tr>
+            </tbody>
+          </table>
+
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin:16px 0 10px">Agreements[] — filled by Sales (Mixed array)</div>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:12px;font-size:12px;font-family:monospace;line-height:2;color:#374151">
+            agreementType: "template" | "unsigned" | "signed"<br/>
+            label: String<br/>
+            pandadocDocumentId: String<br/>
+            pandadocSigningUrl: String<br/>
+            uploadedFileName: String<br/>
+            fileBase64: String<br/>
+            signed: Boolean<br/>
+            signedAt: Date<br/>
+            sentToCustomerAt: Date
+          </div>
+
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin:16px 0 10px">paymentDetails — filled by Sales (Mixed)</div>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:12px;font-size:12px;font-family:monospace;line-height:2;color:#374151">
+            planName: String<br/>
+            currency: String (INR / USD / GBP / EUR)<br/>
+            amount: Number<br/>
+            frequency: "monthly" | "quarterly" | "biannually" | "annually"<br/>
+            serviceDuration: "3months" | "6months" | "1year" | "custom"<br/>
+            startDate / endDate: Date<br/>
+            method: "portal" | "offline"<br/>
+            enabledAt: Date<br/>
+            razorpayOrderId: String<br/>
+            razorpayPaymentId: String<br/>
+            paidAt: Date<br/>
+            <span style="color:#0f766e">offlineConfirmation: {</span><br/>
+            &nbsp;&nbsp;referenceNumber, paymentDate,<br/>
+            &nbsp;&nbsp;paymentMode, notes, confirmedAt<br/>
+            <span style="color:#0f766e">}</span>
+          </div>
+
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin:16px 0 10px">operationalRequirements — filled by Sales (Mixed)</div>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:12px;font-size:12px;font-family:monospace;line-height:2;color:#374151">
+            websites, youtubeChannels, socialHandles, brandNames<br/>
+            platforms: [String]<br/>
+            priority: "standard" | "high" | "critical"<br/>
+            instructions: String<br/>
+            slaStartDate: Date<br/>
+            sentToOpsAt: Date
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other collections -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+
+      <!-- Drafts -->
+      <div class="flow-wrap" style="padding:0;overflow:hidden">
+        <div style="background:#eff6ff;padding:14px 18px;border-bottom:2px solid #3b82f6;display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">📝</span>
+          <div><div style="font-weight:800;color:#1d4ed8">drafts</div><div style="font-size:11px;color:#6b7280">In-progress form saves</div></div>
+        </div>
+        <div style="padding:16px">
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">sessionId</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Unique, links to localStorage</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">resumeToken</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Magic link token for resume email</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">email</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">From form data</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">step</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Last active step (1–4)</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">status</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">"draft" | "signing" | "submitted"</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">formData</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Mixed — full form snapshot</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">lastActiveAt</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Used by abandoned cron</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;background:#eff6ff;border-radius:8px;padding:10px;font-size:11px;color:#1d4ed8">
+            <strong>Lifecycle:</strong> Created on first keystroke (email entered). Deleted after successful submission. Abandoned cron alerts sales after 24h inactivity.
+          </div>
+        </div>
+      </div>
+
+      <!-- Counters -->
+      <div class="flow-wrap" style="padding:0;overflow:hidden">
+        <div style="background:#f0fdf4;padding:14px 18px;border-bottom:2px solid #16a34a;display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">🔢</span>
+          <div><div style="font-weight:800;color:#166534">counters</div><div style="font-size:11px;color:#6b7280">Auto-increment sequences</div></div>
+        </div>
+        <div style="padding:16px">
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">name</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">e.g. "applicationId"</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">value</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Number, increments atomically</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;background:#f0fdf4;border-radius:8px;padding:10px;font-size:11px;color:#166534">
+            <strong>Usage:</strong> When application is submitted, Counter.nextValue("applicationId") generates the next number → formatted as BC-2026-0001.
+          </div>
+        </div>
+      </div>
+
+      <!-- SalesConfig -->
+      <div class="flow-wrap" style="padding:0;overflow:hidden">
+        <div style="background:#f5f3ff;padding:14px 18px;border-bottom:2px solid #7c3aed;display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">🔐</span>
+          <div><div style="font-weight:800;color:#5b21b6">salesconfigs</div><div style="font-size:11px;color:#6b7280">Sales portal auth</div></div>
+        </div>
+        <div style="padding:16px">
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">key</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">"sales_password"</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">passwordHash</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">bcrypt hash</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">updatedAt</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Date</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;background:#f5f3ff;border-radius:8px;padding:10px;font-size:11px;color:#5b21b6">
+            <strong>Usage:</strong> Sales portal login hashes the SALES_PORTAL_PASSWORD env var into this collection on first use. JWT token issued on success, valid for 8h.
           </div>
         </div>
       </div>
@@ -862,7 +1085,385 @@
   </div>
 
   <!-- ══════════════════════════════════════════════ -->
-  <!-- ONBOARDING PORTAL -->
+  <!-- CUSTOMER ONBOARDING FORM -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <!-- Step 1 -->
+  <div id="ob-step1" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — Step 1: Basic Info</div>
+    <div class="screen-label">First step — email, type (individual/company), country. Progress auto-saved to localStorage + DB draft.</div>
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+
+      <!-- Progress bar -->
+      <div style="padding:24px 24px 0">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="display:flex;gap:20px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:32px;height:32px;border-radius:50%;background:#FFA500;color:#111827;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 0 0 4px rgba(255,165,0,0.18)">1</div>
+              <span style="font-size:11px;font-weight:700;color:#FFA500">Basic Info</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:32px;height:32px;border-radius:50%;background:#e5e7eb;color:#9ca3af;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">2</div>
+              <span style="font-size:11px;font-weight:600;color:#9ca3af">Your Details</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:32px;height:32px;border-radius:50%;background:#e5e7eb;color:#9ca3af;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">3</div>
+              <span style="font-size:11px;font-weight:600;color:#9ca3af">Services</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:32px;height:32px;border-radius:50%;background:#e5e7eb;color:#9ca3af;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">4</div>
+              <span style="font-size:11px;font-weight:600;color:#9ca3af">Review</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <span style="font-size:12px;color:#9ca3af">Step 1 of 4 · 0% complete</span>
+          </div>
+        </div>
+        <div style="height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden">
+          <div style="height:100%;width:0%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
+        </div>
+      </div>
+
+      <div style="padding:24px;max-width:640px;margin:0 auto">
+        <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Let's get started</h2>
+          <p style="font-size:13px;color:#9ca3af;margin-bottom:24px">Tell us a bit about yourself</p>
+
+          <div class="form-field" style="margin-bottom:16px">
+            <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Email Address *</label>
+            <input class="form-input" placeholder="your@email.com" style="font-size:14px;padding:12px 14px" />
+          </div>
+
+          <div style="margin-bottom:16px">
+            <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:10px">I am registering as *</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="border:2px solid #FFA500;border-radius:14px;padding:16px;background:#fff8e6;cursor:pointer">
+                <div style="font-size:22px;margin-bottom:6px">👤</div>
+                <div style="font-weight:700;color:#111827;font-size:14px">Individual</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:3px">Personal / freelancer</div>
+              </div>
+              <div style="border:2px solid #e5e7eb;border-radius:14px;padding:16px;cursor:pointer">
+                <div style="font-size:22px;margin-bottom:6px">🏢</div>
+                <div style="font-weight:700;color:#111827;font-size:14px">Company</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:3px">Business entity</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:24px">
+            <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Country *</label>
+            <select class="form-input" style="font-size:14px;padding:12px 14px">
+              <option>India</option><option>United States</option><option>United Kingdom</option>
+            </select>
+          </div>
+
+          <button class="save-btn" style="font-size:15px;padding:14px">Continue →</button>
+        </div>
+        <p style="text-align:center;font-size:12px;color:#9ca3af;margin-top:12px">💾 Progress saved automatically</p>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+    <div class="screen-note">Draft saved to DB after email is entered. Resume link generated — customer can continue on any device.</div>
+  </div>
+
+  <!-- Step 2 Individual -->
+  <div id="ob-step2i" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — Step 2: Individual Details</div>
+    <div class="screen-label">Shown when type = "individual". Collects personal info + ID proof upload.</div>
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+      <div style="padding:20px 24px 0">
+        <div style="height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-bottom:6px">
+          <div style="height:100%;width:33%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:#9ca3af">Step 2 of 4</span><span style="font-size:12px;color:#9ca3af">33% complete</span></div>
+      </div>
+      <div style="padding:24px;max-width:640px;margin:0 auto">
+        <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Your Details</h2>
+          <p style="font-size:13px;color:#9ca3af;margin-bottom:24px">Personal and contact information</p>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Full Legal Name *</label><input class="form-input" placeholder="As on government ID" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">National ID Number *</label><input class="form-input" placeholder="Aadhar / Passport / etc." /></div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload ID Proof *</label>
+            <div style="border:2px dashed #e5e7eb;border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:#f9fafb">
+              <div style="font-size:24px;margin-bottom:6px">📎</div>
+              <div style="font-size:13px;font-weight:600;color:#374151">Click to upload or drag & drop</div>
+              <div style="font-size:11px;color:#9ca3af;margin-top:3px">PDF, JPG, PNG up to 10MB</div>
+            </div>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Contact Number *</label><input class="form-input" placeholder="+91 98765 43210" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Official Email *</label><input class="form-input" placeholder="work@company.com" /></div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Registered Address *</label>
+            <textarea class="form-input" rows="2" placeholder="Full address..."></textarea>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Pincode</label><input class="form-input" placeholder="110001" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Mailing Address</label><input class="form-input" placeholder="If different from above" /></div>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Designation</label><input class="form-input" placeholder="e.g. Content Creator" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Social Media Handles</label><input class="form-input" placeholder="@handle" /></div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:24px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Nature of Work</label>
+            <textarea class="form-input" rows="2" placeholder="Brief description of your work or content..."></textarea>
+          </div>
+
+          <div style="display:flex;gap:12px">
+            <button style="flex:0 0 auto;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
+            <button class="save-btn">Continue →</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+  </div>
+
+  <!-- Step 2 Company -->
+  <div id="ob-step2c" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — Step 2: Company Details</div>
+    <div class="screen-label">Shown when type = "company". Collects company info, signatory, and registration docs.</div>
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+      <div style="padding:20px 24px 0">
+        <div style="height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-bottom:6px">
+          <div style="height:100%;width:33%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:#9ca3af">Step 2 of 4</span><span style="font-size:12px;color:#9ca3af">33% complete</span></div>
+      </div>
+      <div style="padding:24px;max-width:640px;margin:0 auto">
+        <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Company Details</h2>
+          <p style="font-size:13px;color:#9ca3af;margin-bottom:24px">Business and signatory information</p>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Company Name *</label><input class="form-input" placeholder="Nexgen Pvt Ltd" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Registration Number *</label><input class="form-input" placeholder="CIN / Reg No." /></div>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload Reg. Certificate *</label>
+              <div style="border:2px dashed #e5e7eb;border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:#f9fafb">
+                <div style="font-size:18px;margin-bottom:4px">📎</div><div style="font-size:12px;color:#9ca3af">Upload PDF / JPG</div>
+              </div>
+            </div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">GSTIN</label><input class="form-input" placeholder="22AAABB1234C1Z5" /></div>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Contact Number *</label><input class="form-input" placeholder="+91 98765 43210" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Official Email *</label><input class="form-input" placeholder="legal@company.com" /></div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Registered Address *</label>
+            <textarea class="form-input" rows="2"></textarea>
+          </div>
+
+          <div style="border-top:1.5px solid #f3f4f6;padding-top:16px;margin-top:4px;margin-bottom:14px">
+            <div style="font-size:12px;font-weight:700;color:#374151;margin-bottom:12px">Authorized Signatory</div>
+            <div class="form-row form-col-2" style="margin-bottom:12px">
+              <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Signatory Name *</label><input class="form-input" placeholder="Full name" /></div>
+              <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Designation *</label><input class="form-input" placeholder="CEO / Director" /></div>
+            </div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Signatory Email *</label><input class="form-input" placeholder="signatory@company.com" /></div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:24px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload Copyright Certificate (optional)</label>
+            <div style="border:2px dashed #e5e7eb;border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:#f9fafb">
+              <div style="font-size:18px;margin-bottom:4px">📎</div><div style="font-size:12px;color:#9ca3af">Optional — upload if available</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px">
+            <button style="flex:0 0 auto;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
+            <button class="save-btn">Continue →</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+  </div>
+
+  <!-- Step 3 Services -->
+  <div id="ob-step3" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — Step 3: Services</div>
+    <div class="screen-label">Customer selects which Bytescare services they need, with optional details per service.</div>
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+      <div style="padding:20px 24px 0">
+        <div style="height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-bottom:6px">
+          <div style="height:100%;width:66%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:#9ca3af">Step 3 of 4</span><span style="font-size:12px;color:#9ca3af">66% complete</span></div>
+      </div>
+      <div style="padding:24px;max-width:640px;margin:0 auto">
+        <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Select Services</h2>
+          <p style="font-size:13px;color:#9ca3af;margin-bottom:24px">Choose what you need protection for</p>
+
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+            <!-- Selected service -->
+            <div style="border:2px solid #FFA500;border-radius:14px;overflow:hidden">
+              <div style="padding:16px 18px;display:flex;align-items:center;gap:12px;background:#fff8e6;cursor:pointer">
+                <div style="width:22px;height:22px;border-radius:6px;background:#FFA500;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#111827;flex-shrink:0">✓</div>
+                <div style="flex:1">
+                  <div style="font-weight:700;color:#111827;font-size:14px">Business Intelligence</div>
+                  <div style="font-size:12px;color:#9ca3af">Market and competitor monitoring</div>
+                </div>
+              </div>
+              <div style="padding:14px 18px;background:#fff">
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#92400e;margin-bottom:6px">What do you need?</label>
+                <textarea class="form-input" rows="2" placeholder="Describe what you need..."></textarea>
+              </div>
+            </div>
+
+            <!-- Selected service 2 -->
+            <div style="border:2px solid #FFA500;border-radius:14px;overflow:hidden">
+              <div style="padding:16px 18px;display:flex;align-items:center;gap:12px;background:#fff8e6;cursor:pointer">
+                <div style="width:22px;height:22px;border-radius:6px;background:#FFA500;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#111827;flex-shrink:0">✓</div>
+                <div style="flex:1">
+                  <div style="font-weight:700;color:#111827;font-size:14px">Reputation Management</div>
+                  <div style="font-size:12px;color:#9ca3af">Online reputation monitoring & protection</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Unselected service -->
+            <div style="border:2px solid #e5e7eb;border-radius:14px;overflow:hidden">
+              <div style="padding:16px 18px;display:flex;align-items:center;gap:12px;cursor:pointer">
+                <div style="width:22px;height:22px;border-radius:6px;border:2px solid #e5e7eb;flex-shrink:0"></div>
+                <div style="flex:1">
+                  <div style="font-weight:700;color:#111827;font-size:14px">Copyright Protection</div>
+                  <div style="font-size:12px;color:#9ca3af">DMCA takedowns and copyright enforcement</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Unselected service 2 -->
+            <div style="border:2px solid #e5e7eb;border-radius:14px;overflow:hidden">
+              <div style="padding:16px 18px;display:flex;align-items:center;gap:12px;cursor:pointer">
+                <div style="width:22px;height:22px;border-radius:6px;border:2px solid #e5e7eb;flex-shrink:0"></div>
+                <div style="flex:1">
+                  <div style="font-weight:700;color:#111827;font-size:14px">Social Media Monitoring</div>
+                  <div style="font-size:12px;color:#9ca3af">Track brand mentions across platforms</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px">
+            <button style="flex:0 0 auto;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
+            <button class="save-btn">Continue →</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+    <div class="screen-note">Selected services + their descriptions are stored in applications.services[] and applications.serviceDetails{}.</div>
+  </div>
+
+  <!-- Step 4 Review -->
+  <div id="ob-step4" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — Step 4: Review &amp; Submit</div>
+    <div class="screen-label">Customer reviews all entered info before final submission.</div>
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+      <div style="padding:20px 24px 0">
+        <div style="height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-bottom:6px">
+          <div style="height:100%;width:99%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:#9ca3af">Step 4 of 4</span><span style="font-size:12px;color:#9ca3af">99% complete</span></div>
+      </div>
+      <div style="padding:24px;max-width:640px;margin:0 auto">
+        <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Review &amp; Submit</h2>
+          <p style="font-size:13px;color:#9ca3af;margin-bottom:20px">Check everything before submitting</p>
+
+          <!-- Summary sections -->
+          <div style="border:1.5px solid #f3f4f6;border-radius:14px;overflow:hidden;margin-bottom:12px">
+            <div style="background:#f9fafb;padding:10px 16px;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Basic Info</span>
+              <button style="font-size:11px;color:#FFA500;font-weight:700;background:none;border:none;cursor:pointer">Edit</button>
+            </div>
+            <div style="padding:12px 16px;font-size:13px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div><span style="color:#9ca3af">Email: </span><span style="font-weight:600">priyanka@example.com</span></div>
+              <div><span style="color:#9ca3af">Type: </span><span style="font-weight:600">Individual</span></div>
+              <div><span style="color:#9ca3af">Country: </span><span style="font-weight:600">India</span></div>
+            </div>
+          </div>
+
+          <div style="border:1.5px solid #f3f4f6;border-radius:14px;overflow:hidden;margin-bottom:12px">
+            <div style="background:#f9fafb;padding:10px 16px;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Your Details</span>
+              <button style="font-size:11px;color:#FFA500;font-weight:700;background:none;border:none;cursor:pointer">Edit</button>
+            </div>
+            <div style="padding:12px 16px;font-size:13px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div><span style="color:#9ca3af">Name: </span><span style="font-weight:600">Priyanka Choudhary</span></div>
+              <div><span style="color:#9ca3af">Contact: </span><span style="font-weight:600">+91 98765 43210</span></div>
+              <div><span style="color:#9ca3af">Official Email: </span><span style="font-weight:600">work@example.com</span></div>
+              <div><span style="color:#9ca3af">ID Proof: </span><span style="font-weight:600">aadhar.pdf ✓</span></div>
+            </div>
+          </div>
+
+          <div style="border:1.5px solid #f3f4f6;border-radius:14px;overflow:hidden;margin-bottom:20px">
+            <div style="background:#f9fafb;padding:10px 16px;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Services (2 selected)</span>
+              <button style="font-size:11px;color:#FFA500;font-weight:700;background:none;border:none;cursor:pointer">Edit</button>
+            </div>
+            <div style="padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600">Business Intelligence</span>
+              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600">Reputation Management</span>
+            </div>
+          </div>
+
+          <div style="background:#fffbeb;border:1.5px solid rgba(255,165,0,0.3);border-radius:12px;padding:14px;margin-bottom:20px;font-size:12px;color:#92400e">
+            By submitting, you agree to our Terms of Service and Privacy Policy. Our sales team will contact you within 1 business day.
+          </div>
+
+          <div style="display:flex;gap:12px">
+            <button style="flex:0 0 auto;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
+            <button class="save-btn" style="background:#111827;color:#fff;font-size:15px">Submit Application →</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+    <div class="screen-note">On submit: Application document created in MongoDB, Draft deleted, sessionId stored in localStorage, confirmation emails sent to customer + sales.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- ONBOARDING PORTAL STATUS SCREENS -->
   <!-- ══════════════════════════════════════════════ -->
 
   <!-- Under Review -->
