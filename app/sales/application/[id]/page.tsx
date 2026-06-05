@@ -16,6 +16,14 @@ interface AgreementEntry {
   signedAt?: string;
 }
 
+interface OfflineConfirmation {
+  referenceNumber?: string;
+  paymentDate?: string;
+  paymentMode?: string;
+  notes?: string;
+  confirmedAt?: string;
+}
+
 interface PaymentDetails {
   planName: string;
   currency: string;
@@ -26,6 +34,7 @@ interface PaymentDetails {
   endDate?: string;
   method: string;
   enabledAt?: string;
+  offlineConfirmation?: OfflineConfirmation;
 }
 
 interface OperationalRequirements {
@@ -547,6 +556,19 @@ function PaymentTab({
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
 
+  // Offline confirmation state
+  const [refNumber, setRefNumber] = useState(existing?.offlineConfirmation?.referenceNumber || "");
+  const [payDate, setPayDate] = useState(
+    existing?.offlineConfirmation?.paymentDate
+      ? existing.offlineConfirmation.paymentDate.slice(0, 10)
+      : new Date().toISOString().slice(0, 10)
+  );
+  const [payMode, setPayMode] = useState(existing?.offlineConfirmation?.paymentMode || "");
+  const [payNotes, setPayNotes] = useState(existing?.offlineConfirmation?.notes || "");
+  const [confirmSaving, setConfirmSaving] = useState(false);
+  const [confirmError, setConfirmError] = useState("");
+  const [confirmed, setConfirmed] = useState(!!existing?.offlineConfirmation?.confirmedAt);
+
   function calcEndDate() {
     if (!startDate) return "";
     const d = new Date(startDate);
@@ -647,6 +669,7 @@ function PaymentTab({
   );
 
   return (
+    <>
     <form onSubmit={handleSave}>
       {/* Row 1: Currency + Plan Name */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 12, marginBottom: 16 }}>
@@ -855,6 +878,135 @@ function PaymentTab({
         {saving ? "Saving..." : "Save & Notify Customer →"}
       </button>
     </form>
+
+    {/* Offline payment confirmation — shown after plan is saved with offline method */}
+    {existing?.method === "offline" && (
+      <div style={{ marginTop: 24, borderTop: "2px dashed #e5e7eb", paddingTop: 24 }}>
+        <div style={{ fontWeight: 700, fontSize: 14, color: "#374151", marginBottom: 4 }}>
+          💰 Confirm Payment Received
+        </div>
+        <div style={{ fontSize: 12, color: "#9ca3af", marginBottom: 16 }}>
+          Once the customer has paid offline, record the details here. Ops team will be notified.
+        </div>
+
+        {confirmed ? (
+          <div style={{ background: "#f0fdf4", border: "1.5px solid #bbf7d0", borderRadius: 12, padding: 16 }}>
+            <div style={{ fontWeight: 700, color: "#166534", marginBottom: 8 }}>✓ Payment Confirmed</div>
+            <table style={{ fontSize: 13, borderCollapse: "collapse", width: "100%" }}>
+              {existing.offlineConfirmation?.referenceNumber && (
+                <tr><td style={{ color: "#9ca3af", paddingBottom: 4, width: 140 }}>Reference No.</td><td style={{ color: "#111827", fontWeight: 600 }}>{existing.offlineConfirmation.referenceNumber}</td></tr>
+              )}
+              {existing.offlineConfirmation?.paymentMode && (
+                <tr><td style={{ color: "#9ca3af", paddingBottom: 4 }}>Mode</td><td style={{ color: "#111827" }}>{existing.offlineConfirmation.paymentMode}</td></tr>
+              )}
+              {existing.offlineConfirmation?.paymentDate && (
+                <tr><td style={{ color: "#9ca3af", paddingBottom: 4 }}>Date</td><td style={{ color: "#111827" }}>{new Date(existing.offlineConfirmation.paymentDate).toLocaleDateString()}</td></tr>
+              )}
+              {existing.offlineConfirmation?.notes && (
+                <tr><td style={{ color: "#9ca3af", paddingBottom: 4 }}>Notes</td><td style={{ color: "#111827" }}>{existing.offlineConfirmation.notes}</td></tr>
+              )}
+            </table>
+          </div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#374151", marginBottom: 6 }}>
+                  Reference / Transaction No.
+                </label>
+                <input
+                  type="text"
+                  value={refNumber}
+                  onChange={(e) => setRefNumber(e.target.value)}
+                  placeholder="e.g. CHQ-2024-001 or UTR number"
+                  style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: "1.5px solid #e5e7eb", fontSize: 13, color: "#111827", background: "#f9fafb", boxSizing: "border-box" }}
+                />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#374151", marginBottom: 6 }}>
+                  Payment Date
+                </label>
+                <input
+                  type="date"
+                  value={payDate}
+                  onChange={(e) => setPayDate(e.target.value)}
+                  style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: "1.5px solid #e5e7eb", fontSize: 13, color: "#111827", background: "#f9fafb", boxSizing: "border-box" }}
+                />
+              </div>
+            </div>
+            <div>
+              <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#374151", marginBottom: 6 }}>
+                Payment Mode
+              </label>
+              <select
+                value={payMode}
+                onChange={(e) => setPayMode(e.target.value)}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: "1.5px solid #e5e7eb", fontSize: 13, color: "#111827", background: "#f9fafb" }}
+              >
+                <option value="">Select mode</option>
+                <option value="Bank Transfer / NEFT">Bank Transfer / NEFT</option>
+                <option value="UPI">UPI</option>
+                <option value="Cheque">Cheque</option>
+                <option value="Cash">Cash</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#374151", marginBottom: 6 }}>
+                Notes (optional)
+              </label>
+              <textarea
+                value={payNotes}
+                onChange={(e) => setPayNotes(e.target.value)}
+                placeholder="Any additional notes..."
+                rows={2}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: "1.5px solid #e5e7eb", fontSize: 13, color: "#111827", background: "#f9fafb", boxSizing: "border-box", resize: "vertical" }}
+              />
+            </div>
+            {confirmError && <p style={{ color: "#dc2626", fontSize: 12 }}>{confirmError}</p>}
+            <button
+              type="button"
+              disabled={confirmSaving}
+              onClick={async () => {
+                setConfirmSaving(true);
+                setConfirmError("");
+                try {
+                  const res = await fetch(`/api/sales/applications/${app._id}/confirm-offline-payment`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ referenceNumber: refNumber, paymentDate: payDate, paymentMode: payMode, notes: payNotes }),
+                  });
+                  if (!res.ok) {
+                    const d = await res.json();
+                    setConfirmError(d.error || "Failed to confirm payment");
+                  } else {
+                    setConfirmed(true);
+                    onSent();
+                  }
+                } catch {
+                  setConfirmError("Network error. Please try again.");
+                } finally {
+                  setConfirmSaving(false);
+                }
+              }}
+              style={{
+                padding: "12px",
+                background: confirmSaving ? "#e5e7eb" : "#0f766e",
+                color: confirmSaving ? "#9ca3af" : "#fff",
+                fontWeight: 700,
+                fontSize: 14,
+                border: "none",
+                borderRadius: 10,
+                cursor: confirmSaving ? "not-allowed" : "pointer",
+              }}
+            >
+              {confirmSaving ? "Confirming..." : "✓ Mark Payment Received & Notify Ops"}
+            </button>
+          </div>
+        )}
+      </div>
+    )}
+    </>
   );
 }
 
