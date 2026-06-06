@@ -60,10 +60,11 @@ export async function GET(request) {
     // Only include paymentDetails when status is payment_pending
     if (application.status === 'payment_pending' && application.paymentDetails) {
       response.paymentDetails = {
-        planName: application.paymentDetails.planName,
+        plan: application.paymentDetails.planName,
         amount: application.paymentDetails.amount,
         currency: application.paymentDetails.currency,
         frequency: application.paymentDetails.frequency,
+        duration: application.paymentDetails.serviceDuration,
         razorpayKeyId: cfg.razorpayKeyId,
       };
     }

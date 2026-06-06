@@ -13,12 +13,9 @@ export default function OnboardingError({
     console.error("Onboarding portal error:", error);
   }, [error]);
 
-  const clearAndReset = () => {
+  const clearAndReset = async () => {
     try {
-      localStorage.removeItem("bytescare_submitted");
-      localStorage.removeItem("bytescare_session_id");
-      localStorage.removeItem("bytescare_form_data");
-      localStorage.removeItem("bytescare_step");
+      await fetch("/api/auth/session", { method: "DELETE" });
     } catch {}
     reset();
   };
