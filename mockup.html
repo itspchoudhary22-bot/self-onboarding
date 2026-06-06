@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bytescare Portal Mockups</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f1f5f9; color: #111827; }
+
+  /* Nav */
+  .toc { position: fixed; top: 0; left: 0; width: 220px; height: 100vh; background: #111827; padding: 20px 16px; overflow-y: auto; z-index: 100; }
+  .toc h2 { color: #FFA500; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
+  .toc a { display: block; color: #9ca3af; font-size: 12px; font-weight: 500; text-decoration: none; padding: 6px 8px; border-radius: 6px; margin-bottom: 2px; line-height: 1.4; }
+  .toc a:hover { color: #fff; background: #1f2937; }
+  .toc .section-label { color: #FFA500; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin: 14px 0 6px; padding-left: 8px; }
+
+  /* Main */
+  .main { margin-left: 220px; padding: 32px; }
+  h1.page-title { font-size: 28px; font-weight: 900; color: #111827; margin-bottom: 6px; }
+  .page-subtitle { font-size: 14px; color: #6b7280; margin-bottom: 40px; }
+
+  /* Screen wrapper */
+  .screen-group { margin-bottom: 56px; }
+  .screen-group-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #FFA500; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #FFA500; }
+  .screen { background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 28px; }
+  .screen-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; margin-bottom: 10px; }
+  .screen-note { font-size: 12px; color: #9ca3af; margin-top: 8px; font-style: italic; }
+
+  /* Portal chrome */
+  .portal-header { height: 60px; background: #fff; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; }
+  .logo { font-size: 18px; font-weight: 900; }
+  .logo span:first-child { color: #111827; }
+  .logo span:last-child { color: #FFA500; }
+  .sales-badge { background: #111827; color: #FFA500; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; margin-left: 8px; }
+  .header-right { display: flex; align-items: center; gap: 12px; font-size: 13px; color: #6b7280; }
+  .btn-signout { font-size: 12px; color: #6b7280; padding: 6px 12px; border: 1.5px solid #e5e7eb; border-radius: 8px; cursor: pointer; background: none; font-weight: 600; }
+
+  /* Status badge */
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+  .badge-review { background: #fff8e6; color: #92400e; }
+  .badge-agreement { background: #eff6ff; color: #1d4ed8; }
+  .badge-payment { background: #fff8e6; color: #92400e; }
+  .badge-ops { background: #f0fdfa; color: #0f766e; }
+  .badge-active { background: #f0fdf4; color: #166534; }
+
+  /* Onboarding portal body */
+  .ob-body { background: #f9fafb; padding: 32px 16px; }
+  .ob-card { background: #fff; border-radius: 24px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); max-width: 620px; margin: 0 auto; }
+  .ob-info-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; max-width: 620px; margin: 0 auto 20px; }
+  .ob-info-chip { background: #fff; border: 1.5px solid #f3f4f6; border-radius: 12px; padding: 12px 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .ob-info-chip .label { font-size: 11px; color: #9ca3af; margin-bottom: 4px; }
+  .ob-info-chip .value { font-size: 13px; font-weight: 700; color: #111827; }
+  .ob-greeting { max-width: 620px; margin: 0 auto 16px; }
+  .ob-greeting h1 { font-size: 22px; font-weight: 900; color: #111827; }
+  .ob-greeting p { font-size: 13px; color: #9ca3af; margin-top: 4px; }
+
+  /* Banner styles */
+  .banner { border-radius: 14px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+  .banner-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+  .banner-orange { background: linear-gradient(135deg,#fff8e6,#fffdf5); border: 1.5px solid #fed7aa; }
+  .banner-blue { background: linear-gradient(135deg,#eff6ff,#f8faff); border: 1.5px solid #bfdbfe; }
+  .banner-green { background: linear-gradient(135deg,#f0fdf4,#f8fff9); border: 1.5px solid #86efac; }
+  .banner-teal { background: linear-gradient(135deg,#f0fdfa,#f8fffd); border: 1.5px solid #99f6e4; }
+  .banner-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .banner-desc { font-size: 13px; color: #4b5563; line-height: 1.5; }
+
+  /* Timeline */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .timeline-row { display: flex; align-items: flex-start; gap: 10px; }
+  .tl-dot-col { display: flex; flex-direction: column; align-items: center; width: 28px; flex-shrink: 0; }
+  .tl-dot { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .tl-dot-done { background: #FFA500; color: #111827; }
+  .tl-dot-active { background: #FFA500; color: #111827; box-shadow: 0 0 0 5px rgba(255,165,0,0.18); }
+  .tl-dot-pending { background: #e5e7eb; color: #9ca3af; }
+  .tl-line { width: 2px; flex: 1; min-height: 20px; background: #e5e7eb; border-radius: 2px; margin: 2px 0; }
+  .tl-line-done { background: #FFA500; }
+  .tl-label { padding-bottom: 18px; padding-top: 2px; }
+  .tl-label-text { font-size: 13px; font-weight: 600; }
+  .tl-label-sub { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+
+  /* Pill badge */
+  .pill-done { display: inline-flex; align-items: center; gap: 6px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #166534; margin-bottom: 16px; }
+
+  /* Payment chips */
+  .chip-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .chip { background: #f9fafb; border: 1px solid #f3f4f6; border-radius: 12px; padding: 12px 16px; }
+  .chip .chip-label { font-size: 11px; color: #9ca3af; margin-bottom: 4px; }
+  .chip .chip-value { font-size: 14px; font-weight: 700; color: #111827; }
+
+  /* Pay button */
+  .pay-btn { width: 100%; padding: 16px; background: #FFA500; color: #111827; font-weight: 800; font-size: 15px; border: none; border-radius: 16px; cursor: pointer; box-shadow: 0 4px 14px rgba(255,165,0,0.3); }
+  .secure-note { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 8px; }
+
+  /* Agreement card */
+  .agreement-card { border: 1.5px solid #e5e7eb; border-radius: 14px; overflow: hidden; margin-bottom: 12px; }
+  .agreement-header { background: #f9fafb; padding: 12px 16px; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: space-between; }
+  .agreement-body { background: #f3f4f6; height: 140px; display: flex; align-items: center; justify-content: center; color: #9ca3af; font-size: 13px; }
+  .sign-signed { border-color: #bbf7d0; }
+  .sign-signed .agreement-header { background: #f0fdf4; }
+
+  /* Sales dashboard */
+  .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; padding: 20px 24px; background: #f9fafb; border-bottom: 1px solid #f3f4f6; }
+  .stat-card { background: #fff; border: 1.5px solid #f3f4f6; border-radius: 12px; padding: 14px 16px; }
+  .stat-num { font-size: 26px; font-weight: 900; color: #111827; }
+  .stat-label { font-size: 11px; color: #9ca3af; font-weight: 600; margin-top: 2px; }
+
+  .filter-tabs { display: flex; gap: 6px; padding: 14px 24px; border-bottom: 1px solid #f3f4f6; flex-wrap: wrap; }
+  .ftab { font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; border: 1.5px solid #e5e7eb; background: #fff; color: #6b7280; cursor: pointer; }
+  .ftab.active { background: #FFA500; color: #111827; border-color: #FFA500; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 10px 16px; color: #9ca3af; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid #f3f4f6; background: #fafafa; }
+  td { padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: #374151; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  .review-link { font-size: 12px; font-weight: 700; color: #FFA500; text-decoration: none; }
+  .app-id { font-family: monospace; font-weight: 700; color: #111827; font-size: 12px; }
+  .customer-name { font-weight: 600; color: #111827; }
+  .customer-email { font-size: 11px; color: #9ca3af; }
+
+  /* Sales app detail */
+  .app-detail-layout { display: grid; grid-template-columns: 320px 1fr; gap: 0; min-height: 500px; }
+  .app-sidebar { border-right: 1px solid #f3f4f6; padding: 20px; background: #fafafa; }
+  .app-main { padding: 24px; }
+
+  .customer-card { background: #fff; border: 1.5px solid #f3f4f6; border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+  .customer-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg,#FFA500,#f59e0b); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #111827; margin-bottom: 10px; }
+  .customer-name-big { font-size: 15px; font-weight: 800; color: #111827; }
+  .customer-meta { font-size: 12px; color: #9ca3af; margin-top: 3px; }
+  .customer-detail-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #f9fafb; font-size: 12px; }
+  .customer-detail-row:last-child { border-bottom: none; }
+  .detail-key { color: #9ca3af; font-weight: 500; }
+  .detail-val { color: #111827; font-weight: 600; text-align: right; max-width: 160px; word-break: break-all; }
+
+  /* Steps */
+  .steps-row { display: flex; gap: 8px; margin-bottom: 20px; }
+  .step-pill { flex: 1; text-align: center; padding: 10px 6px; border-radius: 10px; font-size: 12px; font-weight: 700; border: 2px solid; }
+  .step-done { border-color: #FFA500; background: #fff8e6; color: #92400e; }
+  .step-active { border-color: #FFA500; background: #FFA500; color: #111827; }
+  .step-todo { border-color: #e5e7eb; background: #fff; color: #9ca3af; }
+
+  /* Tab content */
+  .tab-section { margin-bottom: 18px; }
+  .tab-section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; margin-bottom: 8px; }
+  .form-row { display: grid; gap: 12px; margin-bottom: 14px; }
+  .form-col-2 { grid-template-columns: 1fr 1fr; }
+  .form-col-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .form-field label { display: block; font-size: 11px; font-weight: 600; color: #374151; margin-bottom: 5px; }
+  .form-input { width: 100%; padding: 9px 12px; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: 13px; color: #111827; background: #f9fafb; }
+  .pill-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill-btn { padding: 6px 14px; border-radius: 999px; border: 1.5px solid #e5e7eb; background: #fff; color: #6b7280; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .pill-btn.sel { border-color: #FFA500; background: #fff7ed; color: #FFA500; font-weight: 700; }
+
+  .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px; }
+  .method-card { border: 2px solid #e5e7eb; border-radius: 12px; padding: 14px; cursor: pointer; }
+  .method-card.sel { border-color: #FFA500; background: #fff7ed; }
+  .method-icon { font-size: 22px; margin-bottom: 6px; }
+  .method-title { font-size: 13px; font-weight: 700; color: #111827; margin-bottom: 3px; }
+  .method-desc { font-size: 11px; color: #9ca3af; }
+
+  .save-btn { width: 100%; padding: 12px; background: #FFA500; color: #111827; font-weight: 800; font-size: 14px; border: none; border-radius: 10px; cursor: pointer; margin-top: 4px; }
+  .confirm-btn { width: 100%; padding: 12px; background: #0f766e; color: #fff; font-weight: 700; font-size: 14px; border: none; border-radius: 10px; cursor: pointer; }
+
+  .offline-section { border-top: 2px dashed #e5e7eb; padding-top: 20px; margin-top: 20px; }
+  .offline-title { font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 4px; }
+  .offline-sub { font-size: 12px; color: #9ca3af; margin-bottom: 14px; }
+
+  .confirmed-box { background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px; padding: 16px; }
+  .confirmed-title { font-weight: 700; color: #166534; margin-bottom: 10px; font-size: 13px; }
+  .confirmed-row { display: flex; gap: 8px; font-size: 12px; padding: 3px 0; }
+  .confirmed-key { color: #9ca3af; width: 130px; flex-shrink: 0; }
+  .confirmed-val { color: #111827; font-weight: 600; }
+
+  /* Agreement types */
+  .agreement-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .agr-type-card { border: 2px solid #e5e7eb; border-radius: 10px; padding: 12px; cursor: pointer; }
+  .agr-type-card.sel { border-color: #3b82f6; background: #eff6ff; }
+  .agr-type-icon { font-size: 18px; margin-bottom: 4px; }
+  .agr-type-title { font-size: 12px; font-weight: 700; color: #111827; }
+  .agr-type-desc { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+
+  /* Bottom action bar */
+  .bottom-bar { padding: 14px 24px; background: #fff; border-top: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: space-between; }
+  .send-ops-btn { padding: 12px 24px; background: #111827; color: #fff; font-weight: 700; font-size: 14px; border: none; border-radius: 10px; cursor: pointer; }
+  .send-ops-btn:disabled { background: #e5e7eb; color: #9ca3af; }
+  .all-done-text { font-size: 13px; color: #9ca3af; }
+
+  /* Ops tab */
+  .platform-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 14px; }
+  .platform-chip { border: 1.5px solid #e5e7eb; border-radius: 8px; padding: 8px 10px; text-align: center; font-size: 11px; font-weight: 600; color: #6b7280; cursor: pointer; }
+  .platform-chip.sel { border-color: #FFA500; background: #fff8e6; color: #92400e; }
+
+  .footer-bar { height: 4px; background: linear-gradient(90deg,#FFA500,#7C3AED); }
+
+  /* Flow diagram */
+  .flow-wrap { background: #fff; border-radius: 16px; padding: 28px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); margin-bottom: 28px; }
+  .flow-title { font-size: 14px; font-weight: 800; color: #374151; margin-bottom: 20px; }
+  .flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+  .flow-node { background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 12px; padding: 10px 14px; font-size: 12px; font-weight: 700; color: #374151; text-align: center; min-width: 110px; }
+  .flow-node.orange { background: #fff8e6; border-color: #FFA500; color: #92400e; }
+  .flow-node.blue { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; }
+  .flow-node.teal { background: #f0fdfa; border-color: #0d9488; color: #0f766e; }
+  .flow-node.green { background: #f0fdf4; border-color: #16a34a; color: #166534; }
+  .flow-arrow { font-size: 18px; color: #d1d5db; margin: 0 6px; }
+  .flow-label { font-size: 10px; color: #9ca3af; margin-top: 4px; font-weight: 500; }
+  .flow-branch { display: flex; flex-direction: column; gap: 8px; }
+  .flow-branch-label { font-size: 10px; color: #9ca3af; font-weight: 600; text-align: center; }
+
+  @media (max-width: 900px) {
+    .toc { display: none; }
+    .main { margin-left: 0; padding: 16px; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .app-detail-layout { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOC -->
+<nav class="toc">
+  <h2>Bytescare Mockups</h2>
+  <div class="section-label">Overview</div>
+  <a href="#flow">Complete Flow Diagram</a>
+  <div class="section-label">DB Schema</div>
+  <a href="#db-schema">All Collections</a>
+  <div class="section-label">Sales Portal</div>
+  <a href="#sales-dashboard">Dashboard</a>
+  <a href="#sales-agreement">Agreement Tab</a>
+  <a href="#sales-payment-portal">Payment Tab – Online</a>
+  <a href="#sales-payment-offline">Payment Tab – Offline</a>
+  <a href="#sales-ops">Ops Requirements Tab</a>
+  <div class="section-label">Customer Onboarding</div>
+  <a href="#ob-auth-email">Auth – Email Entry</a>
+  <a href="#ob-auth-otp">Auth – OTP Verify</a>
+  <a href="#ob-step1">Step 1 – Basic Info</a>
+  <a href="#ob-step2i">Step 2 – Individual</a>
+  <a href="#ob-step2c">Step 2 – Company</a>
+  <a href="#ob-step3">Step 3 – Services</a>
+  <a href="#ob-step4">Step 4 – Review</a>
+  <a href="#ob-pending">Under Review</a>
+  <a href="#ob-agreement">Sign Agreement</a>
+  <a href="#ob-payment">Complete Payment</a>
+  <a href="#ob-ops">Setup in Progress</a>
+  <a href="#ob-active">Account Active</a>
+  <div class="section-label">Email Notifications</div>
+  <a href="#emails">Trigger Summary</a>
+</nav>
+
+<!-- Main -->
+<div class="main">
+  <h1 class="page-title">Bytescare Portal Mockups</h1>
+  <p class="page-subtitle">Visual reference for both portals — current working state as of June 2026</p>
+
+  <!-- ── FLOW ── -->
+  <div id="flow" class="screen-group">
+    <div class="screen-group-title">Complete End-to-End Flow</div>
+
+    <div class="flow-wrap">
+      <div class="flow-title">Full Onboarding Pipeline</div>
+      <div style="overflow-x:auto">
+        <div style="display:flex;align-items:flex-start;gap:0;min-width:900px">
+
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div class="flow-node orange">Customer Submits<br/>Application</div>
+            <div class="flow-label">Onboarding Portal</div>
+          </div>
+          <div class="flow-arrow" style="margin-top:18px">→</div>
+
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div class="flow-node">Sales Reviews<br/>in Portal</div>
+            <div class="flow-label">pending_review</div>
+          </div>
+          <div class="flow-arrow" style="margin-top:18px">→</div>
+
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div class="flow-node blue">Sales Fills<br/>All 3 Tabs</div>
+            <div class="flow-label">Agreement + Payment + Ops</div>
+          </div>
+          <div class="flow-arrow" style="margin-top:18px">→</div>
+
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div class="flow-node">Customer Signs<br/>Agreement</div>
+            <div class="flow-label">agreement_pending</div>
+          </div>
+          <div class="flow-arrow" style="margin-top:18px">→</div>
+
+          <!-- Branch -->
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
+            <div style="display:flex;align-items:center;gap:6px">
+              <div style="font-size:10px;color:#9ca3af;width:60px;text-align:right">Online<br/>payment</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node orange" style="font-size:11px">Customer Pays<br/>via Razorpay</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node teal" style="font-size:11px">Ops Setup</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <div style="font-size:10px;color:#9ca3af;width:60px;text-align:right">Offline<br/>payment</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node" style="font-size:11px">Sales Confirms<br/>Receipt</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node teal" style="font-size:11px">Ops Setup</div>
+            </div>
+          </div>
+          <div class="flow-arrow" style="margin-top:18px">→</div>
+
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div class="flow-node green">Account<br/>Activated</div>
+            <div class="flow-label">Ops marks active</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="background:#f9fafb;border-radius:10px;padding:14px">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin-bottom:10px">Email Notifications Sent Automatically</div>
+          <div style="font-size:12px;color:#374151;line-height:2">
+            📧 Customer submits → <strong>Sales</strong> notified<br/>
+            📧 Sales sends agreement → <strong>Customer</strong> notified<br/>
+            📧 Customer signs → <strong>Sales</strong> notified<br/>
+            📧 All signed (online) → <strong>Customer</strong> gets payment link<br/>
+            📧 Customer pays → <strong>Sales + Ops</strong> notified<br/>
+            📧 Sales confirms offline payment → <strong>Ops</strong> notified
+          </div>
+        </div>
+        <div style="background:#f9fafb;border-radius:10px;padding:14px">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin-bottom:10px">Agreement Types</div>
+          <div style="font-size:12px;color:#374151;line-height:2">
+            📄 <strong>Template</strong> — PandaDoc template auto-generated, customer signs in portal<br/>
+            📁 <strong>Unsigned</strong> — Sales uploads doc, customer signs via PandaDoc<br/>
+            ✅ <strong>Pre-signed</strong> — Sales uploads already-signed doc, skips customer signing
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- DB SCHEMA -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div id="db-schema" class="screen-group">
+    <div class="screen-group-title">MongoDB Schema — All Collections</div>
+
+    <div class="flow-wrap">
+      <div class="flow-title">Collection Overview</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px">
+        <div style="background:#fff8e6;border:2px solid #FFA500;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:6px">📋</div>
+          <div style="font-weight:800;color:#92400e">applications</div>
+          <div style="font-size:11px;color:#9ca3af;margin-top:4px">Main entity — one per customer</div>
+        </div>
+        <div style="background:#eff6ff;border:2px solid #3b82f6;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:6px">📝</div>
+          <div style="font-weight:800;color:#1d4ed8">drafts</div>
+          <div style="font-size:11px;color:#9ca3af;margin-top:4px">In-progress forms (pre-submit)</div>
+        </div>
+        <div style="background:#f0fdf4;border:2px solid #16a34a;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:6px">🔢</div>
+          <div style="font-weight:800;color:#166534">counters</div>
+          <div style="font-size:11px;color:#9ca3af;margin-top:4px">Auto-increment for App IDs</div>
+        </div>
+        <div style="background:#f5f3ff;border:2px solid #7c3aed;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:6px">🔐</div>
+          <div style="font-weight:800;color:#5b21b6">salesconfigs</div>
+          <div style="font-size:11px;color:#9ca3af;margin-top:4px">Sales portal password hash</div>
+        </div>
+        <div style="background:#fdf2f8;border:2px solid #db2777;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:6px">🍪</div>
+          <div style="font-weight:800;color:#9d174d">customersessions</div>
+          <div style="font-size:11px;color:#9ca3af;margin-top:4px">OTP + session cookies for customers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Applications Collection -->
+    <div class="flow-wrap" style="padding:0;overflow:hidden">
+      <div style="background:#fff8e6;padding:16px 20px;border-bottom:2px solid #FFA500;display:flex;align-items:center;gap:10px">
+        <span style="font-size:18px">📋</span>
+        <div>
+          <div style="font-weight:800;color:#92400e;font-size:15px">applications</div>
+          <div style="font-size:12px;color:#b45309">One document per customer. Created on form submission, enriched by sales team.</div>
+        </div>
+      </div>
+      <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:0">
+
+        <!-- Identity & Status -->
+        <div style="padding-right:20px;border-right:1px solid #f3f4f6">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin-bottom:10px">Identity &amp; Status</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <thead><tr><th style="text-align:left;padding:5px 8px;background:#f9fafb;color:#6b7280;font-size:10px;border:1px solid #f3f4f6">Field</th><th style="text-align:left;padding:5px 8px;background:#f9fafb;color:#6b7280;font-size:10px;border:1px solid #f3f4f6">Type</th><th style="text-align:left;padding:5px 8px;background:#f9fafb;color:#6b7280;font-size:10px;border:1px solid #f3f4f6">Notes</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">applicationId</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">BC-YYYY-XXXX, unique</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">email</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Required, unique, lowercase</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">type</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">"individual" | "company"</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">country</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr style="background:#fff8e6"><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#92400e;font-weight:700">status</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">pending_review → agreement_pending → payment_pending → ops_setup → active</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">sessionId</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Links to Draft doc</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">salesNotes</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">String</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Internal sales notes</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#7c3aed">createdAt / updatedAt</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#374151">Date</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Auto-managed</td></tr>
+            </tbody>
+          </table>
+
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin:16px 0 10px">Individual Fields</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">individualName</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Full legal name</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">nationalIdNumber</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Aadhar / Passport / etc.</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">idProofName / idProofBase64</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Uploaded ID document</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">contactNumber</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">registeredAddress / pincode</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">mailingAddress</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">officialEmail</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Work/official email</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">designation / workDescription</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">socialMediaHandles</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+            </tbody>
+          </table>
+
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin:16px 0 10px">Services</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">services</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">[String] — list of selected services</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">serviceDetails</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Mixed — { serviceName: "description" }</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Company + Sales-filled fields -->
+        <div style="padding-left:20px">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin-bottom:10px">Company Fields</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyName</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Legal company name</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyRegNumber</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Registration number</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">regCertName / regCertBase64</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Registration certificate upload</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">gstin</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">GST number</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyContact / companyOfficialEmail</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyRegisteredAddress / companyPincode</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyMailingAddress</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companyDescription</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Nature of business</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">signatoryName / signatoryDesignation / signatoryEmail</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Authorized signatory</td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">companySocialMedia</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af"></td></tr>
+              <tr><td style="padding:5px 8px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">copyrightCertName / copyrightCertBase64</td><td style="padding:5px 8px;border:1px solid #f3f4f6;color:#9ca3af">Optional copyright doc</td></tr>
+            </tbody>
+          </table>
+
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin:16px 0 10px">Agreements[] — filled by Sales (Mixed array)</div>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:12px;font-size:12px;font-family:monospace;line-height:2;color:#374151">
+            agreementType: "template" | "unsigned" | "signed"<br/>
+            label: String<br/>
+            pandadocDocumentId: String<br/>
+            pandadocSigningUrl: String<br/>
+            uploadedFileName: String<br/>
+            fileBase64: String<br/>
+            signed: Boolean<br/>
+            signedAt: Date<br/>
+            sentToCustomerAt: Date
+          </div>
+
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin:16px 0 10px">paymentDetails — filled by Sales (Mixed)</div>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:12px;font-size:12px;font-family:monospace;line-height:2;color:#374151">
+            planName: String<br/>
+            currency: String (INR / USD / GBP / EUR)<br/>
+            amount: Number<br/>
+            frequency: "monthly" | "quarterly" | "biannually" | "annually"<br/>
+            serviceDuration: "3months" | "6months" | "1year" | "custom"<br/>
+            startDate / endDate: Date<br/>
+            method: "portal" | "offline"<br/>
+            enabledAt: Date<br/>
+            razorpayOrderId: String<br/>
+            razorpayPaymentId: String<br/>
+            paidAt: Date<br/>
+            <span style="color:#0f766e">offlineConfirmation: {</span><br/>
+            &nbsp;&nbsp;referenceNumber, paymentDate,<br/>
+            &nbsp;&nbsp;paymentMode, notes, confirmedAt<br/>
+            <span style="color:#0f766e">}</span>
+          </div>
+
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin:16px 0 10px">operationalRequirements — filled by Sales (Mixed)</div>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:12px;font-size:12px;font-family:monospace;line-height:2;color:#374151">
+            websites, youtubeChannels, socialHandles, brandNames<br/>
+            platforms: [String]<br/>
+            priority: "standard" | "high" | "critical"<br/>
+            instructions: String<br/>
+            slaStartDate: Date<br/>
+            sentToOpsAt: Date
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other collections -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+
+      <!-- Drafts -->
+      <div class="flow-wrap" style="padding:0;overflow:hidden">
+        <div style="background:#eff6ff;padding:14px 18px;border-bottom:2px solid #3b82f6;display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">📝</span>
+          <div><div style="font-weight:800;color:#1d4ed8">drafts</div><div style="font-size:11px;color:#6b7280">In-progress form saves</div></div>
+        </div>
+        <div style="padding:16px">
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">sessionId</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Unique, links to localStorage</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">resumeToken</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Magic link token for resume email</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">email</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">From form data</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">step</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Last active step (1–4)</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">status</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">"draft" | "signing" | "submitted"</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">formData</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Mixed — full form snapshot</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">lastActiveAt</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Used by abandoned cron</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;background:#eff6ff;border-radius:8px;padding:10px;font-size:11px;color:#1d4ed8">
+            <strong>Lifecycle:</strong> Created on first keystroke (email entered). Deleted after successful submission. Abandoned cron alerts sales after 24h inactivity.
+          </div>
+        </div>
+      </div>
+
+      <!-- Counters -->
+      <div class="flow-wrap" style="padding:0;overflow:hidden">
+        <div style="background:#f0fdf4;padding:14px 18px;border-bottom:2px solid #16a34a;display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">🔢</span>
+          <div><div style="font-weight:800;color:#166534">counters</div><div style="font-size:11px;color:#6b7280">Auto-increment sequences</div></div>
+        </div>
+        <div style="padding:16px">
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">name</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">e.g. "applicationId"</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">value</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Number, increments atomically</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;background:#f0fdf4;border-radius:8px;padding:10px;font-size:11px;color:#166534">
+            <strong>Usage:</strong> When application is submitted, Counter.nextValue("applicationId") generates the next number → formatted as BC-2026-0001.
+          </div>
+        </div>
+      </div>
+
+      <!-- SalesConfig -->
+      <div class="flow-wrap" style="padding:0;overflow:hidden">
+        <div style="background:#f5f3ff;padding:14px 18px;border-bottom:2px solid #7c3aed;display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">🔐</span>
+          <div><div style="font-weight:800;color:#5b21b6">salesconfigs</div><div style="font-size:11px;color:#6b7280">Sales portal auth</div></div>
+        </div>
+        <div style="padding:16px">
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">key</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">"sales_password"</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">passwordHash</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">bcrypt hash</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">updatedAt</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Date</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;background:#f5f3ff;border-radius:8px;padding:10px;font-size:11px;color:#5b21b6">
+            <strong>Usage:</strong> Sales portal login hashes the SALES_PORTAL_PASSWORD env var into this collection on first use. JWT token issued on success, valid for 8h.
+          </div>
+        </div>
+      </div>
+
+      <!-- CustomerSession -->
+      <div class="flow-wrap" style="padding:0;overflow:hidden">
+        <div style="background:#fdf2f8;padding:14px 18px;border-bottom:2px solid #db2777;display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">🍪</span>
+          <div><div style="font-weight:800;color:#9d174d">customersessions</div><div style="font-size:11px;color:#6b7280">Customer OTP + session tokens</div></div>
+        </div>
+        <div style="padding:16px">
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">email</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">String – indexed, one doc per email</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">otpHash</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">HMAC-SHA256(otp, email) – null after use</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">otpExpiresAt</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Date – 10 min from send</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">sessionToken</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">UUID – stored in httpOnly cookie</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">sessionExpiresAt</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Date – 30 days from verify</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">createdAt</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Date – TTL index: auto-delete after 32 days</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;background:#fdf2f8;border-radius:8px;padding:10px;font-size:11px;color:#9d174d">
+            <strong>Cookie:</strong> bytescare_session — httpOnly, secure (prod), sameSite=lax. On each page load, <code>/api/auth/session</code> validates the token and returns the customer's draft or application state.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SALES PORTAL -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <!-- Dashboard -->
+  <div id="sales-dashboard" class="screen-group">
+    <div class="screen-group-title">Sales Portal — Dashboard</div>
+    <div class="screen-label">All applications at a glance with filters and quick actions</div>
+
+    <div class="screen">
+      <div class="portal-header">
+        <div style="display:flex;align-items:center;gap:4px">
+          <div class="logo"><span>BYTES</span><span>CARE</span></div>
+          <span class="sales-badge">Sales Portal</span>
+        </div>
+        <button class="btn-signout">Sign Out</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num">12</div>
+          <div class="stat-label">Total Applications</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:#92400e">4</div>
+          <div class="stat-label">Pending Review</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:#1d4ed8">3</div>
+          <div class="stat-label">Agreement / Payment</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:#166534">5</div>
+          <div class="stat-label">Ops Setup / Active</div>
+        </div>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="filter-tabs">
+        <div class="ftab active">All (12)</div>
+        <div class="ftab">Pending Review (4)</div>
+        <div class="ftab">Agreement Pending (2)</div>
+        <div class="ftab">Payment Pending (1)</div>
+        <div class="ftab">Ops Setup (3)</div>
+        <div class="ftab">Active (2)</div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>App ID</th>
+              <th>Customer</th>
+              <th>Type</th>
+              <th>Services</th>
+              <th>Submitted</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="app-id">#BC-2026-0001</span></td>
+              <td><div class="customer-name">Priyanka Choudhary</div><div class="customer-email">priyanka@example.com</div></td>
+              <td>Individual</td>
+              <td>2 services</td>
+              <td>4 Jun 2026</td>
+              <td><span class="badge badge-payment">Payment Required</span></td>
+              <td><a class="review-link" href="#">Review →</a></td>
+            </tr>
+            <tr>
+              <td><span class="app-id">#BC-2026-0002</span></td>
+              <td><div class="customer-name">Nexgen Pvt Ltd</div><div class="customer-email">legal@nexgen.com</div></td>
+              <td>Company</td>
+              <td>3 services</td>
+              <td>3 Jun 2026</td>
+              <td><span class="badge badge-agreement">Action Required</span></td>
+              <td><a class="review-link" href="#">Review →</a></td>
+            </tr>
+            <tr>
+              <td><span class="app-id">#BC-2026-0003</span></td>
+              <td><div class="customer-name">Rahul Sharma</div><div class="customer-email">rahul@gmail.com</div></td>
+              <td>Individual</td>
+              <td>1 service</td>
+              <td>2 Jun 2026</td>
+              <td><span class="badge badge-review">Under Review</span></td>
+              <td><a class="review-link" href="#">Review →</a></td>
+            </tr>
+            <tr>
+              <td><span class="app-id">#BC-2026-0004</span></td>
+              <td><div class="customer-name">MediaCo Inc</div><div class="customer-email">ops@mediaco.com</div></td>
+              <td>Company</td>
+              <td>4 services</td>
+              <td>1 Jun 2026</td>
+              <td><span class="badge badge-ops">Setup in Progress</span></td>
+              <td><a class="review-link" href="#">Review →</a></td>
+            </tr>
+            <tr>
+              <td><span class="app-id">#BC-2026-0005</span></td>
+              <td><div class="customer-name">Ananya Iyer</div><div class="customer-email">ananya@brand.in</div></td>
+              <td>Individual</td>
+              <td>2 services</td>
+              <td>30 May 2026</td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td><a class="review-link" href="#">Review →</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="screen-note">Stats auto-update. Clicking "Review →" opens the application detail page.</div>
+  </div>
+
+  <!-- Agreement Tab -->
+  <div id="sales-agreement" class="screen-group">
+    <div class="screen-group-title">Sales Portal — Agreement Tab</div>
+    <div class="screen-label">Sales configures the agreement type and sends it to the customer</div>
+
+    <div class="screen">
+      <div class="portal-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <a href="#" style="font-size:13px;font-weight:600;color:#6b7280;text-decoration:none">← All Applications</a>
+          <span style="color:#e5e7eb">|</span>
+          <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        </div>
+        <button class="btn-signout">Sign Out</button>
+      </div>
+
+      <div class="app-detail-layout">
+        <!-- Sidebar -->
+        <div class="app-sidebar">
+          <div class="customer-card">
+            <div class="customer-avatar">P</div>
+            <div class="customer-name-big">Priyanka Choudhary</div>
+            <div class="customer-meta">Individual · India</div>
+            <div style="margin-top:12px">
+              <div class="customer-detail-row"><span class="detail-key">App ID</span><span class="detail-val" style="font-family:monospace">#BC-2026-0001</span></div>
+              <div class="customer-detail-row"><span class="detail-key">Email</span><span class="detail-val">priyanka@example.com</span></div>
+              <div class="customer-detail-row"><span class="detail-key">Contact</span><span class="detail-val">+91 98765 43210</span></div>
+              <div class="customer-detail-row"><span class="detail-key">Status</span><span class="detail-val"><span class="badge badge-review" style="font-size:10px">Under Review</span></span></div>
+              <div class="customer-detail-row"><span class="detail-key">Services</span><span class="detail-val">Business Intelligence, Reputation Mgmt</span></div>
+              <div class="customer-detail-row"><span class="detail-key">Submitted</span><span class="detail-val">4 Jun 2026</span></div>
+            </div>
+          </div>
+
+          <!-- Steps -->
+          <div class="steps-row">
+            <div class="step-pill step-active">1. Agreement</div>
+            <div class="step-pill step-todo">2. Payment</div>
+            <div class="step-pill step-todo">3. Ops</div>
+          </div>
+          <div style="font-size:12px;color:#9ca3af;text-align:center">Complete all 3 steps to send to ops team</div>
+        </div>
+
+        <!-- Main -->
+        <div class="app-main">
+          <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px">Agreement Tab</div>
+          <div style="font-size:12px;color:#9ca3af;margin-bottom:20px">Choose agreement type and configure document</div>
+
+          <!-- Agreement type -->
+          <div class="tab-section">
+            <div class="tab-section-label">Agreement Type</div>
+            <div class="agreement-type-grid">
+              <div class="agr-type-card sel">
+                <div class="agr-type-icon">📄</div>
+                <div class="agr-type-title">Template (PandaDoc)</div>
+                <div class="agr-type-desc">Auto-generate from PandaDoc template. Customer signs in portal.</div>
+              </div>
+              <div class="agr-type-card">
+                <div class="agr-type-icon">📁</div>
+                <div class="agr-type-title">Upload Unsigned</div>
+                <div class="agr-type-desc">Upload doc, send via PandaDoc for customer to sign.</div>
+              </div>
+            </div>
+            <div class="agr-type-card" style="border:2px solid #e5e7eb;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px">
+              <div class="agr-type-icon">✅</div>
+              <div>
+                <div class="agr-type-title">Pre-signed (Already Signed)</div>
+                <div class="agr-type-desc">Upload a doc already signed. Skips customer signing step.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Template fields -->
+          <div class="tab-section" style="margin-top:16px">
+            <div class="tab-section-label">Document Label</div>
+            <input class="form-input" value="Service Agreement" style="margin-bottom:12px" />
+
+            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:14px">
+              📄 A PandaDoc document will be generated from your template and sent to the customer for signing.
+            </div>
+
+            <button class="save-btn" style="background:#3b82f6;color:#fff">Send Agreement to Customer →</button>
+          </div>
+
+          <!-- Agreement already sent -->
+          <div class="tab-section" style="margin-top:20px">
+            <div class="tab-section-label">Current Agreements</div>
+            <div class="agreement-card">
+              <div class="agreement-header">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="font-size:12px;font-weight:700;color:#6b7280">Service Agreement</span>
+                  <span style="background:#fef9c3;color:#d97706;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px">Pending Signature</span>
+                </div>
+                <div style="display:flex;gap:8px">
+                  <button style="font-size:11px;padding:5px 10px;border-radius:8px;border:1.5px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;cursor:pointer;font-weight:600">Sync Status</button>
+                  <button style="font-size:11px;padding:5px 10px;border-radius:8px;border:1.5px solid #fecaca;background:#fff;color:#dc2626;cursor:pointer;font-weight:600">Remove</button>
+                </div>
+              </div>
+              <div class="agreement-body">📄 PandaDoc signing frame (customer signs here in their portal)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-bar">
+        <span class="all-done-text">Complete Agreement → Payment → Ops to enable sending to ops team</span>
+        <button class="send-ops-btn" disabled>Send to Ops Team →</button>
+      </div>
+    </div>
+    <div class="screen-note">Sales can add multiple agreements. "Sync Status" manually checks PandaDoc if the webhook didn't fire.</div>
+  </div>
+
+  <!-- Payment Tab – Online -->
+  <div id="sales-payment-portal" class="screen-group">
+    <div class="screen-group-title">Sales Portal — Payment Tab (Online / Razorpay)</div>
+    <div class="screen-label">Customer will pay online via Razorpay on their portal</div>
+
+    <div class="screen">
+      <div class="portal-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <a href="#" style="font-size:13px;font-weight:600;color:#6b7280;text-decoration:none">← All Applications</a>
+          <span style="color:#e5e7eb">|</span>
+          <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        </div>
+        <button class="btn-signout">Sign Out</button>
+      </div>
+
+      <div class="app-detail-layout">
+        <div class="app-sidebar">
+          <div class="customer-card">
+            <div class="customer-avatar">P</div>
+            <div class="customer-name-big">Priyanka Choudhary</div>
+            <div class="customer-meta">Individual · India</div>
+            <div style="margin-top:10px">
+              <div class="customer-detail-row"><span class="detail-key">Status</span><span class="detail-val"><span class="badge badge-agreement" style="font-size:10px">Agreement Pending</span></span></div>
+            </div>
+          </div>
+          <div class="steps-row">
+            <div class="step-pill step-done">✓ Agreement</div>
+            <div class="step-pill step-active">2. Payment</div>
+            <div class="step-pill step-todo">3. Ops</div>
+          </div>
+        </div>
+
+        <div class="app-main">
+          <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px">Payment Tab</div>
+          <div style="font-size:12px;color:#9ca3af;margin-bottom:20px">Configure plan and payment method</div>
+
+          <div class="form-row form-col-2">
+            <div class="form-field"><label>Currency</label><select class="form-input"><option>INR</option></select></div>
+            <div class="form-field"><label>Plan Name</label><input class="form-input" value="Pro Protection Plan" /></div>
+          </div>
+
+          <div class="form-row" style="margin-bottom:14px">
+            <div class="form-field"><label>Amount (INR)</label><input class="form-input" value="5000" /></div>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:8px">Billing Frequency</div>
+            <div class="pill-group">
+              <div class="pill-btn sel">Monthly</div>
+              <div class="pill-btn">Quarterly</div>
+              <div class="pill-btn">Bi-annually</div>
+              <div class="pill-btn">Annually</div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:8px">Service Duration</div>
+            <div class="pill-group">
+              <div class="pill-btn">3 Months</div>
+              <div class="pill-btn">6 Months</div>
+              <div class="pill-btn sel">1 Year</div>
+              <div class="pill-btn">Custom</div>
+            </div>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label>Start Date</label><input class="form-input" value="2026-06-05" type="date" /></div>
+            <div class="form-field"><label>End Date (auto)</label><input class="form-input" value="5 June 2027" readonly style="color:#9ca3af;background:#f3f4f6" /></div>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:10px">Payment Method</div>
+            <div class="method-grid">
+              <div class="method-card sel">
+                <div class="method-icon">💳</div>
+                <div class="method-title">Via Onboarding Portal</div>
+                <div class="method-desc">Customer pays via Razorpay on their status page</div>
+              </div>
+              <div class="method-card">
+                <div class="method-icon">🤝</div>
+                <div class="method-title">Offline / Manual</div>
+                <div class="method-desc">Payment handled outside the portal</div>
+              </div>
+            </div>
+            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;">
+              ⚠️ Customer will receive an email notification when you save.
+            </div>
+          </div>
+
+          <button class="save-btn">Save & Notify Customer →</button>
+        </div>
+      </div>
+
+      <div class="bottom-bar">
+        <span class="all-done-text">Complete all 3 steps to enable sending</span>
+        <button class="send-ops-btn" disabled>Send to Ops Team →</button>
+      </div>
+    </div>
+    <div class="screen-note">When saved with "Portal" method: customer gets an email with a link to pay. Status moves to payment_pending only after all agreements are signed.</div>
+  </div>
+
+  <!-- Payment Tab – Offline -->
+  <div id="sales-payment-offline" class="screen-group">
+    <div class="screen-group-title">Sales Portal — Payment Tab (Offline) + Confirm Receipt</div>
+    <div class="screen-label">Offline payment — sales records confirmation details once payment is received</div>
+
+    <div class="screen">
+      <div class="portal-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <a href="#" style="font-size:13px;font-weight:600;color:#6b7280;text-decoration:none">← All Applications</a>
+          <span style="color:#e5e7eb">|</span>
+          <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        </div>
+        <button class="btn-signout">Sign Out</button>
+      </div>
+
+      <div class="app-detail-layout">
+        <div class="app-sidebar">
+          <div class="customer-card">
+            <div class="customer-avatar">N</div>
+            <div class="customer-name-big">Nexgen Pvt Ltd</div>
+            <div class="customer-meta">Company · India</div>
+            <div style="margin-top:10px">
+              <div class="customer-detail-row"><span class="detail-key">Status</span><span class="detail-val"><span class="badge badge-ops" style="font-size:10px">Setup in Progress</span></span></div>
+            </div>
+          </div>
+          <div class="steps-row">
+            <div class="step-pill step-done">✓ Agreement</div>
+            <div class="step-pill step-active">2. Payment</div>
+            <div class="step-pill step-done">✓ Ops</div>
+          </div>
+        </div>
+
+        <div class="app-main">
+          <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px">Payment Tab</div>
+          <div style="font-size:12px;color:#9ca3af;margin-bottom:20px">Offline payment selected — plan saved</div>
+
+          <!-- Summary of saved plan -->
+          <div style="background:#f9fafb;border:1.5px solid #f3f4f6;border-radius:12px;padding:16px;margin-bottom:20px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#9ca3af;margin-bottom:10px">Saved Payment Plan</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+              <div><div style="font-size:11px;color:#9ca3af">Plan</div><div style="font-size:13px;font-weight:700;color:#111827">Enterprise Plan</div></div>
+              <div><div style="font-size:11px;color:#9ca3af">Amount</div><div style="font-size:13px;font-weight:700;color:#111827">INR 15,000</div></div>
+              <div><div style="font-size:11px;color:#9ca3af">Frequency</div><div style="font-size:13px;font-weight:700;color:#111827">Annually</div></div>
+            </div>
+            <div style="margin-top:10px;display:flex;align-items:center;gap:6px">
+              <div class="method-icon" style="font-size:16px">🤝</div>
+              <span style="font-size:12px;font-weight:700;color:#374151">Offline / Manual payment</span>
+            </div>
+          </div>
+
+          <!-- Confirm payment section -->
+          <div class="offline-section">
+            <div class="offline-title">💰 Confirm Payment Received</div>
+            <div class="offline-sub">Once the customer has paid offline, record the details here. Ops team will be notified automatically.</div>
+
+            <div class="form-row form-col-2" style="margin-bottom:12px">
+              <div class="form-field">
+                <label>Reference / Transaction No.</label>
+                <input class="form-input" placeholder="e.g. CHQ-2024-001 or UTR number" />
+              </div>
+              <div class="form-field">
+                <label>Payment Date</label>
+                <input class="form-input" type="date" value="2026-06-05" />
+              </div>
+            </div>
+
+            <div class="form-field" style="margin-bottom:12px">
+              <label>Payment Mode</label>
+              <select class="form-input">
+                <option>Select mode</option>
+                <option selected>Bank Transfer / NEFT</option>
+                <option>UPI</option>
+                <option>Cheque</option>
+                <option>Cash</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-field" style="margin-bottom:14px">
+              <label>Notes (optional)</label>
+              <textarea class="form-input" rows="2" placeholder="Any additional notes..."></textarea>
+            </div>
+
+            <button class="confirm-btn">✓ Mark Payment Received &amp; Notify Ops</button>
+          </div>
+
+          <!-- After confirmation -->
+          <div style="margin-top:24px;border-top:2px dashed #e5e7eb;padding-top:20px">
+            <div class="offline-title" style="margin-bottom:12px">After Confirmation (Confirmed State)</div>
+            <div class="confirmed-box">
+              <div class="confirmed-title">✓ Payment Confirmed</div>
+              <div class="confirmed-row"><span class="confirmed-key">Reference No.</span><span class="confirmed-val">UTR2026060512345</span></div>
+              <div class="confirmed-row"><span class="confirmed-key">Mode</span><span class="confirmed-val">Bank Transfer / NEFT</span></div>
+              <div class="confirmed-row"><span class="confirmed-key">Date</span><span class="confirmed-val">5 Jun 2026</span></div>
+              <div class="confirmed-row"><span class="confirmed-key">Notes</span><span class="confirmed-val">Received in account ending 4521</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-bar">
+        <span class="all-done-text">All steps complete — ready to send to ops</span>
+        <button class="send-ops-btn">Send to Ops Team →</button>
+      </div>
+    </div>
+    <div class="screen-note">Offline payment: status goes to ops_setup immediately. Sales fills "Confirm Payment Received" when money is actually received. Ops gets auto-notified.</div>
+  </div>
+
+  <!-- Ops Tab -->
+  <div id="sales-ops" class="screen-group">
+    <div class="screen-group-title">Sales Portal — Ops Requirements Tab</div>
+    <div class="screen-label">Sales fills client's assets and monitoring requirements for the ops team</div>
+
+    <div class="screen">
+      <div class="portal-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <a href="#" style="font-size:13px;font-weight:600;color:#6b7280;text-decoration:none">← All Applications</a>
+          <span style="color:#e5e7eb">|</span>
+          <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        </div>
+        <button class="btn-signout">Sign Out</button>
+      </div>
+
+      <div class="app-detail-layout">
+        <div class="app-sidebar">
+          <div class="customer-card">
+            <div class="customer-avatar">P</div>
+            <div class="customer-name-big">Priyanka Choudhary</div>
+            <div class="customer-meta">Individual · India</div>
+          </div>
+          <div class="steps-row">
+            <div class="step-pill step-done">✓ Agreement</div>
+            <div class="step-pill step-done">✓ Payment</div>
+            <div class="step-pill step-active">3. Ops</div>
+          </div>
+        </div>
+
+        <div class="app-main">
+          <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px">Ops Requirements</div>
+          <div style="font-size:12px;color:#9ca3af;margin-bottom:20px">Fill client's digital assets for ops to set up monitoring</div>
+
+          <div class="form-field" style="margin-bottom:14px">
+            <label>Websites / URLs to Protect</label>
+            <textarea class="form-input" rows="2" placeholder="https://example.com&#10;https://shop.example.com"></textarea>
+          </div>
+          <div class="form-field" style="margin-bottom:14px">
+            <label>YouTube Channels</label>
+            <input class="form-input" placeholder="https://youtube.com/@channel" />
+          </div>
+          <div class="form-field" style="margin-bottom:14px">
+            <label>Social Media Handles</label>
+            <input class="form-input" placeholder="@handle on Instagram, Twitter/X, etc." />
+          </div>
+          <div class="form-field" style="margin-bottom:14px">
+            <label>Brand / Trademark Names</label>
+            <input class="form-input" placeholder="Brand name, product names..." />
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:8px">Monitoring Platforms</div>
+            <div class="platform-grid">
+              <div class="platform-chip sel">YouTube</div>
+              <div class="platform-chip sel">Instagram</div>
+              <div class="platform-chip">Facebook</div>
+              <div class="platform-chip">Twitter/X</div>
+              <div class="platform-chip">TikTok</div>
+              <div class="platform-chip sel">Amazon</div>
+              <div class="platform-chip">Flipkart</div>
+              <div class="platform-chip">Google</div>
+              <div class="platform-chip">App Stores</div>
+              <div class="platform-chip">Dark Web</div>
+              <div class="platform-chip">LinkedIn</div>
+              <div class="platform-chip">Pinterest</div>
+            </div>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field">
+              <label>Priority</label>
+              <div class="pill-group">
+                <div class="pill-btn sel">Standard</div>
+                <div class="pill-btn">High</div>
+                <div class="pill-btn">Critical</div>
+              </div>
+            </div>
+            <div class="form-field">
+              <label>SLA Start Date</label>
+              <input class="form-input" type="date" value="2026-06-10" />
+            </div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:14px">
+            <label>Special Instructions</label>
+            <textarea class="form-input" rows="2" placeholder="Any special notes for the ops team..."></textarea>
+          </div>
+
+          <button class="save-btn">Save Ops Requirements →</button>
+        </div>
+      </div>
+
+      <div class="bottom-bar" style="background:#111827">
+        <span style="font-size:13px;color:#9ca3af">All 3 steps done — ops will receive full requirements email</span>
+        <button class="send-ops-btn" style="background:#FFA500;color:#111827">✓ Send to Ops Team →</button>
+      </div>
+    </div>
+    <div class="screen-note">When "Send to Ops Team" is clicked, ops receives an email with all client details, assets, platforms, and requirements.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- CUSTOMER ONBOARDING — AUTH SCREENS -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <!-- Auth: Email Entry -->
+  <div id="ob-auth-email" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — Email Entry (Auth)</div>
+    <div class="screen-label">First screen on every visit. No password needed — user enters email, receives 6-digit OTP. Session cookie lasts 30 days so returning users skip this step.</div>
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px 24px">
+        <div style="width:100%;max-width:380px">
+          <div style="text-align:center;margin-bottom:28px">
+            <div style="width:56px;height:56px;border-radius:14px;background:#fff8e6;border:2px solid rgba(255,165,0,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFA500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div style="font-size:20px;font-weight:900;color:#111827;margin-bottom:6px">Enter your email</div>
+            <div style="font-size:13px;color:#6b7280;line-height:1.5">We'll send a 6-digit code to verify it's you. No password needed.</div>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Email address</div>
+            <div style="border:2px solid #FFA500;border-radius:10px;padding:10px 14px;font-size:14px;color:#9ca3af;background:#fff">
+              you@example.com
+            </div>
+          </div>
+
+          <button class="btn-primary" style="width:100%;text-align:center;padding:12px">Send Verification Code →</button>
+
+          <div style="text-align:center;margin-top:16px">
+            <div style="font-size:11px;color:#9ca3af;line-height:1.6">Enter the same email to resume from any device.<br/>Your progress is always saved.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:3px;background:linear-gradient(90deg,#FFA500,#7C3AED)"></div>
+    </div>
+  </div>
+
+  <!-- Auth: OTP Verification -->
+  <div id="ob-auth-otp" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — OTP Verification</div>
+    <div class="screen-label">User enters the 6-digit code from their email. Code expires in 10 minutes. On success, a 30-day httpOnly session cookie is set — user won't need to verify again until it expires.</div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap">
+
+      <!-- First-time / new OTP -->
+      <div>
+        <div class="screen-label" style="font-weight:700;color:#374151;margin-bottom:8px">A – Enter code</div>
+        <div class="screen" style="width:320px">
+          <div class="portal-header">
+            <div class="logo"><span>BYTES</span><span>CARE</span></div>
+            <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+          </div>
+
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px 24px">
+            <div style="width:100%;max-width:320px">
+              <div style="text-align:center;margin-bottom:28px">
+                <div style="width:56px;height:56px;border-radius:14px;background:#f0fdf4;border:2px solid #bbf7d0;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.95 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.9 3.12h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div style="font-size:20px;font-weight:900;color:#111827;margin-bottom:6px">Check your email</div>
+                <div style="font-size:13px;color:#6b7280;line-height:1.5">We sent a 6-digit code to <strong style="color:#111827">jo***@example.com</strong></div>
+              </div>
+
+              <div style="margin-bottom:14px">
+                <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Verification code</div>
+                <div style="border:2px solid #FFA500;border-radius:10px;padding:10px 14px;font-size:26px;font-weight:900;font-family:monospace;letter-spacing:14px;color:#111827;text-align:center;background:#fff">
+                  ——————
+                </div>
+              </div>
+
+              <button class="btn-primary" style="width:100%;text-align:center;padding:12px;opacity:0.5">Verify &amp; Continue →</button>
+
+              <div style="display:flex;justify-content:space-between;margin-top:14px">
+                <span style="font-size:13px;font-weight:600;color:#FFA500;cursor:pointer">Resend in 58s</span>
+                <span style="font-size:13px;color:#6b7280;cursor:pointer">← Change email</span>
+              </div>
+            </div>
+          </div>
+          <div style="height:3px;background:linear-gradient(90deg,#FFA500,#7C3AED)"></div>
+        </div>
+      </div>
+
+      <!-- Code filled in -->
+      <div>
+        <div class="screen-label" style="font-weight:700;color:#374151;margin-bottom:8px">B – Code entered, ready to submit</div>
+        <div class="screen" style="width:320px">
+          <div class="portal-header">
+            <div class="logo"><span>BYTES</span><span>CARE</span></div>
+            <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+          </div>
+
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px 24px">
+            <div style="width:100%;max-width:320px">
+              <div style="text-align:center;margin-bottom:28px">
+                <div style="width:56px;height:56px;border-radius:14px;background:#f0fdf4;border:2px solid #bbf7d0;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.95 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.9 3.12h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div style="font-size:20px;font-weight:900;color:#111827;margin-bottom:6px">Check your email</div>
+                <div style="font-size:13px;color:#6b7280;line-height:1.5">We sent a 6-digit code to <strong style="color:#111827">jo***@example.com</strong></div>
+              </div>
+
+              <div style="margin-bottom:14px">
+                <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Verification code</div>
+                <div style="border:2px solid #16a34a;border-radius:10px;padding:10px 14px;font-size:26px;font-weight:900;font-family:monospace;letter-spacing:14px;color:#111827;text-align:center;background:#fff">
+                  4 8 2 1 6 3
+                </div>
+              </div>
+
+              <button class="btn-primary" style="width:100%;text-align:center;padding:12px">Verify &amp; Continue →</button>
+
+              <div style="display:flex;justify-content:space-between;margin-top:14px">
+                <span style="font-size:13px;font-weight:600;color:#FFA500;cursor:pointer">Resend code</span>
+                <span style="font-size:13px;color:#6b7280;cursor:pointer">← Change email</span>
+              </div>
+            </div>
+          </div>
+          <div style="height:3px;background:linear-gradient(90deg,#FFA500,#7C3AED)"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Auth flow diagram -->
+    <div style="margin-top:24px;padding:20px;background:#f9fafb;border-radius:16px;border:1.5px solid #e5e7eb">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6b7280;margin-bottom:14px">Auth State Machine</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px">
+        <div style="background:#f3f4f6;border-radius:8px;padding:6px 12px;font-weight:700;color:#374151">Page Load</div>
+        <div style="color:#9ca3af">→</div>
+        <div style="background:#fff8e6;border:1.5px solid rgba(255,165,0,0.3);border-radius:8px;padding:6px 12px;font-weight:700;color:#92400e">Checking Cookie</div>
+        <div style="color:#9ca3af">→ valid</div>
+        <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:8px;padding:6px 12px;font-weight:700;color:#166534">Load Draft / App</div>
+        <div style="color:#9ca3af">→</div>
+        <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:8px;padding:6px 12px;font-weight:700;color:#166534">Form or Status</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;margin-top:10px">
+        <div style="background:#fff;border-radius:8px;padding:6px 12px;font-weight:600;color:#9ca3af;border:1.5px solid #e5e7eb">no cookie / expired</div>
+        <div style="color:#9ca3af">→</div>
+        <div style="background:#fff8e6;border:1.5px solid rgba(255,165,0,0.3);border-radius:8px;padding:6px 12px;font-weight:700;color:#92400e">Email Entry</div>
+        <div style="color:#9ca3af">→ OTP sent</div>
+        <div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:8px;padding:6px 12px;font-weight:700;color:#1e40af">OTP Entry</div>
+        <div style="color:#9ca3af">→ verified</div>
+        <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:8px;padding:6px 12px;font-weight:700;color:#166534">Set 30-day Cookie</div>
+        <div style="color:#9ca3af">→</div>
+        <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:8px;padding:6px 12px;font-weight:700;color:#166534">Load State</div>
+      </div>
+    </div>
+
+    <!-- API routes -->
+    <div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
+      <div style="background:#1e1e2e;border-radius:12px;padding:16px;font-family:monospace;font-size:12px;color:#cdd6f4">
+        <div style="color:#a6e3a1;font-weight:700;margin-bottom:8px">POST /api/auth/send-otp</div>
+        <div style="color:#bac2de">Body: { email }</div>
+        <div style="color:#bac2de">→ generates 6-digit OTP</div>
+        <div style="color:#bac2de">→ HMAC-SHA256 hash stored in DB</div>
+        <div style="color:#bac2de">→ emails OTP (expires 10 min)</div>
+        <div style="color:#bac2de">→ rate-limited: 1 per 60s/email</div>
+      </div>
+      <div style="background:#1e1e2e;border-radius:12px;padding:16px;font-family:monospace;font-size:12px;color:#cdd6f4">
+        <div style="color:#a6e3a1;font-weight:700;margin-bottom:8px">POST /api/auth/verify-otp</div>
+        <div style="color:#bac2de">Body: { email, otp }</div>
+        <div style="color:#bac2de">→ timing-safe compare</div>
+        <div style="color:#bac2de">→ issues UUID session token</div>
+        <div style="color:#bac2de">→ Sets httpOnly cookie (30 days)</div>
+        <div style="color:#bac2de">→ clears OTP from DB</div>
+      </div>
+      <div style="background:#1e1e2e;border-radius:12px;padding:16px;font-family:monospace;font-size:12px;color:#cdd6f4">
+        <div style="color:#a6e3a1;font-weight:700;margin-bottom:8px">GET /api/auth/session</div>
+        <div style="color:#bac2de">Reads bytescare_session cookie</div>
+        <div style="color:#bac2de">→ looks up CustomerSession</div>
+        <div style="color:#bac2de">→ finds Application by email</div>
+        <div style="color:#bac2de">→ or Draft by email</div>
+        <div style="color:#bac2de">→ returns full state for UI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- CUSTOMER ONBOARDING FORM -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <!-- Step 1 -->
+  <div id="ob-step1" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — Step 1: Basic Info</div>
+    <div class="screen-label">First step after auth — email pre-filled from session, user picks type (individual/company) and country. Progress auto-saved to DB draft.</div>
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+
+      <!-- Progress bar -->
+      <div style="padding:24px 24px 0">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="display:flex;gap:20px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:32px;height:32px;border-radius:50%;background:#FFA500;color:#111827;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 0 0 4px rgba(255,165,0,0.18)">1</div>
+              <span style="font-size:11px;font-weight:700;color:#FFA500">Basic Info</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:32px;height:32px;border-radius:50%;background:#e5e7eb;color:#9ca3af;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">2</div>
+              <span style="font-size:11px;font-weight:600;color:#9ca3af">Your Details</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:32px;height:32px;border-radius:50%;background:#e5e7eb;color:#9ca3af;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">3</div>
+              <span style="font-size:11px;font-weight:600;color:#9ca3af">Services</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:32px;height:32px;border-radius:50%;background:#e5e7eb;color:#9ca3af;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">4</div>
+              <span style="font-size:11px;font-weight:600;color:#9ca3af">Review</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <span style="font-size:12px;color:#9ca3af">Step 1 of 4 · 0% complete</span>
+          </div>
+        </div>
+        <div style="height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden">
+          <div style="height:100%;width:0%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
+        </div>
+      </div>
+
+      <div style="padding:24px;max-width:640px;margin:0 auto">
+        <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Let's get started</h2>
+          <p style="font-size:13px;color:#9ca3af;margin-bottom:24px">Tell us a bit about yourself</p>
+
+          <div class="form-field" style="margin-bottom:16px">
+            <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Email Address *</label>
+            <input class="form-input" placeholder="your@email.com" style="font-size:14px;padding:12px 14px" />
+          </div>
+
+          <div style="margin-bottom:16px">
+            <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:10px">I am registering as *</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="border:2px solid #FFA500;border-radius:14px;padding:16px;background:#fff8e6;cursor:pointer">
+                <div style="font-size:22px;margin-bottom:6px">👤</div>
+                <div style="font-weight:700;color:#111827;font-size:14px">Individual</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:3px">Personal / freelancer</div>
+              </div>
+              <div style="border:2px solid #e5e7eb;border-radius:14px;padding:16px;cursor:pointer">
+                <div style="font-size:22px;margin-bottom:6px">🏢</div>
+                <div style="font-weight:700;color:#111827;font-size:14px">Company</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:3px">Business entity</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:24px">
+            <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Country *</label>
+            <select class="form-input" style="font-size:14px;padding:12px 14px">
+              <option>India</option><option>United States</option><option>United Kingdom</option>
+            </select>
+          </div>
+
+          <button class="save-btn" style="font-size:15px;padding:14px">Continue →</button>
+        </div>
+        <p style="text-align:center;font-size:12px;color:#9ca3af;margin-top:12px">💾 Progress saved automatically</p>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+    <div class="screen-note">Draft saved to DB after email is entered. Resume link generated — customer can continue on any device.</div>
+  </div>
+
+  <!-- Step 2 Individual -->
+  <div id="ob-step2i" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — Step 2: Individual Details</div>
+    <div class="screen-label">Shown when type = "individual". Collects personal info + ID proof upload.</div>
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+      <div style="padding:20px 24px 0">
+        <div style="height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-bottom:6px">
+          <div style="height:100%;width:33%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:#9ca3af">Step 2 of 4</span><span style="font-size:12px;color:#9ca3af">33% complete</span></div>
+      </div>
+      <div style="padding:24px;max-width:640px;margin:0 auto">
+        <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Your Details</h2>
+          <p style="font-size:13px;color:#9ca3af;margin-bottom:24px">Personal and contact information</p>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Full Legal Name *</label><input class="form-input" placeholder="As on government ID" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">National ID Number *</label><input class="form-input" placeholder="Aadhar / Passport / etc." /></div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload ID Proof *</label>
+            <div style="border:2px dashed #e5e7eb;border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:#f9fafb">
+              <div style="font-size:24px;margin-bottom:6px">📎</div>
+              <div style="font-size:13px;font-weight:600;color:#374151">Click to upload or drag & drop</div>
+              <div style="font-size:11px;color:#9ca3af;margin-top:3px">PDF, JPG, PNG up to 10MB</div>
+            </div>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Contact Number *</label><input class="form-input" placeholder="+91 98765 43210" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Official Email *</label><input class="form-input" placeholder="work@company.com" /></div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Registered Address *</label>
+            <textarea class="form-input" rows="2" placeholder="Full address..."></textarea>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Pincode</label><input class="form-input" placeholder="110001" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Mailing Address</label><input class="form-input" placeholder="If different from above" /></div>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Designation</label><input class="form-input" placeholder="e.g. Content Creator" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Social Media Handles</label><input class="form-input" placeholder="@handle" /></div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:24px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Nature of Work</label>
+            <textarea class="form-input" rows="2" placeholder="Brief description of your work or content..."></textarea>
+          </div>
+
+          <div style="display:flex;gap:12px">
+            <button style="flex:0 0 auto;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
+            <button class="save-btn">Continue →</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+  </div>
+
+  <!-- Step 2 Company -->
+  <div id="ob-step2c" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — Step 2: Company Details</div>
+    <div class="screen-label">Shown when type = "company". Collects company info, signatory, and registration docs.</div>
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+      <div style="padding:20px 24px 0">
+        <div style="height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-bottom:6px">
+          <div style="height:100%;width:33%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:#9ca3af">Step 2 of 4</span><span style="font-size:12px;color:#9ca3af">33% complete</span></div>
+      </div>
+      <div style="padding:24px;max-width:640px;margin:0 auto">
+        <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Company Details</h2>
+          <p style="font-size:13px;color:#9ca3af;margin-bottom:24px">Business and signatory information</p>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Company Name *</label><input class="form-input" placeholder="Nexgen Pvt Ltd" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Registration Number *</label><input class="form-input" placeholder="CIN / Reg No." /></div>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload Reg. Certificate *</label>
+              <div style="border:2px dashed #e5e7eb;border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:#f9fafb">
+                <div style="font-size:18px;margin-bottom:4px">📎</div><div style="font-size:12px;color:#9ca3af">Upload PDF / JPG</div>
+              </div>
+            </div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">GSTIN</label><input class="form-input" placeholder="22AAABB1234C1Z5" /></div>
+          </div>
+
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Contact Number *</label><input class="form-input" placeholder="+91 98765 43210" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Official Email *</label><input class="form-input" placeholder="legal@company.com" /></div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Registered Address *</label>
+            <textarea class="form-input" rows="2"></textarea>
+          </div>
+
+          <div style="border-top:1.5px solid #f3f4f6;padding-top:16px;margin-top:4px;margin-bottom:14px">
+            <div style="font-size:12px;font-weight:700;color:#374151;margin-bottom:12px">Authorized Signatory</div>
+            <div class="form-row form-col-2" style="margin-bottom:12px">
+              <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Signatory Name *</label><input class="form-input" placeholder="Full name" /></div>
+              <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Designation *</label><input class="form-input" placeholder="CEO / Director" /></div>
+            </div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Signatory Email *</label><input class="form-input" placeholder="signatory@company.com" /></div>
+          </div>
+
+          <div class="form-field" style="margin-bottom:24px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload Copyright Certificate (optional)</label>
+            <div style="border:2px dashed #e5e7eb;border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:#f9fafb">
+              <div style="font-size:18px;margin-bottom:4px">📎</div><div style="font-size:12px;color:#9ca3af">Optional — upload if available</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px">
+            <button style="flex:0 0 auto;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
+            <button class="save-btn">Continue →</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+  </div>
+
+  <!-- Step 3 Services -->
+  <div id="ob-step3" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — Step 3: Services</div>
+    <div class="screen-label">Customer selects which Bytescare services they need, with optional details per service.</div>
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+      <div style="padding:20px 24px 0">
+        <div style="height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-bottom:6px">
+          <div style="height:100%;width:66%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:#9ca3af">Step 3 of 4</span><span style="font-size:12px;color:#9ca3af">66% complete</span></div>
+      </div>
+      <div style="padding:24px;max-width:640px;margin:0 auto">
+        <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Select Services</h2>
+          <p style="font-size:13px;color:#9ca3af;margin-bottom:24px">Choose what you need protection for</p>
+
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+            <!-- Selected service -->
+            <div style="border:2px solid #FFA500;border-radius:14px;overflow:hidden">
+              <div style="padding:16px 18px;display:flex;align-items:center;gap:12px;background:#fff8e6;cursor:pointer">
+                <div style="width:22px;height:22px;border-radius:6px;background:#FFA500;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#111827;flex-shrink:0">✓</div>
+                <div style="flex:1">
+                  <div style="font-weight:700;color:#111827;font-size:14px">Business Intelligence</div>
+                  <div style="font-size:12px;color:#9ca3af">Market and competitor monitoring</div>
+                </div>
+              </div>
+              <div style="padding:14px 18px;background:#fff">
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#92400e;margin-bottom:6px">What do you need?</label>
+                <textarea class="form-input" rows="2" placeholder="Describe what you need..."></textarea>
+              </div>
+            </div>
+
+            <!-- Selected service 2 -->
+            <div style="border:2px solid #FFA500;border-radius:14px;overflow:hidden">
+              <div style="padding:16px 18px;display:flex;align-items:center;gap:12px;background:#fff8e6;cursor:pointer">
+                <div style="width:22px;height:22px;border-radius:6px;background:#FFA500;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#111827;flex-shrink:0">✓</div>
+                <div style="flex:1">
+                  <div style="font-weight:700;color:#111827;font-size:14px">Reputation Management</div>
+                  <div style="font-size:12px;color:#9ca3af">Online reputation monitoring & protection</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Unselected service -->
+            <div style="border:2px solid #e5e7eb;border-radius:14px;overflow:hidden">
+              <div style="padding:16px 18px;display:flex;align-items:center;gap:12px;cursor:pointer">
+                <div style="width:22px;height:22px;border-radius:6px;border:2px solid #e5e7eb;flex-shrink:0"></div>
+                <div style="flex:1">
+                  <div style="font-weight:700;color:#111827;font-size:14px">Copyright Protection</div>
+                  <div style="font-size:12px;color:#9ca3af">DMCA takedowns and copyright enforcement</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Unselected service 2 -->
+            <div style="border:2px solid #e5e7eb;border-radius:14px;overflow:hidden">
+              <div style="padding:16px 18px;display:flex;align-items:center;gap:12px;cursor:pointer">
+                <div style="width:22px;height:22px;border-radius:6px;border:2px solid #e5e7eb;flex-shrink:0"></div>
+                <div style="flex:1">
+                  <div style="font-weight:700;color:#111827;font-size:14px">Social Media Monitoring</div>
+                  <div style="font-size:12px;color:#9ca3af">Track brand mentions across platforms</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px">
+            <button style="flex:0 0 auto;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
+            <button class="save-btn">Continue →</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+    <div class="screen-note">Selected services + their descriptions are stored in applications.services[] and applications.serviceDetails{}.</div>
+  </div>
+
+  <!-- Step 4 Review -->
+  <div id="ob-step4" class="screen-group">
+    <div class="screen-group-title">Customer Onboarding — Step 4: Review &amp; Submit</div>
+    <div class="screen-label">Customer reviews all entered info before final submission.</div>
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+      <div style="padding:20px 24px 0">
+        <div style="height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-bottom:6px">
+          <div style="height:100%;width:99%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:#9ca3af">Step 4 of 4</span><span style="font-size:12px;color:#9ca3af">99% complete</span></div>
+      </div>
+      <div style="padding:24px;max-width:640px;margin:0 auto">
+        <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Review &amp; Submit</h2>
+          <p style="font-size:13px;color:#9ca3af;margin-bottom:20px">Check everything before submitting</p>
+
+          <!-- Summary sections -->
+          <div style="border:1.5px solid #f3f4f6;border-radius:14px;overflow:hidden;margin-bottom:12px">
+            <div style="background:#f9fafb;padding:10px 16px;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Basic Info</span>
+              <button style="font-size:11px;color:#FFA500;font-weight:700;background:none;border:none;cursor:pointer">Edit</button>
+            </div>
+            <div style="padding:12px 16px;font-size:13px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div><span style="color:#9ca3af">Email: </span><span style="font-weight:600">priyanka@example.com</span></div>
+              <div><span style="color:#9ca3af">Type: </span><span style="font-weight:600">Individual</span></div>
+              <div><span style="color:#9ca3af">Country: </span><span style="font-weight:600">India</span></div>
+            </div>
+          </div>
+
+          <div style="border:1.5px solid #f3f4f6;border-radius:14px;overflow:hidden;margin-bottom:12px">
+            <div style="background:#f9fafb;padding:10px 16px;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Your Details</span>
+              <button style="font-size:11px;color:#FFA500;font-weight:700;background:none;border:none;cursor:pointer">Edit</button>
+            </div>
+            <div style="padding:12px 16px;font-size:13px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div><span style="color:#9ca3af">Name: </span><span style="font-weight:600">Priyanka Choudhary</span></div>
+              <div><span style="color:#9ca3af">Contact: </span><span style="font-weight:600">+91 98765 43210</span></div>
+              <div><span style="color:#9ca3af">Official Email: </span><span style="font-weight:600">work@example.com</span></div>
+              <div><span style="color:#9ca3af">ID Proof: </span><span style="font-weight:600">aadhar.pdf ✓</span></div>
+            </div>
+          </div>
+
+          <div style="border:1.5px solid #f3f4f6;border-radius:14px;overflow:hidden;margin-bottom:20px">
+            <div style="background:#f9fafb;padding:10px 16px;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Services (2 selected)</span>
+              <button style="font-size:11px;color:#FFA500;font-weight:700;background:none;border:none;cursor:pointer">Edit</button>
+            </div>
+            <div style="padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600">Business Intelligence</span>
+              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600">Reputation Management</span>
+            </div>
+          </div>
+
+          <div style="background:#fffbeb;border:1.5px solid rgba(255,165,0,0.3);border-radius:12px;padding:14px;margin-bottom:20px;font-size:12px;color:#92400e">
+            By submitting, you agree to our Terms of Service and Privacy Policy. Our sales team will contact you within 1 business day.
+          </div>
+
+          <div style="display:flex;gap:12px">
+            <button style="flex:0 0 auto;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
+            <button class="save-btn" style="background:#111827;color:#fff;font-size:15px">Submit Application →</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+    <div class="screen-note">On submit: Application document created in MongoDB, Draft deleted, sessionId stored in localStorage, confirmation emails sent to customer + sales.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- ONBOARDING PORTAL STATUS SCREENS -->
+  <!-- ══════════════════════════════════════════════ -->
+
+  <!-- Under Review -->
+  <div id="ob-pending" class="screen-group">
+    <div class="screen-group-title">Customer Portal — Under Sales Review</div>
+    <div class="screen-label">Status: pending_review — customer sees after submitting application</div>
+
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Application Status</span>
+      </div>
+
+      <div class="ob-body">
+        <div class="ob-info-row">
+          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2026-0001</div></div>
+          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">4 Jun 2026</div></div>
+          <div class="ob-info-chip"><div class="label">Status</div><div class="value"><span class="badge badge-review">Under Review</span></div></div>
+        </div>
+        <div class="ob-greeting"><h1>Hi, priyanka</h1><p>Here's the latest status of your application.</p></div>
+        <div class="ob-card">
+          <div class="banner banner-orange">
+            <div class="banner-icon" style="background:#FFA500">🔒</div>
+            <div>
+              <div class="banner-title" style="color:#111827">Application Submitted!</div>
+              <div class="banner-desc">Your application is being reviewed by our sales team. You'll receive an email when action is required.</div>
+            </div>
+          </div>
+
+          <div style="padding:20px;border:1.5px solid #f3f4f6;border-radius:16px">
+            <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:16px">Progress</div>
+            <div class="timeline">
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-done">✓</div><div class="tl-line tl-line-done"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#111827">Application Submitted</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-active"><span style="display:block;width:8px;height:8px;border-radius:50%;background:#111827"></span></div><div class="tl-line"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#FFA500">Under Sales Review</div><div class="tl-label-sub">In progress…</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-pending"><span style="display:block;width:8px;height:8px;border-radius:50%;background:#9ca3af"></span></div><div class="tl-line"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#9ca3af">Agreement &amp; Payment</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-pending"><span style="display:block;width:8px;height:8px;border-radius:50%;background:#9ca3af"></span></div><div class="tl-line"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#9ca3af">Operations Setup</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-pending"><span style="display:block;width:8px;height:8px;border-radius:50%;background:#9ca3af"></span></div></div><div class="tl-label"><div class="tl-label-text" style="color:#9ca3af">Account Activated</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+  </div>
+
+  <!-- Sign Agreement -->
+  <div id="ob-agreement" class="screen-group">
+    <div class="screen-group-title">Customer Portal — Sign Agreement</div>
+    <div class="screen-label">Status: agreement_pending — customer signs via PandaDoc embedded in page</div>
+
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Application Status</span>
+      </div>
+
+      <div class="ob-body">
+        <div class="ob-info-row">
+          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2026-0001</div></div>
+          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">4 Jun 2026</div></div>
+          <div class="ob-info-chip"><div class="label">Status</div><div class="value"><span class="badge badge-agreement">Action Required</span></div></div>
+        </div>
+        <div class="ob-greeting"><h1>Hi, priyanka</h1><p>Here's the latest status of your application.</p></div>
+        <div class="ob-card">
+          <div class="banner banner-blue">
+            <div class="banner-icon" style="background:#3b82f6">🔑</div>
+            <div>
+              <div class="banner-title" style="color:#1d4ed8">Action Required: Sign your agreement</div>
+              <div class="banner-desc">Your sales review is complete. Please sign the agreement below to proceed.</div>
+            </div>
+          </div>
+
+          <div class="pill-done">✓ Sales review complete</div>
+
+          <!-- Agreement unsigned -->
+          <div class="agreement-card">
+            <div class="agreement-header">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:12px;font-weight:700;color:#6b7280">Service Agreement</span>
+                <span style="background:#fef9c3;color:#d97706;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px">Pending your signature</span>
+              </div>
+              <a href="#" style="font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;background:#eff6ff;color:#1d4ed8;text-decoration:none">Open in new tab</a>
+            </div>
+            <div class="agreement-body" style="height:240px;background:#e8f0fe;border:none">
+              <div style="text-align:center;color:#4b5563">
+                <div style="font-size:28px;margin-bottom:8px">📄</div>
+                <div style="font-weight:600;margin-bottom:4px">PandaDoc Signing Interface</div>
+                <div style="font-size:12px;color:#9ca3af">Embedded in the portal — customer signs here</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Agreement signed -->
+          <div class="agreement-card sign-signed" style="margin-top:12px">
+            <div class="agreement-header" style="background:#f0fdf4">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:12px;font-weight:700;color:#6b7280">Letter of Authority</span>
+                <span style="background:#dcfce7;color:#16a34a;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px">✓ Signed</span>
+              </div>
+            </div>
+            <div style="padding:14px;text-align:center">
+              <div style="font-size:13px;font-weight:600;color:#16a34a">Document signed ✓</div>
+            </div>
+          </div>
+
+          <div style="margin-top:14px;text-align:center">
+            <button style="font-size:13px;font-weight:600;padding:10px 20px;border-radius:12px;background:#eff6ff;color:#1d4ed8;border:1.5px solid #bfdbfe;cursor:pointer">
+              I've signed all documents — check my status
+            </button>
+            <div style="font-size:11px;color:#9ca3af;margin-top:8px">Once signed, our team will activate your payment step.</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+    <div class="screen-note">Multiple agreements can appear. Customer signs each one. "Check my status" button manually triggers a PandaDoc sync if webhook was delayed.</div>
+  </div>
+
+  <!-- Payment -->
+  <div id="ob-payment" class="screen-group">
+    <div class="screen-group-title">Customer Portal — Complete Payment</div>
+    <div class="screen-label">Status: payment_pending — Razorpay modal opens on "Pay" click</div>
+
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Application Status</span>
+      </div>
+
+      <div class="ob-body">
+        <div class="ob-info-row">
+          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2026-0001</div></div>
+          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">4 Jun 2026</div></div>
+          <div class="ob-info-chip"><div class="label">Status</div><div class="value"><span class="badge badge-payment">Payment Required</span></div></div>
+        </div>
+        <div class="ob-greeting"><h1>Hi, priyanka</h1><p>Here's the latest status of your application.</p></div>
+        <div class="ob-card">
+          <div class="banner banner-orange">
+            <div class="banner-icon" style="background:#FFA500">🔑</div>
+            <div>
+              <div class="banner-title" style="color:#92400e">Action Required: Complete your payment</div>
+              <div class="banner-desc">Your agreement has been signed. Please complete the payment to activate your account.</div>
+            </div>
+          </div>
+
+          <div class="pill-done">✓ Agreement Complete</div>
+
+          <div class="chip-row">
+            <div class="chip"><div class="chip-label">Amount</div><div class="chip-value">INR 5,000</div></div>
+            <div class="chip"><div class="chip-label">Frequency</div><div class="chip-value">Monthly</div></div>
+            <div class="chip"><div class="chip-label">Plan</div><div class="chip-value">Pro Protection</div></div>
+            <div class="chip"><div class="chip-label">Duration</div><div class="chip-value">1 Year</div></div>
+          </div>
+
+          <div style="padding:20px;border:1.5px solid #f3f4f6;border-radius:16px">
+            <button class="pay-btn">Pay INR 5,000 →</button>
+            <div class="secure-note">🔒 Secured payment via Razorpay</div>
+          </div>
+
+          <!-- Razorpay modal hint -->
+          <div style="margin-top:16px;background:#f9fafb;border:1.5px dashed #e5e7eb;border-radius:12px;padding:16px;text-align:center">
+            <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:4px">When Pay button is clicked →</div>
+            <div style="font-size:12px;color:#9ca3af">Razorpay modal opens with UPI, Cards, Netbanking, Wallets. Payment completes inline — no page redirect.</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+  </div>
+
+  <!-- Ops Setup -->
+  <div id="ob-ops" class="screen-group">
+    <div class="screen-group-title">Customer Portal — Setup in Progress</div>
+    <div class="screen-label">Status: ops_setup — shown after payment (online or offline)</div>
+
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Application Status</span>
+      </div>
+
+      <div class="ob-body">
+        <div class="ob-info-row">
+          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2026-0001</div></div>
+          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">4 Jun 2026</div></div>
+          <div class="ob-info-chip"><div class="label">Status</div><div class="value"><span class="badge badge-ops">Setup in Progress</span></div></div>
+        </div>
+        <div class="ob-greeting"><h1>Hi, priyanka</h1><p>Here's the latest status of your application.</p></div>
+        <div class="ob-card">
+          <div class="banner banner-teal">
+            <div class="banner-icon" style="background:#0d9488">⚙️</div>
+            <div>
+              <div class="banner-title" style="color:#0f766e">Thank you! Setup in Progress</div>
+              <div class="banner-desc">Our ops team is setting up your account and will share your details soon. This typically takes 1–2 business days.</div>
+            </div>
+          </div>
+
+          <div style="padding:20px;border:1.5px solid #f3f4f6;border-radius:16px">
+            <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:16px">Progress</div>
+            <div class="timeline">
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-done">✓</div><div class="tl-line tl-line-done"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#111827">Application Submitted</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-done">✓</div><div class="tl-line tl-line-done"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#111827">Under Sales Review</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-done">✓</div><div class="tl-line tl-line-done"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#111827">Agreement &amp; Payment</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-active"><span style="display:block;width:8px;height:8px;border-radius:50%;background:#111827"></span></div><div class="tl-line"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#FFA500">Operations Setup</div><div class="tl-label-sub">In progress…</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-pending"><span style="display:block;width:8px;height:8px;border-radius:50%;background:#9ca3af"></span></div></div><div class="tl-label"><div class="tl-label-text" style="color:#9ca3af">Account Activated</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+  </div>
+
+  <!-- Active -->
+  <div id="ob-active" class="screen-group">
+    <div class="screen-group-title">Customer Portal — Account Activated</div>
+    <div class="screen-label">Status: active — ops marks this manually once setup is complete</div>
+
+    <div class="screen">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Application Status</span>
+      </div>
+
+      <div class="ob-body">
+        <div class="ob-info-row">
+          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2026-0001</div></div>
+          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">4 Jun 2026</div></div>
+          <div class="ob-info-chip"><div class="label">Status</div><div class="value"><span class="badge badge-active">Active</span></div></div>
+        </div>
+        <div class="ob-greeting"><h1>Hi, priyanka</h1><p>Here's the latest status of your application.</p></div>
+        <div class="ob-card">
+          <div class="banner banner-green">
+            <div class="banner-icon" style="background:#16a34a">✓</div>
+            <div>
+              <div class="banner-title" style="color:#166534">Account Activated!</div>
+              <div class="banner-desc">You'll receive your dashboard credentials by email shortly.</div>
+            </div>
+          </div>
+
+          <div style="padding:16px;border:1.5px solid #f3f4f6;border-radius:14px;margin-bottom:16px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#9ca3af;margin-bottom:10px">Services Enrolled</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:5px 14px;font-size:12px;font-weight:600">Business Intelligence</span>
+              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:5px 14px;font-size:12px;font-weight:600">Reputation Management</span>
+            </div>
+          </div>
+
+          <div style="padding:20px;border:1.5px solid #f3f4f6;border-radius:16px">
+            <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:16px">Progress</div>
+            <div class="timeline">
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-done">✓</div><div class="tl-line tl-line-done"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#111827">Application Submitted</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-done">✓</div><div class="tl-line tl-line-done"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#111827">Under Sales Review</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-done">✓</div><div class="tl-line tl-line-done"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#111827">Agreement &amp; Payment</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-done">✓</div><div class="tl-line tl-line-done"></div></div><div class="tl-label"><div class="tl-label-text" style="color:#111827">Operations Setup</div></div></div>
+              <div class="timeline-row"><div class="tl-dot-col"><div class="tl-dot tl-dot-active"><span style="display:block;width:8px;height:8px;border-radius:50%;background:#111827"></span></div></div><div class="tl-label"><div class="tl-label-text" style="color:#FFA500">Account Activated</div></div></div>
+            </div>
+          </div>
+
+          <div style="text-align:center;margin-top:16px;font-size:13px;color:#6b7280">
+            Need help? <a href="mailto:support@bytescare.com" style="color:#FFA500;font-weight:700">support@bytescare.com</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+  </div>
+
+  <!-- Email summary -->
+  <div id="emails" class="screen-group">
+    <div class="screen-group-title">Email Notification Triggers</div>
+    <div class="flow-wrap">
+      <table style="font-size:13px">
+        <thead>
+          <tr>
+            <th>Trigger Event</th>
+            <th>Recipient</th>
+            <th>Subject Line</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Customer submits application</td><td><span class="badge badge-review">Sales Team</span></td><td style="font-family:monospace;font-size:11px">[New Application] #BC-2026-0001 – Name</td></tr>
+          <tr><td>Customer submits application</td><td><span class="badge badge-active">Customer</span></td><td style="font-family:monospace;font-size:11px">Bytescare Application Received – Name</td></tr>
+          <tr><td>Sales sends agreement</td><td><span class="badge badge-active">Customer</span></td><td style="font-family:monospace;font-size:11px">Action Required: Sign Your Bytescare Agreement</td></tr>
+          <tr><td>Customer signs all agreements</td><td><span class="badge badge-review">Sales Team</span></td><td style="font-family:monospace;font-size:11px">[Agreement Signed] #BC-2026-0001 – Name</td></tr>
+          <tr><td>All signed + online payment</td><td><span class="badge badge-active">Customer</span></td><td style="font-family:monospace;font-size:11px">Action Required: Complete Payment – #BC-2026-0001</td></tr>
+          <tr><td>Customer completes Razorpay payment</td><td><span class="badge badge-review">Sales Team</span></td><td style="font-family:monospace;font-size:11px">[Payment Received] #BC-2026-0001 – Name</td></tr>
+          <tr><td>Customer completes Razorpay payment</td><td><span class="badge badge-ops">Ops Team</span></td><td style="font-family:monospace;font-size:11px">[Ops] #BC-2026-0001 – Ready for Setup</td></tr>
+          <tr><td>Sales confirms offline payment</td><td><span class="badge badge-ops">Ops Team</span></td><td style="font-family:monospace;font-size:11px">[Ops] #BC-2026-0001 – Ready for Setup</td></tr>
+          <tr><td>Abandoned session (cron daily)</td><td><span class="badge badge-review">Sales Team</span></td><td style="font-family:monospace;font-size:11px">[Abandoned Onboarding] Name – Follow Up Required</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
