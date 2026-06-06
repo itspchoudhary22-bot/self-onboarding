@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bytescare c-dash — Billing Module (Concept)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; }
+
+  /* Layout */
+  .app { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    background: #1a1d27;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-logo {
+    padding: 22px 20px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sidebar-logo .brand { font-size: 16px; font-weight: 900; }
+  .sidebar-logo .brand .orange { color: #FFA500; }
+  .sidebar-logo .brand .white { color: #f8fafc; }
+  .sidebar-logo .badge {
+    font-size: 9px;
+    font-weight: 700;
+    background: rgba(255,165,0,0.15);
+    color: #FFA500;
+    padding: 2px 6px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(255,165,0,0.25);
+  }
+  .nav-section { padding: 16px 12px 8px; }
+  .nav-section-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.25);
+    padding: 0 8px;
+    margin-bottom: 6px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 1px;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.8); }
+  .nav-item.active { background: rgba(255,165,0,0.12); color: #FFA500; font-weight: 700; }
+  .nav-item.active svg { color: #FFA500; }
+  .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+  }
+  .sidebar-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFA500, #7C3AED);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: #fff;
+    flex-shrink: 0;
+  }
+  .sidebar-user-name { font-size: 12px; font-weight: 600; color: #e2e8f0; }
+  .sidebar-user-email { font-size: 10px; color: rgba(255,255,255,0.3); }
+
+  /* Main content */
+  .main { flex: 1; overflow-y: auto; }
+  .page-header {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .page-title { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .page-subtitle { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 3px; }
+  .btn {
+    padding: 9px 18px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: #FFA500; color: #111827; }
+  .btn-ghost { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.1); }
+
+  .content { padding: 28px 32px; }
+
+  /* Screen sections */
+  .screen-section {
+    margin-bottom: 60px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .screen-section:last-child { border-bottom: none; }
+  .section-heading {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #FFA500;
+    margin-bottom: 6px;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  /* Stat cards */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .stat-card {
+    background: #1a1d27;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.3); margin-bottom: 8px; }
+  .stat-value { font-size: 26px; font-weight: 900; color: #f8fafc; }
+  .stat-value.orange { color: #FFA500; }
+  .stat-value.green { color: #34d399; }
+  .stat-value.red { color: #f87171; }
+  .stat-sub { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 5px; }
+  .stat-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-top: 8px;
+  }
+  .badge-green { background: rgba(52,211,153,0.12); color: #34d399; }
+  .badge-orange { background: rgba(255,165,0,0.12); color: #FFA500; }
+  .badge-red { background: rgba(248,113,113,0.12); color: #f87171; }
+  .badge-gray { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.4); }
+
+  /* Plan card */
+  .plan-card {
+    background: linear-gradient(135deg, rgba(255,165,0,0.08) 0%, rgba(124,58,237,0.08) 100%);
+    border: 1.5px solid rgba(255,165,0,0.2);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .plan-name { font-size: 18px; font-weight: 900; color: #FFA500; }
+  .plan-price { font-size: 28px; font-weight: 900; color: #f8fafc; }
+  .plan-price span { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.4); }
+  .plan-features { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .plan-feat-tag {
+    font-size: 11px; font-weight: 600;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6);
+    padding: 4px 10px; border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .plan-next { text-align: right; }
+  .plan-next-label { font-size: 11px; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
+  .plan-next-date { font-size: 15px; font-weight: 700; color: #f8fafc; }
+
+  /* Timeline / progress bar */
+  .billing-period {
+    background: #1a1d27;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+  }
+  .bp-label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+  .bp-bar-track { background: rgba(255,255,255,0.07); border-radius: 99px; height: 8px; margin-bottom: 8px; }
+  .bp-bar-fill { background: linear-gradient(90deg, #FFA500, #7C3AED); border-radius: 99px; height: 8px; width: 62%; }
+  .bp-dates { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.25); }
+
+  /* Table */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.25);
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .data-table td {
+    padding: 13px 14px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: middle;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .table-wrap {
+    background: #1a1d27;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .table-title { font-size: 14px; font-weight: 700; color: #f8fafc; }
+  .inv-id { font-family: monospace; font-size: 12px; color: #FFA500; font-weight: 700; }
+  .inv-status { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .inv-paid { background: rgba(52,211,153,0.12); color: #34d399; }
+  .inv-pending { background: rgba(255,165,0,0.12); color: #FFA500; }
+  .inv-failed { background: rgba(248,113,113,0.12); color: #f87171; }
+  .dl-btn {
+    font-size: 11px; font-weight: 700;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.5);
+    padding: 5px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.08);
+    white-space: nowrap;
+  }
+
+  /* Usage meters */
+  .usage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .usage-card {
+    background: #1a1d27;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .usage-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .usage-name { font-size: 13px; font-weight: 700; color: #f8fafc; }
+  .usage-val { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.5); }
+  .usage-track { background: rgba(255,255,255,0.07); border-radius: 99px; height: 6px; margin-bottom: 8px; }
+  .usage-fill { border-radius: 99px; height: 6px; }
+  .fill-green { background: #34d399; }
+  .fill-orange { background: #FFA500; }
+  .fill-red { background: #f87171; }
+  .usage-limit { font-size: 10px; color: rgba(255,255,255,0.2); }
+
+  /* Payment methods */
+  .pm-card {
+    background: #1a1d27;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .pm-card.default { border-color: rgba(255,165,0,0.25); }
+  .pm-icon {
+    width: 44px; height: 30px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .pm-info { flex: 1; }
+  .pm-name { font-size: 13px; font-weight: 700; color: #f8fafc; }
+  .pm-detail { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 2px; }
+  .pm-default-badge {
+    font-size: 10px; font-weight: 700;
+    background: rgba(255,165,0,0.12); color: #FFA500;
+    padding: 3px 8px; border-radius: 20px;
+  }
+
+  /* Divider */
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 24px 0; }
+
+  /* Alert banners */
+  .alert {
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .alert-warn { background: rgba(255,165,0,0.08); border: 1px solid rgba(255,165,0,0.2); color: #fbbf24; }
+  .alert-danger { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); color: #f87171; }
+  .alert-info { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.2); color: #93c5fd; }
+  .alert-icon { font-size: 16px; flex-shrink: 0; }
+  .alert-text { flex: 1; }
+  .alert strong { font-weight: 800; }
+  .alert-action { font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: underline; white-space: nowrap; }
+
+  /* Upgrade banner */
+  .upgrade-banner {
+    background: linear-gradient(135deg, #1a1507 0%, #1a0f2e 100%);
+    border: 1.5px solid rgba(255,165,0,0.15);
+    border-radius: 16px;
+    padding: 22px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .upgrade-text { font-size: 15px; font-weight: 800; color: #f8fafc; margin-bottom: 4px; }
+  .upgrade-sub { font-size: 12px; color: rgba(255,255,255,0.35); }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; margin-bottom: 24px; background: rgba(255,255,255,0.04); padding: 4px; border-radius: 10px; width: fit-content; }
+  .tab-btn {
+    padding: 7px 16px; border-radius: 7px; font-size: 12px; font-weight: 600;
+    cursor: pointer; color: rgba(255,255,255,0.4); border: none; background: none;
+  }
+  .tab-btn.active { background: rgba(255,255,255,0.08); color: #f8fafc; }
+
+  /* Annotation callouts */
+  .callout-box {
+    background: rgba(255,165,0,0.05);
+    border: 1.5px dashed rgba(255,165,0,0.25);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+  }
+  .callout-box strong { color: #FFA500; font-weight: 700; }
+
+  /* Screen label strip */
+  .screen-label-strip {
+    background: rgba(255,165,0,0.06);
+    border: 1px solid rgba(255,165,0,0.12);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #FFA500;
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+
+  /* Responsive */
+  @media(max-width:700px){ .sidebar{display:none} .content{padding:20px} }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Sidebar (c-dash style) -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="brand"><span class="white">BYTES</span><span class="orange">CARE</span></div>
+      <span class="badge">c-dash</span>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Activity
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Protection</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Takedowns
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Monitoring
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Reports
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Account</div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Billing
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Settings
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">AK</div>
+        <div>
+          <div class="sidebar-user-name">Aman Kumar</div>
+          <div class="sidebar-user-email">aman@techcorp.io</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SCREEN 1 — BILLING OVERVIEW
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="screen-section">
+      <div class="page-header">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:4px">Screen 1</div>
+          <div class="page-title">Billing Overview</div>
+          <div class="page-subtitle">Current plan, next renewal, quick payment actions</div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost">Download All Invoices</button>
+          <button class="btn btn-primary">Upgrade Plan</button>
+        </div>
+      </div>
+      <div class="content">
+
+        <!-- Alert examples -->
+        <div class="alert alert-warn">
+          <span class="alert-icon">⚠️</span>
+          <div class="alert-text"><strong>Payment due in 3 days</strong> — INR 12,000 due on 9 Jun 2026 for Professional Plan renewal.</div>
+          <span class="alert-action">Pay Now</span>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">Current Plan</div>
+            <div class="stat-value orange">Professional</div>
+            <div class="stat-badge badge-orange">Monthly</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Next Billing</div>
+            <div class="stat-value" style="font-size:20px">9 Jun 2026</div>
+            <div class="stat-sub">3 days remaining</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Amount Due</div>
+            <div class="stat-value orange">₹12,000</div>
+            <div class="stat-sub">Auto-pay enabled</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Paid (YTD)</div>
+            <div class="stat-value green">₹72,000</div>
+            <div class="stat-sub">6 invoices paid</div>
+          </div>
+        </div>
+
+        <!-- Current plan card -->
+        <div class="plan-card">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,165,0,0.5);margin-bottom:6px">Active Plan</div>
+            <div class="plan-name">Professional Plan</div>
+            <div class="plan-features">
+              <span class="plan-feat-tag">5 Websites</span>
+              <span class="plan-feat-tag">3 YouTube Channels</span>
+              <span class="plan-feat-tag">Social Media Monitoring</span>
+              <span class="plan-feat-tag">500 Takedowns/mo</span>
+              <span class="plan-feat-tag">Priority Support</span>
+            </div>
+          </div>
+          <div class="plan-next">
+            <div class="plan-price">₹12,000 <span>/ month</span></div>
+            <div class="plan-next-label" style="margin-top:10px">Renews on</div>
+            <div class="plan-next-date">9 Jun 2026</div>
+            <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end">
+              <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px">Change Plan</button>
+              <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px;color:rgba(248,113,113,0.7)">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing period progress -->
+        <div class="billing-period">
+          <div class="bp-label">Current Billing Period — May 9 to Jun 9, 2026</div>
+          <div class="bp-bar-track"><div class="bp-bar-fill"></div></div>
+          <div class="bp-dates">
+            <span>May 9, 2026 (start)</span>
+            <span>19 days elapsed · 11 remaining</span>
+            <span>Jun 9, 2026 (end)</span>
+          </div>
+        </div>
+
+        <!-- Recent invoices (short) -->
+        <div class="table-wrap">
+          <div class="table-header">
+            <div class="table-title">Recent Invoices</div>
+            <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px">View All →</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Invoice</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Method</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="inv-id">INV-2026-006</span></td>
+                <td>May 9, 2026</td>
+                <td style="font-weight:700;color:#f8fafc">₹12,000</td>
+                <td><span class="inv-status inv-paid">Paid</span></td>
+                <td>UPI Auto-pay</td>
+                <td><span class="dl-btn">↓ PDF</span></td>
+              </tr>
+              <tr>
+                <td><span class="inv-id">INV-2026-005</span></td>
+                <td>Apr 9, 2026</td>
+                <td style="font-weight:700;color:#f8fafc">₹12,000</td>
+                <td><span class="inv-status inv-paid">Paid</span></td>
+                <td>UPI Auto-pay</td>
+                <td><span class="dl-btn">↓ PDF</span></td>
+              </tr>
+              <tr>
+                <td><span class="inv-id">INV-2026-004</span></td>
+                <td>Mar 9, 2026</td>
+                <td style="font-weight:700;color:#f8fafc">₹12,000</td>
+                <td><span class="inv-status inv-paid">Paid</span></td>
+                <td>Card</td>
+                <td><span class="dl-btn">↓ PDF</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout-box">
+          <strong>What this screen gives the customer:</strong> At a glance — what plan they're on, when they get charged next, how much, and whether auto-pay is working. The alert banner proactively surfaces anything that needs action (failed payment, expiring card, etc.).<br/>
+          <strong>Billing triggers from onboarding:</strong> When ops marks status → <code>active</code>, the client's plan start date and recurring charge cycle begins from that date.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SCREEN 2 — INVOICE HISTORY
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="screen-section">
+      <div class="page-header">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:4px">Screen 2</div>
+          <div class="page-title">Invoice History</div>
+          <div class="page-subtitle">Full record of all charges, downloadable PDFs</div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost">Export CSV</button>
+          <button class="btn btn-ghost">Download All PDFs</button>
+        </div>
+      </div>
+      <div class="content">
+
+        <div class="tabs">
+          <button class="tab-btn active">All</button>
+          <button class="tab-btn">Paid</button>
+          <button class="tab-btn">Pending</button>
+          <button class="tab-btn">Failed</button>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Invoice ID</th>
+                <th>Billing Period</th>
+                <th>Plan</th>
+                <th>Amount</th>
+                <th>Payment Method</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="inv-id">INV-2026-006</span></td>
+                <td style="color:rgba(255,255,255,0.4);font-size:12px">May 9 – Jun 9</td>
+                <td>Professional</td>
+                <td style="font-weight:700;color:#f8fafc">₹12,000</td>
+                <td>UPI Auto-pay</td>
+                <td><span class="inv-status inv-paid">Paid</span></td>
+                <td style="font-size:12px;color:rgba(255,255,255,0.4)">May 9, 2026</td>
+                <td><span class="dl-btn">↓ PDF</span></td>
+              </tr>
+              <tr>
+                <td><span class="inv-id">INV-2026-005</span></td>
+                <td style="color:rgba(255,255,255,0.4);font-size:12px">Apr 9 – May 9</td>
+                <td>Professional</td>
+                <td style="font-weight:700;color:#f8fafc">₹12,000</td>
+                <td>UPI Auto-pay</td>
+                <td><span class="inv-status inv-paid">Paid</span></td>
+                <td style="font-size:12px;color:rgba(255,255,255,0.4)">Apr 9, 2026</td>
+                <td><span class="dl-btn">↓ PDF</span></td>
+              </tr>
+              <tr>
+                <td><span class="inv-id">INV-2026-004</span></td>
+                <td style="color:rgba(255,255,255,0.4);font-size:12px">Mar 9 – Apr 9</td>
+                <td>Professional</td>
+                <td style="font-weight:700;color:#f8fafc">₹12,000</td>
+                <td>Card ····4242</td>
+                <td><span class="inv-status inv-paid">Paid</span></td>
+                <td style="font-size:12px;color:rgba(255,255,255,0.4)">Mar 9, 2026</td>
+                <td><span class="dl-btn">↓ PDF</span></td>
+              </tr>
+              <tr>
+                <td><span class="inv-id">INV-2026-003</span></td>
+                <td style="color:rgba(255,255,255,0.4);font-size:12px">Feb 9 – Mar 9</td>
+                <td>Starter</td>
+                <td style="font-weight:700;color:#f8fafc">₹5,000</td>
+                <td>Card ····4242</td>
+                <td><span class="inv-status inv-paid">Paid</span></td>
+                <td style="font-size:12px;color:rgba(255,255,255,0.4)">Feb 9, 2026</td>
+                <td><span class="dl-btn">↓ PDF</span></td>
+              </tr>
+              <tr>
+                <td><span class="inv-id">INV-2026-002</span></td>
+                <td style="color:rgba(255,255,255,0.4);font-size:12px">Jan 9 – Feb 9</td>
+                <td>Starter</td>
+                <td style="font-weight:700;color:#f87171">₹5,000</td>
+                <td>Card ····4242</td>
+                <td><span class="inv-status inv-failed">Failed</span></td>
+                <td style="font-size:12px;color:rgba(255,255,255,0.4)">Jan 9, 2026</td>
+                <td><span class="dl-btn">Retry</span></td>
+              </tr>
+              <tr>
+                <td><span class="inv-id">INV-2025-001</span></td>
+                <td style="color:rgba(255,255,255,0.4);font-size:12px">Dec 9 – Jan 9</td>
+                <td>Starter</td>
+                <td style="font-weight:700;color:#f8fafc">₹5,000</td>
+                <td>Offline (NEFT)</td>
+                <td><span class="inv-status inv-paid">Paid</span></td>
+                <td style="font-size:12px;color:rgba(255,255,255,0.4)">Dec 9, 2025</td>
+                <td><span class="dl-btn">↓ PDF</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout-box">
+          <strong>Notes for the team:</strong> Each invoice maps to one billing cycle. When payment method is "Offline (NEFT/Cheque)", the sales team manually confirms it from the sales portal — same flow as onboarding offline payment. Failed payments auto-retry after 3 days and trigger an email alert to the client.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SCREEN 3 — PLAN & USAGE
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="screen-section">
+      <div class="page-header">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:4px">Screen 3</div>
+          <div class="page-title">Plan &amp; Usage</div>
+          <div class="page-subtitle">How much of your plan you've used this cycle</div>
+        </div>
+        <button class="btn btn-primary">Upgrade Plan</button>
+      </div>
+      <div class="content">
+
+        <!-- Usage meters -->
+        <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.4);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.08em;font-size:11px">Usage This Billing Cycle</div>
+        <div class="usage-grid">
+          <div class="usage-card">
+            <div class="usage-top">
+              <div class="usage-name">Takedowns</div>
+              <div class="usage-val">387 / 500</div>
+            </div>
+            <div class="usage-track"><div class="usage-fill fill-orange" style="width:77%"></div></div>
+            <div class="usage-limit">77% used · 113 remaining</div>
+          </div>
+          <div class="usage-card">
+            <div class="usage-top">
+              <div class="usage-name">Monitored Websites</div>
+              <div class="usage-val">3 / 5</div>
+            </div>
+            <div class="usage-track"><div class="usage-fill fill-green" style="width:60%"></div></div>
+            <div class="usage-limit">60% used · 2 slots free</div>
+          </div>
+          <div class="usage-card">
+            <div class="usage-top">
+              <div class="usage-name">YouTube Channels</div>
+              <div class="usage-val">3 / 3</div>
+            </div>
+            <div class="usage-track"><div class="usage-fill fill-red" style="width:100%"></div></div>
+            <div class="usage-limit">100% — at limit</div>
+          </div>
+          <div class="usage-card">
+            <div class="usage-top">
+              <div class="usage-name">Social Handles</div>
+              <div class="usage-val">6 / 10</div>
+            </div>
+            <div class="usage-track"><div class="usage-fill fill-green" style="width:60%"></div></div>
+            <div class="usage-limit">60% used · 4 remaining</div>
+          </div>
+          <div class="usage-card">
+            <div class="usage-top">
+              <div class="usage-name">API Calls</div>
+              <div class="usage-val">8,200 / 10,000</div>
+            </div>
+            <div class="usage-track"><div class="usage-fill fill-orange" style="width:82%"></div></div>
+            <div class="usage-limit">82% used — approaching limit</div>
+          </div>
+          <div class="usage-card">
+            <div class="usage-top">
+              <div class="usage-name">Reports Generated</div>
+              <div class="usage-val">12 / unlimited</div>
+            </div>
+            <div class="usage-track"><div class="usage-fill fill-green" style="width:20%"></div></div>
+            <div class="usage-limit">Unlimited on this plan</div>
+          </div>
+        </div>
+
+        <!-- Plan comparison / upgrade -->
+        <div class="upgrade-banner">
+          <div>
+            <div class="upgrade-text">You're close to your YouTube channel limit</div>
+            <div class="upgrade-sub">Upgrade to Enterprise to monitor unlimited channels and get 2,000 takedowns/month.</div>
+          </div>
+          <button class="btn btn-primary">View Enterprise →</button>
+        </div>
+
+        <hr class="divider"/>
+
+        <!-- Plan comparison table -->
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:16px">All Plans</div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Plan</th>
+                <th>Price</th>
+                <th>Takedowns</th>
+                <th>Websites</th>
+                <th>YouTube</th>
+                <th>Support</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700;color:#f8fafc">Starter</td>
+                <td>₹5,000/mo</td>
+                <td>150/mo</td>
+                <td>2</td>
+                <td>1</td>
+                <td>Email</td>
+                <td><span class="dl-btn">Downgrade</span></td>
+              </tr>
+              <tr style="background:rgba(255,165,0,0.03)">
+                <td style="font-weight:800;color:#FFA500">Professional <span style="font-size:10px;background:rgba(255,165,0,0.15);padding:2px 6px;border-radius:20px;margin-left:6px">Current</span></td>
+                <td>₹12,000/mo</td>
+                <td>500/mo</td>
+                <td>5</td>
+                <td>3</td>
+                <td>Priority</td>
+                <td style="color:rgba(255,255,255,0.2);font-size:12px">—</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;color:#f8fafc">Enterprise</td>
+                <td>₹30,000/mo</td>
+                <td>2,000/mo</td>
+                <td>Unlimited</td>
+                <td>Unlimited</td>
+                <td>Dedicated AM</td>
+                <td><button class="btn btn-primary" style="padding:6px 14px;font-size:11px">Upgrade</button></td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;color:#f8fafc">Custom</td>
+                <td style="color:rgba(255,255,255,0.4)">Talk to sales</td>
+                <td>Custom</td>
+                <td>Custom</td>
+                <td>Custom</td>
+                <td>Dedicated AM</td>
+                <td><button class="btn btn-ghost" style="padding:6px 14px;font-size:11px">Contact Sales</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout-box">
+          <strong>For the team:</strong> Plan changes (upgrade/downgrade) go through the sales team for now — clicking "Upgrade" raises a request to sales. Future: self-serve upgrade via Razorpay.
+          Usage counters can be pulled from the existing c-dash activity/takedown data — no new data source needed.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SCREEN 4 — PAYMENT METHODS
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="screen-section">
+      <div class="page-header">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:4px">Screen 4</div>
+          <div class="page-title">Payment Methods</div>
+          <div class="page-subtitle">Saved cards, UPI IDs, and auto-pay settings</div>
+        </div>
+        <button class="btn btn-primary">+ Add Payment Method</button>
+      </div>
+      <div class="content">
+
+        <div class="alert alert-info">
+          <span class="alert-icon">💡</span>
+          <div class="alert-text"><strong>Auto-pay is ON.</strong> Your default payment method will be charged automatically on each renewal date. You can turn this off anytime.</div>
+        </div>
+
+        <!-- Saved methods -->
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:14px">Saved Methods</div>
+
+        <div class="pm-card default">
+          <div class="pm-icon">💳</div>
+          <div class="pm-info">
+            <div class="pm-name">HDFC Credit Card ····4242</div>
+            <div class="pm-detail">Visa · Expires 08/27</div>
+          </div>
+          <span class="pm-default-badge">Default</span>
+          <span class="dl-btn" style="margin-left:8px">Remove</span>
+        </div>
+
+        <div class="pm-card">
+          <div class="pm-icon">📱</div>
+          <div class="pm-info">
+            <div class="pm-name">UPI — aman@okicici</div>
+            <div class="pm-detail">ICICI Bank · Added Apr 2026</div>
+          </div>
+          <span class="dl-btn">Set as Default</span>
+          <span class="dl-btn" style="margin-left:8px">Remove</span>
+        </div>
+
+        <div class="pm-card">
+          <div class="pm-icon">🏦</div>
+          <div class="pm-info">
+            <div class="pm-name">Net Banking — SBI</div>
+            <div class="pm-detail">Manual · No auto-pay support</div>
+          </div>
+          <span class="dl-btn" style="color:rgba(255,255,255,0.25)">No auto-pay</span>
+        </div>
+
+        <hr class="divider"/>
+
+        <!-- Auto-pay toggle -->
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:14px">Auto-Pay Settings</div>
+        <div class="pm-card">
+          <div style="flex:1">
+            <div class="pm-name">Auto-pay on renewal</div>
+            <div class="pm-detail">Automatically charge HDFC ····4242 on Jun 9, 2026 for ₹12,000</div>
+          </div>
+          <div style="background:rgba(52,211,153,0.15);color:#34d399;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;border:1px solid rgba(52,211,153,0.2)">ON</div>
+        </div>
+
+        <div class="callout-box">
+          <strong>For the team:</strong> Razorpay Subscriptions (or saved token with recurring mandate) handles auto-pay. Offline clients (those who paid NEFT during onboarding) will NOT see auto-pay options — they get a "Payment due" email each cycle and the sales team marks it paid manually in the sales portal, same as before.
+          <br/><br/>
+          <strong>Integration point:</strong> When onboarding → <code>active</code>, Razorpay customer ID + payment method token is stored on the account. c-dash Billing page reads from that.
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         FLOW SUMMARY
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="screen-section">
+      <div class="page-header">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:4px">Architecture Note</div>
+          <div class="page-title">How Billing Connects to Onboarding</div>
+          <div class="page-subtitle">High-level flow for the team</div>
+        </div>
+      </div>
+      <div class="content">
+
+        <!-- Flow steps -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:28px">
+          <div style="background:#1a1d27;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px">
+            <div style="font-size:22px;margin-bottom:10px">1️⃣</div>
+            <div style="font-size:13px;font-weight:800;color:#f8fafc;margin-bottom:6px">Onboarding Portal</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6">Customer completes form, signs agreement, makes first payment via Razorpay (or offline). Sales confirms → status becomes <code style="color:#FFA500">ops_setup</code>.</div>
+          </div>
+          <div style="background:#1a1d27;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px">
+            <div style="font-size:22px;margin-bottom:10px">2️⃣</div>
+            <div style="font-size:13px;font-weight:800;color:#f8fafc;margin-bottom:6px">Ops Sets Up Account</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6">Ops team provisions the client in c-dash, links their Razorpay customer token, sets plan limits, marks status → <code style="color:#FFA500">active</code>.</div>
+          </div>
+          <div style="background:#1a1d27;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px">
+            <div style="font-size:22px;margin-bottom:10px">3️⃣</div>
+            <div style="font-size:13px;font-weight:800;color:#f8fafc;margin-bottom:6px">c-dash Access Granted</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6">Client gets login credentials via email. Billing tab shows plan from day 1 — first renewal is already scheduled in Razorpay.</div>
+          </div>
+          <div style="background:#1a1d27;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px">
+            <div style="font-size:22px;margin-bottom:10px">4️⃣</div>
+            <div style="font-size:13px;font-weight:800;color:#f8fafc;margin-bottom=6px">Recurring Billing</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6">Razorpay auto-charges on each renewal. Webhook creates a new invoice record, sends email receipt. Failed payments trigger retry + alert.</div>
+          </div>
+        </div>
+
+        <!-- What to build vs skip -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="background:#0d1f15;border:1.5px solid rgba(52,211,153,0.2);border-radius:14px;padding:18px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#34d399;margin-bottom:12px">Phase 1 — Build First</div>
+            <ul style="font-size:12px;color:rgba(255,255,255,0.55);line-height:2;padding-left:16px">
+              <li>Billing Overview screen (plan + next date + amount)</li>
+              <li>Invoice list with PDF download</li>
+              <li>Payment failed alert banner + retry button</li>
+              <li>Saved payment methods list</li>
+              <li>Connect Razorpay webhook → invoice records</li>
+            </ul>
+          </div>
+          <div style="background:#1a1007;border:1.5px solid rgba(255,165,0,0.2);border-radius:14px;padding:18px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#FFA500;margin-bottom:12px">Phase 2 — Later</div>
+            <ul style="font-size:12px;color:rgba(255,255,255,0.55);line-height:2;padding-left:16px">
+              <li>Self-serve plan upgrade/downgrade</li>
+              <li>Usage meter alerts (email when 90% hit)</li>
+              <li>Add / change payment method in-app</li>
+              <li>Annual billing option with discount</li>
+              <li>GST invoice with GSTIN auto-fill</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout-box" style="margin-top:16px">
+          <strong>Key decision for the team:</strong> Recurring payments need Razorpay Subscriptions (auto-mandate) OR a cron job that creates an order + sends payment link each cycle. <strong>Subscriptions</strong> is simpler and fully automated — customer saves UPI mandate once, gets charged every month. Works for both monthly and quarterly cycles. Sales portal remains the same; ops still confirms account activation.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+</body>
+</html>
