@@ -316,6 +316,7 @@
         <div style="background:#f9fafb;border-radius:10px;padding:14px">
           <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin-bottom:10px">Email Notifications Sent Automatically</div>
           <div style="font-size:12px;color:#374151;line-height:2">
+            📧 Customer enters email → <strong>Customer</strong> gets OTP code<br/>
             📧 Customer submits → <strong>Sales</strong> notified<br/>
             📧 Sales sends agreement → <strong>Customer</strong> notified<br/>
             📧 Customer signs → <strong>Sales</strong> notified<br/>
@@ -344,7 +345,7 @@
 
     <div class="flow-wrap">
       <div class="flow-title">Collection Overview</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px">
         <div style="background:#fff8e6;border:2px solid #FFA500;border-radius:12px;padding:14px;text-align:center">
           <div style="font-size:20px;margin-bottom:6px">📋</div>
           <div style="font-weight:800;color:#92400e">applications</div>
@@ -490,7 +491,7 @@
     </div>
 
     <!-- Other collections -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
 
       <!-- Drafts -->
       <div class="flow-wrap" style="padding:0;overflow:hidden">
@@ -501,8 +502,8 @@
         <div style="padding:16px">
           <table style="width:100%;border-collapse:collapse;font-size:12px">
             <tbody>
-              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">sessionId</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Unique, links to localStorage</td></tr>
-              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">resumeToken</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Magic link token for resume email</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">sessionId</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">UUID — identifies this form session, stored in Application on submit</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">resumeToken</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Token for email resume link (legacy — OTP auth is now primary)</td></tr>
               <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">email</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">From form data</td></tr>
               <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">step</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Last active step (1–4)</td></tr>
               <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">status</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">"draft" | "signing" | "submitted"</td></tr>
@@ -511,7 +512,7 @@
             </tbody>
           </table>
           <div style="margin-top:10px;background:#eff6ff;border-radius:8px;padding:10px;font-size:11px;color:#1d4ed8">
-            <strong>Lifecycle:</strong> Created on first keystroke (email entered). Deleted after successful submission. Abandoned cron alerts sales after 24h inactivity.
+            <strong>Lifecycle:</strong> Created when email entered on Step 1. Auto-saved every 3s while user fills form. Marked "submitted" on final submit (not deleted, kept for audit). Looked up by <code>email</code> after OTP auth so returning users resume their draft on any device. Abandoned cron alerts sales after 24h inactivity.
           </div>
         </div>
       </div>
@@ -525,12 +526,12 @@
         <div style="padding:16px">
           <table style="width:100%;border-collapse:collapse;font-size:12px">
             <tbody>
-              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">name</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">e.g. "applicationId"</td></tr>
-              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">value</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Number, increments atomically</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">name</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">"application_counter" (only one doc)</td></tr>
+              <tr><td style="padding:5px 6px;border:1px solid #f3f4f6;font-family:monospace;color:#374151">value</td><td style="padding:5px 6px;border:1px solid #f3f4f6;color:#9ca3af">Number — increments atomically via $inc</td></tr>
             </tbody>
           </table>
           <div style="margin-top:10px;background:#f0fdf4;border-radius:8px;padding:10px;font-size:11px;color:#166534">
-            <strong>Usage:</strong> When application is submitted, Counter.nextValue("applicationId") generates the next number → formatted as BC-2026-0001.
+            <strong>Usage:</strong> On every form submission, <code>Counter.findOneAndUpdate({ name: "application_counter" }, { $inc: { value: 1 } })</code> returns the next number → formatted as <code>BC-2026-0001</code>. Always exactly 1 document in this collection.
           </div>
         </div>
       </div>
@@ -1670,7 +1671,7 @@
       </div>
       <div class="footer-bar"></div>
     </div>
-    <div class="screen-note">On submit: Application document created in MongoDB, Draft deleted, sessionId stored in localStorage, confirmation emails sent to customer + sales.</div>
+    <div class="screen-note">On submit: Application document created in MongoDB, Draft marked "submitted", session identified via OTP cookie (not localStorage). Confirmation emails sent to customer + sales automatically.</div>
   </div>
 
   <!-- ══════════════════════════════════════════════ -->
@@ -1956,6 +1957,7 @@
           </tr>
         </thead>
         <tbody>
+          <tr><td>Customer enters email on onboarding portal</td><td><span class="badge badge-active">Customer</span></td><td style="font-family:monospace;font-size:11px">482163 is your Bytescare verification code</td></tr>
           <tr><td>Customer submits application</td><td><span class="badge badge-review">Sales Team</span></td><td style="font-family:monospace;font-size:11px">[New Application] #BC-2026-0001 – Name</td></tr>
           <tr><td>Customer submits application</td><td><span class="badge badge-active">Customer</span></td><td style="font-family:monospace;font-size:11px">Bytescare Application Received – Name</td></tr>
           <tr><td>Sales sends agreement</td><td><span class="badge badge-active">Customer</span></td><td style="font-family:monospace;font-size:11px">Action Required: Sign Your Bytescare Agreement</td></tr>
