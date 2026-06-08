@@ -293,7 +293,7 @@ export default function OnboardingPage() {
                 </div>
                 <h1 className="text-2xl font-black mb-2" style={{ color: "#111827" }}>Enter your email</h1>
                 <p className="text-sm leading-relaxed" style={{ color: "#6b7280" }}>
-                  We'll send a 6-digit code to verify it's you. No password needed.
+                  We&apos;ll send a 6-digit code to verify it&apos;s you. No password needed.
                 </p>
               </div>
 
