@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bytescare – Email Templates Preview</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f3f4f6;color:#111827}
+  .page{max-width:1100px;margin:0 auto;padding:32px 20px 64px}
+  .page-header{margin-bottom:40px}
+  .page-header h1{font-size:28px;font-weight:900;color:#111827}
+  .page-header p{color:#6b7280;margin-top:6px;font-size:14px}
+  .brand{display:inline-flex;align-items:center;gap:0;margin-bottom:4px}
+  .brand-b{font-size:20px;font-weight:900;color:#111827}
+  .brand-o{font-size:20px;font-weight:900;color:#FFA500}
+
+  .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+  .badge-customer{background:#dbeafe;color:#1e40af}
+  .badge-sales{background:#fef3c7;color:#92400e}
+  .badge-ops{background:#d1fae5;color:#065f46}
+  .badge-auto{background:#f3e8ff;color:#6b21a8}
+  .badge-legacy{background:#f9fafb;color:#9ca3af;border:1px solid #e5e7eb}
+
+  .section-title{font-size:16px;font-weight:800;color:#374151;margin:40px 0 16px;padding-bottom:8px;border-bottom:2px solid #e5e7eb;display:flex;align-items:center;gap:10px}
+
+  .template-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(480px,1fr));gap:28px}
+  @media(max-width:540px){.template-grid{grid-template-columns:1fr}}
+
+  .template-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.07);border:1.5px solid #e5e7eb}
+  .template-card-header{padding:14px 18px;border-bottom:1.5px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between;gap:10;flex-wrap:wrap;gap:8px}
+  .template-card-header .fn{font-size:12px;font-family:monospace;color:#6b7280;font-weight:600}
+  .template-card-meta{padding:12px 18px;background:#f9fafb;border-bottom:1.5px solid #f3f4f6;font-size:12px}
+  .meta-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px}
+  .meta-label{color:#9ca3af;width:72px;flex-shrink:0;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;font-size:10px;padding-top:1px}
+  .meta-value{color:#374151}
+  .meta-value code{font-family:monospace;background:#e5e7eb;padding:1px 5px;border-radius:4px;font-size:11px}
+
+  .template-preview{padding:20px;background:#f9fafb}
+  .email-shell{background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;overflow:hidden;font-size:13px;max-height:520px;overflow-y:auto}
+  .email-content{padding:0}
+
+  .trigger-number{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#111827;color:#FFA500;font-size:10px;font-weight:900;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-header">
+    <div class="brand"><span class="brand-b">BYTES</span><span class="brand-o">CARE</span></div>
+    <h1>Email Notification Templates</h1>
+    <p>All 13 automated emails sent by the onboarding system — with sample data. Source: <code>lib/email.js</code></p>
+    <div class="legend">
+      <span class="badge badge-customer">● Customer</span>
+      <span class="badge badge-sales">● Sales</span>
+      <span class="badge badge-ops">● Ops</span>
+      <span class="badge badge-auto">★ Auto-triggered</span>
+      <span class="badge badge-legacy">◌ Legacy / Deprecated</span>
+    </div>
+  </div>
+
+  <!-- ── Section 1: Authentication ───────────────────────────────────────── -->
+  <div class="section-title"><span class="trigger-number">1</span> Authentication</div>
+  <div class="template-grid">
+
+    <!-- 1. sendOTP -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Verification OTP</div>
+          <div class="fn">sendOTP(email, otp)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-customer">Customer</span>
+          <span class="badge badge-auto">★ Auto</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">User enters email on onboarding portal → OTP requested</span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>847291 is your Bytescare verification code</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value">Customer email address</span></div>
+        <div class="meta-row"><span class="meta-label">Resend</span><span class="meta-value">Rate-limited: 1 OTP per 60s. Expires in 10 min.</span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px">
+              <div style="margin-bottom:24px">
+                <span style="font-size:22px;font-weight:900;color:#111827">BYTES</span><span style="font-size:22px;font-weight:900;color:#FFA500">CARE</span>
+              </div>
+              <h2 style="color:#111827;margin-bottom:8px">Your verification code</h2>
+              <p style="color:#6b7280;margin-bottom:24px;line-height:1.6">
+                Use the code below to sign in to your Bytescare onboarding portal. It expires in 10 minutes.
+              </p>
+              <div style="background:#f9fafb;border:2px solid #e5e7eb;border-radius:16px;padding:24px;text-align:center;margin-bottom:24px">
+                <span style="font-size:40px;font-weight:900;letter-spacing:12px;color:#111827;font-family:monospace">847291</span>
+              </div>
+              <p style="color:#9ca3af;font-size:13px;line-height:1.6">
+                If you did not request this code, you can safely ignore this email. Someone may have entered your address by mistake.
+              </p>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
+              <p style="color:#9ca3af;font-size:12px">© 2025 Bytescare. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Section 2: Onboarding Flow (Customer) ────────────────────────────── -->
+  <div class="section-title"><span class="trigger-number">2</span> Onboarding Flow — Customer Emails</div>
+  <div class="template-grid">
+
+    <!-- 2. sendSubmissionConfirmation -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Application Received</div>
+          <div class="fn">sendSubmissionConfirmation(formData)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-customer">Customer</span>
+          <span class="badge badge-auto">★ Auto</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">Step 4 — customer submits onboarding form</span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>Bytescare Application Received – Acme Corp</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value">signatoryEmail (company) or officialEmail (individual)</span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:620px;margin:0 auto;padding:24px">
+              <div style="margin-bottom:24px">
+                <span style="font-size:22px;font-weight:900;color:#111827">BYTES</span><span style="font-size:22px;font-weight:900;color:#FFA500">CARE</span>
+              </div>
+              <h2 style="color:#111827;margin-bottom:8px">Application Received!</h2>
+              <p style="color:#6b7280;margin-bottom:20px;line-height:1.6">
+                Hi Acme Corp, we have received your onboarding application. Our sales team will review it and reach out shortly.
+              </p>
+              <div style="background:#fffbeb;border:1.5px solid rgba(255,165,0,0.3);border-radius:12px;padding:16px;margin-bottom:24px">
+                <p style="font-weight:700;color:#111827;margin:0 0 10px">What happens next?</p>
+                <table style="width:100%;border-collapse:collapse">
+                  <tr>
+                    <td style="padding:5px 0;vertical-align:top;width:28px"><span style="display:inline-block;background:#FFA500;color:#111827;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;font-size:10px;font-weight:900">1</span></td>
+                    <td style="padding:5px 0;color:#374151;font-size:14px">Our sales team reviews your application (usually within 1 business day)</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:5px 0;vertical-align:top"><span style="display:inline-block;background:#FFA500;color:#111827;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;font-size:10px;font-weight:900">2</span></td>
+                    <td style="padding:5px 0;color:#374151;font-size:14px">You'll receive an email to review and sign your service agreement</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:5px 0;vertical-align:top"><span style="display:inline-block;background:#FFA500;color:#111827;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;font-size:10px;font-weight:900">3</span></td>
+                    <td style="padding:5px 0;color:#374151;font-size:14px">Payment details will be shared once the agreement is signed</td>
+                  </tr>
+                </table>
+              </div>
+              <p style="font-size:13px;font-weight:700;color:#374151;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.08em">Application Summary</p>
+              <div style="margin-bottom:16px;border-radius:12px;overflow:hidden;border:1.5px solid #f3f4f6">
+                <div style="background:#f9fafb;padding:10px 14px;border-bottom:1px solid #f3f4f6">
+                  <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Basic Information</span>
+                </div>
+                <table style="width:100%;border-collapse:collapse">
+                  <tr><td style="padding:7px 12px;color:#9ca3af;font-size:13px;width:170px">Email</td><td style="padding:7px 12px;color:#111827;font-size:13px">john@acmecorp.com</td></tr>
+                  <tr><td style="padding:7px 12px;color:#9ca3af;font-size:13px">Type</td><td style="padding:7px 12px;color:#111827;font-size:13px">Company</td></tr>
+                  <tr><td style="padding:7px 12px;color:#9ca3af;font-size:13px">Country</td><td style="padding:7px 12px;color:#111827;font-size:13px">India</td></tr>
+                </table>
+              </div>
+              <div style="margin-bottom:16px;border-radius:12px;overflow:hidden;border:1.5px solid #f3f4f6">
+                <div style="background:#f9fafb;padding:10px 14px;border-bottom:1px solid #f3f4f6">
+                  <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Company Details</span>
+                </div>
+                <table style="width:100%;border-collapse:collapse">
+                  <tr><td style="padding:7px 12px;color:#9ca3af;font-size:13px;width:170px">Company Name</td><td style="padding:7px 12px;color:#111827;font-size:13px">Acme Corp Pvt. Ltd.</td></tr>
+                  <tr><td style="padding:7px 12px;color:#9ca3af;font-size:13px">Reg. Number</td><td style="padding:7px 12px;color:#111827;font-size:13px">U74999MH2020PTC123456</td></tr>
+                  <tr><td style="padding:7px 12px;color:#9ca3af;font-size:13px">GSTIN</td><td style="padding:7px 12px;color:#111827;font-size:13px">27AABCU9603R1ZX</td></tr>
+                  <tr><td style="padding:7px 12px;color:#9ca3af;font-size:13px">Signatory Name</td><td style="padding:7px 12px;color:#111827;font-size:13px">John Smith</td></tr>
+                  <tr><td style="padding:7px 12px;color:#9ca3af;font-size:13px">Signatory Email</td><td style="padding:7px 12px;color:#111827;font-size:13px">john@acmecorp.com</td></tr>
+                </table>
+              </div>
+              <div style="margin-bottom:16px;border-radius:12px;overflow:hidden;border:1.5px solid #f3f4f6">
+                <div style="background:#f9fafb;padding:10px 14px;border-bottom:1px solid #f3f4f6">
+                  <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Services Selected (2)</span>
+                </div>
+                <div style="padding:12px 14px">
+                  <span style="display:inline-block;margin:3px 4px 3px 0;background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600">DMCA Takedowns</span>
+                  <span style="display:inline-block;margin:3px 4px 3px 0;background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600">Brand Protection</span>
+                </div>
+              </div>
+              <p style="color:#6b7280;font-size:13px;line-height:1.6">Questions? Email <a href="#" style="color:#FFA500">support@bytescare.com</a></p>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0"/>
+              <p style="color:#9ca3af;font-size:12px">© 2025 Bytescare. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. sendAgreementReady -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Agreement Ready to Sign</div>
+          <div class="fn">sendAgreementReady(application)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-customer">Customer</span>
+          <span class="badge badge-auto">★ Auto</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">Sales sets status → <code>agreement_pending</code> in c-dash</span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>Action Required: Sign Your Bytescare Agreement – BC-2025-0042</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value">signatoryEmail or officialEmail</span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <div style="margin-bottom:24px">
+                <span style="font-size:22px;font-weight:900;color:#111827">BYTES</span><span style="font-size:22px;font-weight:900;color:#FFA500">CARE</span>
+              </div>
+              <div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:20px">
+                <p style="font-weight:700;color:#1e40af;margin:0 0 4px">Action Required</p>
+                <p style="color:#3b82f6;margin:0;font-size:14px">Your service agreement is ready for review and signing.</p>
+              </div>
+              <p style="color:#374151;margin-bottom:20px;line-height:1.6">Hi Acme Corp, your Bytescare service agreement has been prepared. Please review it carefully and sign to proceed.</p>
+              <a href="#" style="display:inline-block;background:#FFA500;color:#111827;font-weight:800;font-size:14px;padding:14px 28px;border-radius:12px;text-decoration:none;margin-bottom:16px">
+                Review &amp; Sign Agreement →
+              </a>
+              <p style="color:#6b7280;font-size:13px;line-height:1.6">Application: <strong>BC-2025-0042</strong><br/>Once signed, our team will finalize your payment plan.</p>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0"/>
+              <p style="color:#9ca3af;font-size:12px">© 2025 Bytescare. Questions? <a href="#" style="color:#FFA500">Contact support</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. sendPaymentEnabled -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Complete Payment</div>
+          <div class="fn">sendPaymentEnabled(application)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-customer">Customer</span>
+          <span class="badge badge-auto">★ Auto</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">Sales sets status → <code>payment_pending</code> in c-dash</span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>Action Required: Complete Payment – BC-2025-0042</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value">signatoryEmail or officialEmail</span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <div style="margin-bottom:24px">
+                <span style="font-size:22px;font-weight:900;color:#111827">BYTES</span><span style="font-size:22px;font-weight:900;color:#FFA500">CARE</span>
+              </div>
+              <div style="background:#fff7ed;border:1.5px solid #fed7aa;border-radius:12px;padding:16px;margin-bottom:20px">
+                <p style="font-weight:700;color:#c2410c;margin:0 0 4px">Payment Ready</p>
+                <p style="color:#ea580c;margin:0;font-size:14px">Your payment plan has been configured. Complete payment to activate your account.</p>
+              </div>
+              <p style="color:#374151;margin-bottom:20px;line-height:1.6">Hi Acme Corp, your agreement is signed and your payment plan is ready.</p>
+              <div style="background:#f9fafb;border-radius:12px;padding:16px;margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap">
+                <div style="flex:1;min-width:100px">
+                  <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin:0 0 4px">Plan</p>
+                  <p style="font-size:16px;font-weight:900;color:#111827;margin:0">Enterprise</p>
+                </div>
+                <div style="flex:1;min-width:100px">
+                  <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin:0 0 4px">Amount</p>
+                  <p style="font-size:16px;font-weight:900;color:#FFA500;margin:0">INR 24,999</p>
+                </div>
+                <div style="flex:1;min-width:100px">
+                  <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin:0 0 4px">Frequency</p>
+                  <p style="font-size:16px;font-weight:900;color:#111827;margin:0">Monthly</p>
+                </div>
+              </div>
+              <a href="#" style="display:inline-block;background:#FFA500;color:#111827;font-weight:800;font-size:14px;padding:14px 28px;border-radius:12px;text-decoration:none;margin-bottom:16px">
+                Complete Payment →
+              </a>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0"/>
+              <p style="color:#9ca3af;font-size:12px">© 2025 Bytescare. Questions? <a href="#" style="color:#FFA500">Contact support</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. sendClientConfirmation -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Onboarding Complete / Welcome</div>
+          <div class="fn">sendClientConfirmation(formData)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-customer">Customer</span>
+          <span class="badge badge-auto">★ Auto</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">Sales marks application → <code>active</code> in c-dash</span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>Welcome to Bytescare – Onboarding Complete</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value">signatoryEmail or officialEmail</span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <div style="display:flex;align-items:center;gap:4px;margin-bottom:24px">
+                <span style="font-size:22px;font-weight:900;color:#111827">BYTES</span>
+                <span style="font-size:22px;font-weight:900;color:#FFA500">CARE</span>
+              </div>
+              <h2 style="color:#111827;margin-bottom:8px">You're officially onboarded! 🎉</h2>
+              <p style="color:#6b7280;margin-bottom:20px">Hi Acme Corp, thank you for completing your onboarding with Bytescare.</p>
+              <div style="background:#fffbeb;border:1px solid rgba(255,165,0,0.3);border-radius:12px;padding:16px;margin-bottom:20px">
+                <p style="font-weight:700;color:#111827;margin:0 0 8px">What happens next?</p>
+                <ul style="color:#374151;margin:0;padding-left:20px;line-height:1.8">
+                  <li>Our operations team will begin setting up your account</li>
+                  <li>You will receive your <strong>client dashboard credentials</strong> within 1–2 business days</li>
+                  <li>Your assigned account manager will reach out shortly</li>
+                </ul>
+              </div>
+              <div style="background:#f9fafb;border-radius:12px;padding:16px;margin-bottom:20px">
+                <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin:0 0 8px">Services enrolled</p>
+                <p style="color:#374151;margin:0">DMCA Takedowns · Brand Protection</p>
+              </div>
+              <p style="color:#6b7280;font-size:14px">If you have any questions, reply to this email or contact us at <a href="#" style="color:#FFA500">support@bytescare.com</a></p>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0" />
+              <p style="color:#9ca3af;font-size:12px">© 2025 Bytescare. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legacy: sendResumeLink -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Resume Application Link</div>
+          <div class="fn">sendResumeLink(email, resumeToken)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-customer">Customer</span>
+          <span class="badge badge-legacy">◌ Legacy</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">Customer requests resume link (legacy flow — replaced by OTP auth)</span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>Continue your Bytescare onboarding</code></span></div>
+        <div class="meta-row"><span class="meta-label">Note</span><span class="meta-value" style="color:#92400e">⚠ This function is no longer called by the UI. OTP auth handles resumption now.</span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px">
+              <div style="margin-bottom:24px">
+                <span style="font-size:22px;font-weight:900;color:#111827">BYTES</span><span style="font-size:22px;font-weight:900;color:#FFA500">CARE</span>
+              </div>
+              <h2 style="color:#111827;margin-bottom:8px">Your application is saved ✅</h2>
+              <p style="color:#6b7280;margin-bottom:24px;line-height:1.6">
+                We saved your progress. Use the button below to pick up exactly where you left off — on any device, any browser.
+              </p>
+              <a href="#" style="display:inline-block;background:#FFA500;color:#111827;font-weight:800;font-size:15px;padding:16px 32px;border-radius:14px;text-decoration:none;">
+                Continue My Application →
+              </a>
+              <p style="color:#9ca3af;font-size:13px;margin-top:20px;">
+                Or copy this link: <span style="color:#374151;word-break:break-all;">https://self-onboarding-rosy.vercel.app/onboarding?session=abc123...</span>
+              </p>
+              <p style="color:#9ca3af;font-size:12px;margin-top:24px;">This link is unique to your application. Don't share it with others.</p>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
+              <p style="color:#9ca3af;font-size:12px">© 2025 Bytescare. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Section 3: Sales Notifications ───────────────────────────────────── -->
+  <div class="section-title"><span class="trigger-number">3</span> Sales Notifications</div>
+  <div class="template-grid">
+
+    <!-- sendSalesNewApplication -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">New Application Alert</div>
+          <div class="fn">sendSalesNewApplication(application)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-sales">Sales</span>
+          <span class="badge badge-auto">★ Auto</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">Customer submits form (same time as submission confirmation)</span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>[New Application] BC-2025-0042 – Acme Corp</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value"><code>sales@bytescare.com</code></span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <div style="margin-bottom:20px">
+                <span style="font-size:22px;font-weight:900;color:#111827">BYTES</span><span style="font-size:22px;font-weight:900;color:#FFA500">CARE</span>
+                <span style="margin-left:8px;background:#111827;color:#FFA500;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.05em">Sales Portal</span>
+              </div>
+              <h2 style="color:#111827;margin-bottom:6px">New Application Received</h2>
+              <p style="color:#6b7280;margin-bottom:20px">A new customer has completed onboarding. Please review and process.</p>
+              <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:20px">
+                <tr><td style="padding:8px 0;color:#9ca3af;width:160px;border-bottom:1px solid #f3f4f6">Application ID</td><td style="padding:8px 0;color:#111827;font-weight:700;font-family:monospace;border-bottom:1px solid #f3f4f6">BC-2025-0042</td></tr>
+                <tr><td style="padding:8px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Customer Type</td><td style="padding:8px 0;color:#111827;border-bottom:1px solid #f3f4f6">Company</td></tr>
+                <tr><td style="padding:8px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Name</td><td style="padding:8px 0;color:#111827;border-bottom:1px solid #f3f4f6">Acme Corp Pvt. Ltd.</td></tr>
+                <tr><td style="padding:8px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Email</td><td style="padding:8px 0;color:#111827;border-bottom:1px solid #f3f4f6">john@acmecorp.com</td></tr>
+                <tr><td style="padding:8px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Country</td><td style="padding:8px 0;color:#111827;border-bottom:1px solid #f3f4f6">India</td></tr>
+                <tr><td style="padding:8px 0;color:#9ca3af">Services</td><td style="padding:8px 0;color:#111827">DMCA Takedowns, Brand Protection</td></tr>
+              </table>
+              <a href="#" style="display:inline-block;background:#FFA500;color:#111827;font-weight:800;font-size:14px;padding:14px 28px;border-radius:12px;text-decoration:none;margin-bottom:16px">
+                Review Application in Sales Portal →
+              </a>
+              <p style="color:#9ca3af;font-size:12px">Next steps: Review customer details, set up agreement, configure payment plan, and fill operational requirements.</p>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0"/>
+              <p style="color:#9ca3af;font-size:12px">© 2025 Bytescare Sales Team.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- sendAgreementSignedNotification -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Agreement Signed</div>
+          <div class="fn">sendAgreementSignedNotification(application)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-sales">Sales</span>
+          <span class="badge badge-auto">★ Auto</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">PandaDoc webhook fires when customer signs all documents</span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>[Agreement Signed] BC-2025-0042 – Acme Corp</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value"><code>sales@bytescare.com</code></span></div>
+        <div class="meta-row"><span class="meta-label">Action</span><span class="meta-value">Sales should now configure payment plan in c-dash</span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <div style="margin-bottom:20px">
+                <span style="font-size:22px;font-weight:900;color:#111827">BYTES</span><span style="font-size:22px;font-weight:900;color:#FFA500">CARE</span>
+                <span style="margin-left:8px;background:#111827;color:#FFA500;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.05em">Sales Portal</span>
+              </div>
+              <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:16px;margin-bottom:20px">
+                <p style="font-weight:700;color:#166534;margin:0 0 4px">Agreement Signed ✓</p>
+                <p style="color:#16a34a;margin:0;font-size:14px">The customer has signed all agreements. Next step is now active.</p>
+              </div>
+              <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:20px">
+                <tr><td style="padding:7px 0;color:#9ca3af;width:160px;border-bottom:1px solid #f3f4f6">Application ID</td><td style="padding:7px 0;color:#111827;font-weight:700;font-family:monospace;border-bottom:1px solid #f3f4f6">BC-2025-0042</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Client</td><td style="padding:7px 0;color:#111827;border-bottom:1px solid #f3f4f6">Acme Corp Pvt. Ltd.</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Email</td><td style="padding:7px 0;color:#111827;border-bottom:1px solid #f3f4f6">john@acmecorp.com</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af">Services</td><td style="padding:7px 0;color:#111827">DMCA Takedowns, Brand Protection</td></tr>
+              </table>
+              <a href="#" style="display:inline-block;background:#FFA500;color:#111827;font-weight:800;font-size:14px;padding:14px 28px;border-radius:12px;text-decoration:none;margin-bottom:16px">
+                View in Sales Portal →
+              </a>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0"/>
+              <p style="color:#9ca3af;font-size:12px">© 2025 Bytescare Sales Team.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- sendPaymentReceivedNotification -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Payment Received</div>
+          <div class="fn">sendPaymentReceivedNotification(application)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-sales">Sales</span>
+          <span class="badge badge-auto">★ Auto</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">Razorpay payment verified → <code>/api/razorpay/verify</code></span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>[Payment Received] BC-2025-0042 – Acme Corp</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value"><code>sales@bytescare.com</code></span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <div style="margin-bottom:20px">
+                <span style="font-size:22px;font-weight:900;color:#111827">BYTES</span><span style="font-size:22px;font-weight:900;color:#FFA500">CARE</span>
+                <span style="margin-left:8px;background:#111827;color:#FFA500;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.05em">Sales Portal</span>
+              </div>
+              <div style="background:#fff8e6;border:1.5px solid #fed7aa;border-radius:12px;padding:16px;margin-bottom:20px">
+                <p style="font-weight:700;color:#92400e;margin:0 0 4px">Payment Received 💰</p>
+                <p style="color:#b45309;margin:0;font-size:14px">The customer has completed payment. Account is now queued for ops setup.</p>
+              </div>
+              <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:20px">
+                <tr><td style="padding:7px 0;color:#9ca3af;width:160px;border-bottom:1px solid #f3f4f6">Application ID</td><td style="padding:7px 0;color:#111827;font-weight:700;font-family:monospace;border-bottom:1px solid #f3f4f6">BC-2025-0042</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Client</td><td style="padding:7px 0;color:#111827;border-bottom:1px solid #f3f4f6">Acme Corp Pvt. Ltd.</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Email</td><td style="padding:7px 0;color:#111827;border-bottom:1px solid #f3f4f6">john@acmecorp.com</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Plan</td><td style="padding:7px 0;color:#111827;border-bottom:1px solid #f3f4f6">Enterprise</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Amount Paid</td><td style="padding:7px 0;color:#111827;font-weight:700;border-bottom:1px solid #f3f4f6">INR 24,999 / monthly</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af">Payment ID</td><td style="padding:7px 0;color:#111827;font-family:monospace;font-size:12px">pay_Qz8xK2mN3rL1vJ</td></tr>
+              </table>
+              <a href="#" style="display:inline-block;background:#FFA500;color:#111827;font-weight:800;font-size:14px;padding:14px 28px;border-radius:12px;text-decoration:none;margin-bottom:16px">
+                View in Sales Portal →
+              </a>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0"/>
+              <p style="color:#9ca3af;font-size:12px">© 2025 Bytescare Sales Team.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- sendAbandonedSessionAlert -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Abandoned Onboarding Alert</div>
+          <div class="fn">sendAbandonedSessionAlert(draft)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-sales">Sales</span>
+          <span class="badge badge-auto">★ Cron</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">Daily cron (<code>0 8 * * *</code>) — drafts idle 24h+ without submitting</span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>[Abandoned Onboarding] Acme Corp – Follow Up Required</code><br/>or <code>[Agreement Not Signed] Acme Corp – Needs Follow Up</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value"><code>sales@bytescare.com</code></span></div>
+        <div class="meta-row"><span class="meta-label">Variants</span><span class="meta-value">Two variants: mid-form abandoned vs. stuck at Step 5 (signing)</span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <h2 style="color:#111827">Abandoned Onboarding Alert</h2>
+              <p style="color:#6b7280">A customer started onboarding but did not complete it. They may need follow-up.</p>
+              <table style="width:100%;border-collapse:collapse;font-size:14px;margin-top:16px">
+                <tr><td style="padding:6px 0;color:#9ca3af;width:180px">Name</td><td style="color:#111827">Acme Corp Pvt. Ltd.</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Email</td><td style="color:#111827">john@acmecorp.com</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Type</td><td style="color:#111827">company</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Last Active Step</td><td style="color:#111827">Step 3</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Last Active</td><td style="color:#111827">Jun 15, 2025, 2:14 PM</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- sendSalesQuestion -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Agreement Question Request</div>
+          <div class="fn">sendSalesQuestion(formData)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-sales">Sales</span>
+          <span class="badge badge-auto">★ Auto</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">Customer clicks "Questions?" button on Step 5 (sign agreements)</span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>[Agreement Question] Acme Corp needs help</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value"><code>sales@bytescare.com</code></span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <h2 style="color:#111827">Customer Has Questions About the Agreement</h2>
+              <p style="color:#6b7280">A customer reviewing the Service Agreement clicked "Questions?" and requested to be contacted by the sales team.</p>
+              <table style="width:100%;border-collapse:collapse;font-size:14px;margin-top:16px">
+                <tr><td style="padding:6px 0;color:#9ca3af;width:180px">Name</td><td style="color:#111827">Acme Corp Pvt. Ltd.</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Email</td><td style="color:#111827">john@acmecorp.com</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Type</td><td style="color:#111827">company</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Services</td><td style="color:#111827">DMCA Takedowns, Brand Protection</td></tr>
+              </table>
+              <p style="color:#6b7280;font-size:13px;margin-top:16px">Please reach out to them at <a href="#" style="color:#FFA500">john@acmecorp.com</a> to address their questions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Section 4: Ops Notifications ─────────────────────────────────────── -->
+  <div class="section-title"><span class="trigger-number">4</span> Ops Notifications</div>
+  <div class="template-grid">
+
+    <!-- sendOpsRequirements -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Client Ready for Setup</div>
+          <div class="fn">sendOpsRequirements(application)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-ops">Ops</span>
+          <span class="badge badge-auto">★ Auto</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">Razorpay payment verified → status becomes <code>ops_setup</code></span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>[Ops] BC-2025-0042 – Acme Corp – Ready for Setup</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value"><code>ops@bytescare.com</code></span></div>
+        <div class="meta-row"><span class="meta-label">Note</span><span class="meta-value">Includes assets to protect, platforms, SLA date, special instructions</span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <div style="margin-bottom:20px">
+                <span style="font-size:22px;font-weight:900;color:#111827">BYTES</span><span style="font-size:22px;font-weight:900;color:#FFA500">CARE</span>
+                <span style="margin-left:8px;background:#0f766e;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase">Ops</span>
+              </div>
+              <h2 style="color:#111827;margin-bottom:6px">New Client Ready for Setup</h2>
+              <p style="color:#6b7280;margin-bottom:20px">A new client has completed onboarding. Please begin account setup.</p>
+              <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:20px">
+                <tr><td style="padding:7px 0;color:#9ca3af;width:160px;border-bottom:1px solid #f3f4f6">Application ID</td><td style="padding:7px 0;color:#111827;font-weight:700;font-family:monospace;border-bottom:1px solid #f3f4f6">BC-2025-0042</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Client Name</td><td style="padding:7px 0;color:#111827;border-bottom:1px solid #f3f4f6">Acme Corp Pvt. Ltd.</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Email</td><td style="padding:7px 0;color:#111827;border-bottom:1px solid #f3f4f6">john@acmecorp.com</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Services</td><td style="padding:7px 0;color:#111827;border-bottom:1px solid #f3f4f6">DMCA Takedowns, Brand Protection</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Plan</td><td style="padding:7px 0;color:#111827;border-bottom:1px solid #f3f4f6">Enterprise — INR 24,999/monthly</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af;border-bottom:1px solid #f3f4f6">Priority</td><td style="padding:7px 0;color:#111827;border-bottom:1px solid #f3f4f6">Standard</td></tr>
+                <tr><td style="padding:7px 0;color:#9ca3af">SLA Start</td><td style="padding:7px 0;color:#111827">Jun 17, 2025</td></tr>
+              </table>
+              <div style="background:#f9fafb;border-radius:12px;padding:16px;margin-bottom:16px">
+                <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin:0 0 12px">Assets to Protect</p>
+                <p style="margin:0 0 8px"><strong style="color:#374151;font-size:12px">Websites/URLs:</strong><br/><span style="color:#6b7280;font-size:13px">https://acmecorp.com, https://acmemedia.io</span></p>
+                <p style="margin:0 0 8px"><strong style="color:#374151;font-size:12px">YouTube:</strong><br/><span style="color:#6b7280;font-size:13px">@AcmeOfficialYT</span></p>
+                <p style="margin:0"><strong style="color:#374151;font-size:12px">Brand Names:</strong><br/><span style="color:#6b7280;font-size:13px">Acme, AcmePro</span></p>
+              </div>
+              <div style="background:#f9fafb;border-radius:12px;padding:16px;margin-bottom:16px">
+                <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin:0 0 8px">Monitoring Platforms</p>
+                <p style="color:#374151;font-size:13px;margin:0">Google, YouTube, Social Media, Telegram</p>
+              </div>
+              <div style="background:#fff8e6;border:1px solid rgba(255,165,0,0.3);border-radius:12px;padding:16px;margin-bottom:16px">
+                <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin:0 0 8px">Special Instructions</p>
+                <p style="color:#374151;font-size:13px;margin:0;line-height:1.6">Priority monitoring on YouTube — channel has 500k subscribers. Expedite DMCA setup.</p>
+              </div>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0"/>
+              <p style="color:#9ca3af;font-size:12px">© 2025 Bytescare Operations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- sendOpsNotification (legacy) -->
+    <div class="template-card">
+      <div class="template-card-header">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:2px">Ops Notification (Legacy)</div>
+          <div class="fn">sendOpsNotification(formData)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge badge-ops">Ops</span>
+          <span class="badge badge-legacy">◌ Legacy</span>
+        </div>
+      </div>
+      <div class="template-card-meta">
+        <div class="meta-row"><span class="meta-label">Trigger</span><span class="meta-value">Original simple ops notification (superseded by <code>sendOpsRequirements</code>)</span></div>
+        <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value"><code>[New Onboarding] Acme Corp – company</code></span></div>
+        <div class="meta-row"><span class="meta-label">To</span><span class="meta-value"><code>ops@bytescare.com</code></span></div>
+        <div class="meta-row"><span class="meta-label">Note</span><span class="meta-value" style="color:#92400e">⚠ Still callable but <code>sendOpsRequirements</code> is the primary ops email now.</span></div>
+      </div>
+      <div class="template-preview">
+        <div class="email-shell">
+          <div class="email-content">
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <h2 style="color:#111827">New Onboarding Submission</h2>
+              <table style="width:100%;border-collapse:collapse;font-size:14px">
+                <tr><td style="padding:6px 0;color:#9ca3af;width:180px">Type</td><td style="color:#111827;font-weight:600">company</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Name</td><td style="color:#111827">Acme Corp Pvt. Ltd.</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Email</td><td style="color:#111827">john@acmecorp.com</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Country</td><td style="color:#111827">India</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Signatory</td><td style="color:#111827">John Smith (CEO)</td></tr>
+                <tr><td style="padding:6px 0;color:#9ca3af">Services</td><td style="color:#111827">DMCA Takedowns, Brand Protection</td></tr>
+              </table>
+              <p style="color:#6b7280;font-size:13px;margin-top:16px">Please begin account setup and send dashboard credentials to the client.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Summary Table ────────────────────────────────────────────────────── -->
+  <div class="section-title" style="margin-top:48px">All 13 Templates — Quick Reference</div>
+  <div style="background:#fff;border-radius:16px;overflow:hidden;border:1.5px solid #e5e7eb;overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="background:#f9fafb">
+          <th style="padding:10px 14px;text-align:left;color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e5e7eb;white-space:nowrap">#</th>
+          <th style="padding:10px 14px;text-align:left;color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e5e7eb">Function</th>
+          <th style="padding:10px 14px;text-align:left;color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e5e7eb;white-space:nowrap">To</th>
+          <th style="padding:10px 14px;text-align:left;color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e5e7eb">Trigger</th>
+          <th style="padding:10px 14px;text-align:left;color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1.5px solid #e5e7eb;white-space:nowrap">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">1</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendOTP</td>
+          <td style="padding:10px 14px"><span class="badge badge-customer" style="font-size:11px">Customer</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Email entered on portal</td>
+          <td style="padding:10px 14px"><span class="badge badge-auto" style="font-size:11px">★ Active</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">2</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendSubmissionConfirmation</td>
+          <td style="padding:10px 14px"><span class="badge badge-customer" style="font-size:11px">Customer</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Form submitted (Step 4)</td>
+          <td style="padding:10px 14px"><span class="badge badge-auto" style="font-size:11px">★ Active</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">3</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendAgreementReady</td>
+          <td style="padding:10px 14px"><span class="badge badge-customer" style="font-size:11px">Customer</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Sales sets <code>agreement_pending</code></td>
+          <td style="padding:10px 14px"><span class="badge badge-auto" style="font-size:11px">★ Active</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">4</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendPaymentEnabled</td>
+          <td style="padding:10px 14px"><span class="badge badge-customer" style="font-size:11px">Customer</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Sales sets <code>payment_pending</code></td>
+          <td style="padding:10px 14px"><span class="badge badge-auto" style="font-size:11px">★ Active</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">5</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendClientConfirmation</td>
+          <td style="padding:10px 14px"><span class="badge badge-customer" style="font-size:11px">Customer</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Sales marks <code>active</code></td>
+          <td style="padding:10px 14px"><span class="badge badge-auto" style="font-size:11px">★ Active</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">6</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendResumeLink</td>
+          <td style="padding:10px 14px"><span class="badge badge-customer" style="font-size:11px">Customer</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Legacy resume link request</td>
+          <td style="padding:10px 14px"><span class="badge badge-legacy" style="font-size:11px">◌ Legacy</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">7</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendSalesNewApplication</td>
+          <td style="padding:10px 14px"><span class="badge badge-sales" style="font-size:11px">Sales</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Form submitted (Step 4)</td>
+          <td style="padding:10px 14px"><span class="badge badge-auto" style="font-size:11px">★ Active</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">8</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendAgreementSignedNotification</td>
+          <td style="padding:10px 14px"><span class="badge badge-sales" style="font-size:11px">Sales</span></td>
+          <td style="padding:10px 14px;color:#6b7280">PandaDoc webhook (all signed)</td>
+          <td style="padding:10px 14px"><span class="badge badge-auto" style="font-size:11px">★ Active</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">9</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendPaymentReceivedNotification</td>
+          <td style="padding:10px 14px"><span class="badge badge-sales" style="font-size:11px">Sales</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Razorpay payment verified</td>
+          <td style="padding:10px 14px"><span class="badge badge-auto" style="font-size:11px">★ Active</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">10</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendAbandonedSessionAlert</td>
+          <td style="padding:10px 14px"><span class="badge badge-sales" style="font-size:11px">Sales</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Daily cron — idle drafts 24h+</td>
+          <td style="padding:10px 14px"><span class="badge badge-auto" style="font-size:11px">★ Active</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">11</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendSalesQuestion</td>
+          <td style="padding:10px 14px"><span class="badge badge-sales" style="font-size:11px">Sales</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Customer clicks "Questions?" in Step 5</td>
+          <td style="padding:10px 14px"><span class="badge badge-auto" style="font-size:11px">★ Active</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:10px 14px;color:#9ca3af">12</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendOpsRequirements</td>
+          <td style="padding:10px 14px"><span class="badge badge-ops" style="font-size:11px">Ops</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Razorpay payment verified</td>
+          <td style="padding:10px 14px"><span class="badge badge-auto" style="font-size:11px">★ Active</span></td>
+        </tr>
+        <tr>
+          <td style="padding:10px 14px;color:#9ca3af">13</td>
+          <td style="padding:10px 14px;font-family:monospace;color:#374151;font-size:12px">sendOpsNotification</td>
+          <td style="padding:10px 14px"><span class="badge badge-ops" style="font-size:11px">Ops</span></td>
+          <td style="padding:10px 14px;color:#6b7280">Legacy simple ops alert</td>
+          <td style="padding:10px 14px"><span class="badge badge-legacy" style="font-size:11px">◌ Legacy</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="color:#9ca3af;font-size:12px;margin-top:24px;text-align:center">Source: <code>lib/email.js</code> · All templates use Gmail SMTP via nodemailer · From: <code>Bytescare &lt;onboarding@bytescare.com&gt;</code></p>
+
+</div>
+</body>
+</html>
