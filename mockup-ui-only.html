@@ -213,6 +213,18 @@
     .stats-row { grid-template-columns: 1fr 1fr; }
     .app-detail-layout { grid-template-columns: 1fr; }
   }
+
+  /* Primary button */
+  .btn-primary { display:inline-block; padding:12px 24px; background:#FFA500; color:#111827; font-weight:800; font-size:14px; border:none; border-radius:12px; cursor:pointer; box-shadow:0 4px 14px rgba(255,165,0,0.25); }
+
+  /* Service card modal */
+  .modal-overlay { position:relative; background:rgba(0,0,0,0.04); border-radius:24px; padding:20px; margin-bottom:28px; }
+  .modal-card { background:#fff; border-radius:24px; padding:0; box-shadow:0 8px 40px rgba(0,0,0,0.18); max-width:480px; margin:0 auto; overflow:hidden; }
+  .modal-header { display:flex; align-items:flex-start; gap:14px; padding:24px 24px 16px; border-bottom:1px solid #f3f4f6; }
+  .modal-body { padding:20px 24px; max-height:400px; overflow-y:auto; }
+  .modal-footer { padding:16px 24px; border-top:1px solid #f3f4f6; }
+  .coverage-row { display:flex; align-items:center; gap:10px; background:#f9fafb; border-radius:12px; padding:10px 14px; margin-bottom:8px; font-size:13px; font-weight:600; color:#374151; }
+  .benefit-pill { display:inline-flex; align-items:center; gap:6px; background:#fff8e6; border:1px solid rgba(255,165,0,0.3); border-radius:999px; padding:6px 14px; font-size:12px; font-weight:600; color:#92400e; margin:4px; }
 </style>
 </head>
 <body>
@@ -223,6 +235,7 @@
   <div class="section-label">Overview</div>
   <a href="#flow">Complete Flow Diagram</a>
   <div class="section-label">Sales Portal</div>
+  <a href="#sales-login">Login</a>
   <a href="#sales-dashboard">Dashboard</a>
   <a href="#sales-agreement">Agreement Tab</a>
   <a href="#sales-payment-portal">Payment Tab – Online</a>
@@ -340,6 +353,31 @@
   <!-- SALES PORTAL -->
   <!-- ══════════════════════════════════════════════ -->
 
+  <!-- Sales Login -->
+  <div id="sales-login" class="screen-group">
+    <div class="screen-group-title">Sales Portal — Login</div>
+    <div class="screen-label">Password-protected entry for internal sales team</div>
+
+    <div class="screen" style="max-width:480px;margin:0 auto">
+      <div style="background:#f9fafb;padding:48px 24px;min-height:400px;display:flex;align-items:center;justify-content:center">
+        <div style="width:100%;max-width:360px;background:#fff;border-radius:24px;padding:36px 32px;box-shadow:0 2px 12px rgba(0,0,0,0.06),0 0 0 1px rgba(0,0,0,0.04)">
+          <div style="text-align:center;margin-bottom:24px">
+            <div class="logo" style="font-size:26px;margin-bottom:10px"><span>BYTES</span><span>CARE</span></div>
+            <span style="display:inline-block;background:#fff8e6;color:#92400e;font-size:11px;font-weight:800;padding:4px 12px;border-radius:999px;text-transform:uppercase;letter-spacing:0.08em;border:1px solid rgba(255,165,0,0.3)">Sales Portal</span>
+          </div>
+          <h1 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px;text-align:center">Sign in to continue</h1>
+          <p style="font-size:13px;color:#9ca3af;text-align:center;margin-bottom:24px">Internal access only</p>
+          <div class="form-field" style="margin-bottom:20px">
+            <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Password</label>
+            <input class="form-input" type="password" placeholder="Enter portal password" style="font-size:14px;padding:12px 14px;background:#f9fafb" />
+          </div>
+          <button class="save-btn" style="font-size:15px;padding:14px">Sign In →</button>
+        </div>
+      </div>
+      <div class="footer-bar"></div>
+    </div>
+  </div>
+
   <!-- Dashboard -->
   <div id="sales-dashboard" class="screen-group">
     <div class="screen-group-title">Sales Portal — Dashboard</div>
@@ -357,26 +395,30 @@
       <!-- Stats -->
       <div class="stats-row">
         <div class="stat-card">
-          <div class="stat-num">12</div>
+          <div style="font-size:20px;margin-bottom:4px">📋</div>
+          <div class="stat-num">24</div>
           <div class="stat-label">Total Applications</div>
         </div>
         <div class="stat-card">
-          <div class="stat-num" style="color:#92400e">4</div>
+          <div style="font-size:20px;margin-bottom:4px">⏳</div>
+          <div class="stat-num" style="color:#92400e">8</div>
           <div class="stat-label">Pending Review</div>
         </div>
         <div class="stat-card">
-          <div class="stat-num" style="color:#1d4ed8">3</div>
+          <div style="font-size:20px;margin-bottom:4px">💰</div>
+          <div class="stat-num" style="color:#1d4ed8">5</div>
           <div class="stat-label">Agreement / Payment</div>
         </div>
         <div class="stat-card">
-          <div class="stat-num" style="color:#166534">5</div>
-          <div class="stat-label">Ops Setup / Active</div>
+          <div style="font-size:20px;margin-bottom:4px">✅</div>
+          <div class="stat-num" style="color:#166534">11</div>
+          <div class="stat-label">Active / Setup</div>
         </div>
       </div>
 
       <!-- Filter tabs -->
       <div class="filter-tabs">
-        <div class="ftab active">All (12)</div>
+        <div class="ftab active">All</div>
         <div class="ftab">Pending Review (4)</div>
         <div class="ftab">Agreement Pending (2)</div>
         <div class="ftab">Payment Pending (1)</div>
@@ -389,60 +431,56 @@
         <table>
           <thead>
             <tr>
-              <th>App ID</th>
-              <th>Customer</th>
+              <th>Application ID</th>
+              <th>Name / Email</th>
               <th>Type</th>
               <th>Services</th>
-              <th>Submitted</th>
+              <th>Country</th>
               <th>Status</th>
+              <th>Submitted</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><span class="app-id">#BC-2026-0001</span></td>
+              <td><span class="app-id">#BC-2025-0042</span></td>
+              <td><div class="customer-name">Acme Corp</div><div class="customer-email">john@example.com</div></td>
+              <td>Company</td>
+              <td>Digital Piracy, Brand</td>
+              <td>India</td>
+              <td><span class="badge badge-review">Under Review</span></td>
+              <td>14 Jan 2025</td>
+              <td><a class="review-link" href="#">View →</a></td>
+            </tr>
+            <tr>
+              <td><span class="app-id">#BC-2025-0043</span></td>
               <td><div class="customer-name">Priyanka Choudhary</div><div class="customer-email">priyanka@example.com</div></td>
               <td>Individual</td>
-              <td>2 services</td>
-              <td>4 Jun 2026</td>
-              <td><span class="badge badge-payment">Payment Required</span></td>
-              <td><a class="review-link" href="#">Review →</a></td>
+              <td>Reputation Mgmt</td>
+              <td>India</td>
+              <td><span class="badge badge-agreement">Action Required</span></td>
+              <td>16 Jan 2025</td>
+              <td><a class="review-link" href="#">View →</a></td>
             </tr>
             <tr>
-              <td><span class="app-id">#BC-2026-0002</span></td>
+              <td><span class="app-id">#BC-2025-0044</span></td>
               <td><div class="customer-name">Nexgen Pvt Ltd</div><div class="customer-email">legal@nexgen.com</div></td>
               <td>Company</td>
-              <td>3 services</td>
-              <td>3 Jun 2026</td>
-              <td><span class="badge badge-agreement">Action Required</span></td>
-              <td><a class="review-link" href="#">Review →</a></td>
+              <td>Brand, Counterfeit</td>
+              <td>India</td>
+              <td><span class="badge badge-payment">Payment Required</span></td>
+              <td>18 Jan 2025</td>
+              <td><a class="review-link" href="#">View →</a></td>
             </tr>
             <tr>
-              <td><span class="app-id">#BC-2026-0003</span></td>
-              <td><div class="customer-name">Rahul Sharma</div><div class="customer-email">rahul@gmail.com</div></td>
-              <td>Individual</td>
-              <td>1 service</td>
-              <td>2 Jun 2026</td>
-              <td><span class="badge badge-review">Under Review</span></td>
-              <td><a class="review-link" href="#">Review →</a></td>
-            </tr>
-            <tr>
-              <td><span class="app-id">#BC-2026-0004</span></td>
+              <td><span class="app-id">#BC-2025-0045</span></td>
               <td><div class="customer-name">MediaCo Inc</div><div class="customer-email">ops@mediaco.com</div></td>
               <td>Company</td>
-              <td>4 services</td>
-              <td>1 Jun 2026</td>
-              <td><span class="badge badge-ops">Setup in Progress</span></td>
-              <td><a class="review-link" href="#">Review →</a></td>
-            </tr>
-            <tr>
-              <td><span class="app-id">#BC-2026-0005</span></td>
-              <td><div class="customer-name">Ananya Iyer</div><div class="customer-email">ananya@brand.in</div></td>
-              <td>Individual</td>
-              <td>2 services</td>
-              <td>30 May 2026</td>
+              <td>Digital Piracy, Threat Intel</td>
+              <td>US</td>
               <td><span class="badge badge-active">Active</span></td>
-              <td><a class="review-link" href="#">Review →</a></td>
+              <td>20 Jan 2025</td>
+              <td><a class="review-link" href="#">View →</a></td>
             </tr>
           </tbody>
         </table>
@@ -466,20 +504,38 @@
         <button class="btn-signout">Sign Out</button>
       </div>
 
+      <!-- App detail header -->
+      <div style="padding:16px 24px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <a href="#" style="font-size:13px;font-weight:600;color:#6b7280;text-decoration:none">←</a>
+          <h1 style="font-size:16px;font-weight:900;color:#111827">#BC-2025-0042 — Acme Corp</h1>
+          <span class="badge badge-review">Under Review</span>
+        </div>
+        <span style="font-size:12px;color:#9ca3af">Submitted 14 Jan 2025</span>
+      </div>
+      <!-- Tabs -->
+      <div style="display:flex;gap:8px;padding:12px 24px;border-bottom:1px solid #f3f4f6;flex-wrap:wrap">
+        <div style="padding:7px 16px;border-radius:999px;background:#111827;color:#fff;font-size:12px;font-weight:700;cursor:pointer">Overview</div>
+        <div style="padding:7px 16px;border-radius:999px;background:#FFA500;color:#111827;font-size:12px;font-weight:700;border:1.5px solid #FFA500;cursor:pointer">Agreement</div>
+        <div style="padding:7px 16px;border-radius:999px;background:#fff;color:#6b7280;font-size:12px;font-weight:600;border:1.5px solid #e5e7eb;cursor:pointer">Payment</div>
+        <div style="padding:7px 16px;border-radius:999px;background:#fff;color:#6b7280;font-size:12px;font-weight:600;border:1.5px solid #e5e7eb;cursor:pointer">Ops Requirements</div>
+        <div style="padding:7px 16px;border-radius:999px;background:#fff;color:#6b7280;font-size:12px;font-weight:600;border:1.5px solid #e5e7eb;cursor:pointer">Questions</div>
+        <div style="padding:7px 16px;border-radius:999px;background:#fff;color:#6b7280;font-size:12px;font-weight:600;border:1.5px solid #e5e7eb;cursor:pointer">Activity Log</div>
+      </div>
+
       <div class="app-detail-layout">
         <!-- Sidebar -->
         <div class="app-sidebar">
           <div class="customer-card">
-            <div class="customer-avatar">P</div>
-            <div class="customer-name-big">Priyanka Choudhary</div>
-            <div class="customer-meta">Individual · India</div>
+            <div class="customer-avatar">A</div>
+            <div class="customer-name-big">Acme Corp</div>
+            <div class="customer-meta">Company · India</div>
             <div style="margin-top:12px">
-              <div class="customer-detail-row"><span class="detail-key">App ID</span><span class="detail-val" style="font-family:monospace">#BC-2026-0001</span></div>
-              <div class="customer-detail-row"><span class="detail-key">Email</span><span class="detail-val">priyanka@example.com</span></div>
-              <div class="customer-detail-row"><span class="detail-key">Contact</span><span class="detail-val">+91 98765 43210</span></div>
+              <div class="customer-detail-row"><span class="detail-key">App ID</span><span class="detail-val" style="font-family:monospace">#BC-2025-0042</span></div>
+              <div class="customer-detail-row"><span class="detail-key">Email</span><span class="detail-val">john@example.com</span></div>
               <div class="customer-detail-row"><span class="detail-key">Status</span><span class="detail-val"><span class="badge badge-review" style="font-size:10px">Under Review</span></span></div>
-              <div class="customer-detail-row"><span class="detail-key">Services</span><span class="detail-val">Business Intelligence, Reputation Mgmt</span></div>
-              <div class="customer-detail-row"><span class="detail-key">Submitted</span><span class="detail-val">4 Jun 2026</span></div>
+              <div class="customer-detail-row"><span class="detail-key">Services</span><span class="detail-val">Digital Piracy Protection, Brand Protection</span></div>
+              <div class="customer-detail-row"><span class="detail-key">Submitted</span><span class="detail-val">14 Jan 2025</span></div>
             </div>
           </div>
 
@@ -494,8 +550,27 @@
 
         <!-- Main -->
         <div class="app-main">
-          <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px">Agreement Tab</div>
-          <div style="font-size:12px;color:#9ca3af;margin-bottom:20px">Choose agreement type and configure document</div>
+          <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px">Agreement</div>
+          <div style="font-size:12px;color:#9ca3af;margin-bottom:20px">Send agreement documents to the customer for signing</div>
+
+          <!-- Send Agreement -->
+          <div class="tab-section" style="background:#f9fafb;border:1.5px solid #f3f4f6;border-radius:16px;padding:16px;margin-bottom:20px">
+            <div class="tab-section-label">Send Agreement</div>
+            <div class="form-row form-col-2" style="margin-bottom:12px">
+              <div class="form-field">
+                <label>Agreement Type</label>
+                <select class="form-input">
+                  <option>Service Agreement</option>
+                  <option>Letter of Authority (LOA)</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label>Document Label</label>
+                <input class="form-input" value="Service Agreement" />
+              </div>
+            </div>
+            <button style="padding:10px 20px;background:#3b82f6;color:#fff;font-weight:700;font-size:13px;border:none;border-radius:10px;cursor:pointer">Send Agreement to Customer →</button>
+          </div>
 
           <!-- Agreement type -->
           <div class="tab-section">
@@ -579,11 +654,12 @@
       <div class="app-detail-layout">
         <div class="app-sidebar">
           <div class="customer-card">
-            <div class="customer-avatar">P</div>
-            <div class="customer-name-big">Priyanka Choudhary</div>
-            <div class="customer-meta">Individual · India</div>
+            <div class="customer-avatar">A</div>
+            <div class="customer-name-big">Acme Corp</div>
+            <div class="customer-meta">Company · India</div>
             <div style="margin-top:10px">
-              <div class="customer-detail-row"><span class="detail-key">Status</span><span class="detail-val"><span class="badge badge-agreement" style="font-size:10px">Agreement Pending</span></span></div>
+              <div class="customer-detail-row"><span class="detail-key">App ID</span><span class="detail-val" style="font-family:monospace">#BC-2025-0042</span></div>
+              <div class="customer-detail-row"><span class="detail-key">Status</span><span class="detail-val"><span class="badge badge-payment" style="font-size:10px">Payment Required</span></span></div>
             </div>
           </div>
           <div class="steps-row">
@@ -594,63 +670,48 @@
         </div>
 
         <div class="app-main">
-          <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px">Payment Tab</div>
-          <div style="font-size:12px;color:#9ca3af;margin-bottom:20px">Configure plan and payment method</div>
+          <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px">Payment</div>
+          <div style="font-size:12px;color:#9ca3af;margin-bottom:20px">Enable payment link for the customer</div>
 
-          <div class="form-row form-col-2">
-            <div class="form-field"><label>Currency</label><select class="form-input"><option>INR</option></select></div>
-            <div class="form-field"><label>Plan Name</label><input class="form-input" value="Pro Protection Plan" /></div>
-          </div>
-
-          <div class="form-row" style="margin-bottom:14px">
-            <div class="form-field"><label>Amount (INR)</label><input class="form-input" value="5000" /></div>
-          </div>
-
-          <div style="margin-bottom:14px">
-            <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:8px">Billing Frequency</div>
-            <div class="pill-group">
-              <div class="pill-btn sel">Monthly</div>
-              <div class="pill-btn">Quarterly</div>
-              <div class="pill-btn">Bi-annually</div>
-              <div class="pill-btn">Annually</div>
-            </div>
-          </div>
-
-          <div style="margin-bottom:14px">
-            <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:8px">Service Duration</div>
-            <div class="pill-group">
-              <div class="pill-btn">3 Months</div>
-              <div class="pill-btn">6 Months</div>
-              <div class="pill-btn sel">1 Year</div>
-              <div class="pill-btn">Custom</div>
-            </div>
-          </div>
-
-          <div class="form-row form-col-2" style="margin-bottom:14px">
-            <div class="form-field"><label>Start Date</label><input class="form-input" value="2026-06-05" type="date" /></div>
-            <div class="form-field"><label>End Date (auto)</label><input class="form-input" value="5 June 2027" readonly style="color:#9ca3af;background:#f3f4f6" /></div>
-          </div>
-
-          <div style="margin-bottom:14px">
-            <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:10px">Payment Method</div>
-            <div class="method-grid">
-              <div class="method-card sel">
-                <div class="method-icon">💳</div>
-                <div class="method-title">Via Onboarding Portal</div>
-                <div class="method-desc">Customer pays via Razorpay on their status page</div>
+          <!-- Enable Payment card -->
+          <div style="background:#f9fafb;border:1.5px solid #f3f4f6;border-radius:16px;padding:16px;margin-bottom:20px">
+            <div class="tab-section-label">Enable Payment for Customer</div>
+            <div class="form-row form-col-2" style="margin-bottom:12px">
+              <div class="form-field"><label>Plan</label>
+                <select class="form-input">
+                  <option>Standard</option><option selected>Professional</option><option>Business</option><option>Custom</option>
+                </select>
               </div>
-              <div class="method-card">
-                <div class="method-icon">🤝</div>
-                <div class="method-title">Offline / Manual</div>
-                <div class="method-desc">Payment handled outside the portal</div>
+              <div class="form-field"><label>Amount (INR)</label><input class="form-input" value="24999" /></div>
+            </div>
+            <div class="form-row form-col-2" style="margin-bottom:12px">
+              <div class="form-field"><label>Frequency</label>
+                <select class="form-input"><option selected>Monthly</option><option>Quarterly</option><option>Annually</option></select>
+              </div>
+              <div class="form-field"><label>Duration</label>
+                <select class="form-input"><option>6 Months</option><option selected>12 months</option><option>24 months</option></select>
               </div>
             </div>
-            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;">
-              ⚠️ Customer will receive an email notification when you save.
+            <button class="save-btn">Enable Payment for Customer →</button>
+          </div>
+
+          <!-- Payment status card -->
+          <div style="background:#fff;border:1.5px solid #f3f4f6;border-radius:16px;padding:16px;margin-bottom:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <div class="tab-section-label" style="margin-bottom:0">Payment Status</div>
+              <span style="background:#f0fdf4;color:#166534;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1px solid #bbf7d0">✓ Payment Received</span>
+            </div>
+            <div class="chip-row">
+              <div class="chip"><div class="chip-label">Plan</div><div class="chip-value">Professional</div></div>
+              <div class="chip"><div class="chip-label">Amount</div><div class="chip-value">INR 24,999</div></div>
+              <div class="chip"><div class="chip-label">Frequency</div><div class="chip-value">Monthly</div></div>
+              <div class="chip"><div class="chip-label">Duration</div><div class="chip-value">12 months</div></div>
             </div>
           </div>
 
-          <button class="save-btn">Save & Notify Customer →</button>
+          <div style="background:#fffbeb;border:1.5px solid rgba(255,165,0,0.3);border-radius:12px;padding:12px 14px;font-size:12px;color:#92400e;margin-bottom:16px">
+            ⚠️ Once enabled, the customer will receive an email with a payment link. Status moves to payment_pending after all agreements are signed.
+          </div>
         </div>
       </div>
 
@@ -884,8 +945,8 @@
         <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
       </div>
 
-      <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px 24px">
-        <div style="width:100%;max-width:380px">
+      <div style="background:#f9fafb;padding:40px 24px;display:flex;align-items:center;justify-content:center">
+        <div style="width:100%;max-width:420px;background:#fff;border-radius:24px;padding:36px;box-shadow:0 2px 12px rgba(0,0,0,0.06),0 0 0 1px rgba(0,0,0,0.04)">
           <div style="text-align:center;margin-bottom:28px">
             <div style="width:56px;height:56px;border-radius:14px;background:#fff8e6;border:2px solid rgba(255,165,0,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFA500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
@@ -904,12 +965,12 @@
           <button class="btn-primary" style="width:100%;text-align:center;padding:12px">Send Verification Code →</button>
 
           <div style="text-align:center;margin-top:16px">
-            <div style="font-size:11px;color:#9ca3af;line-height:1.6">Enter the same email to resume from any device.<br/>Your progress is always saved.</div>
+            <div style="font-size:11px;color:#9ca3af;line-height:1.6">Your progress is always saved. Enter the same email to resume from any device.</div>
           </div>
         </div>
       </div>
 
-      <div style="height:3px;background:linear-gradient(90deg,#FFA500,#7C3AED)"></div>
+      <div style="height:4px;background:linear-gradient(90deg,#FFA500,#7C3AED)"></div>
     </div>
   </div>
 
@@ -1075,21 +1136,23 @@
 
           <div class="form-field" style="margin-bottom:16px">
             <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Email Address *</label>
-            <input class="form-input" placeholder="your@email.com" style="font-size:14px;padding:12px 14px" />
+            <input class="form-input" value="john@example.com" style="font-size:14px;padding:12px 14px" />
+            <div style="font-size:11px;color:#9ca3af;margin-top:5px">We'll send your confirmation and documents here.</div>
           </div>
 
           <div style="margin-bottom:16px">
-            <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:10px">I am registering as *</label>
+            <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:10px">Registration Type *</label>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-              <div style="border:2px solid #FFA500;border-radius:14px;padding:16px;background:#fff8e6;cursor:pointer">
+              <div style="position:relative;border:2px solid #FFA500;border-radius:14px;padding:16px;background:#fff8e6;cursor:pointer">
+                <div style="position:absolute;top:10px;right:10px;width:18px;height:18px;border-radius:50%;background:#FFA500;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:900">✓</div>
                 <div style="font-size:22px;margin-bottom:6px">👤</div>
                 <div style="font-weight:700;color:#111827;font-size:14px">Individual</div>
-                <div style="font-size:12px;color:#9ca3af;margin-top:3px">Personal / freelancer</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:3px">Creator, freelancer</div>
               </div>
               <div style="border:2px solid #e5e7eb;border-radius:14px;padding:16px;cursor:pointer">
                 <div style="font-size:22px;margin-bottom:6px">🏢</div>
                 <div style="font-weight:700;color:#111827;font-size:14px">Company</div>
-                <div style="font-size:12px;color:#9ca3af;margin-top:3px">Business entity</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:3px">Business, brand</div>
               </div>
             </div>
           </div>
@@ -1097,7 +1160,7 @@
           <div class="form-field" style="margin-bottom:24px">
             <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Country *</label>
             <select class="form-input" style="font-size:14px;padding:12px 14px">
-              <option>India</option><option>United States</option><option>United Kingdom</option>
+              <option selected>India</option><option>United States</option><option>United Kingdom</option>
             </select>
           </div>
 
@@ -1426,168 +1489,72 @@
       <div class="footer-bar"></div>
     </div>
 
-    <!-- State B: After "Know more →" clicked on Digital Piracy Protection -->
-    <div style="margin-bottom:10px;font-weight:700;color:#374151;font-size:12px">B – After clicking "Know more →" on Digital Piracy Protection (drawer expands below card, spanning full width)</div>
-    <div class="screen" style="margin-bottom:28px;max-width:700px">
-      <div class="portal-header">
-        <div class="logo"><span>BYTES</span><span>CARE</span></div>
-        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
-      </div>
-      <div style="padding:16px 24px 0">
-        <div style="height:5px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-bottom:4px">
-          <div style="height:100%;width:67%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
+    <!-- State B: After "Know more →" clicked — modal overlay appears -->
+    <div style="margin-bottom:10px;font-weight:700;color:#374151;font-size:12px">B – After clicking "Know more →" — a centered modal popup appears over the grid (dark backdrop + scrollable card)</div>
+    <div style="position:relative;margin-bottom:28px;max-width:700px">
+      <!-- Backdrop dimming the screen behind -->
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);border-radius:16px;z-index:10"></div>
+      <!-- The modal card itself, centered -->
+      <div style="position:absolute;top:40px;left:50%;transform:translateX(-50%);width:90%;max-width:440px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.25);z-index:20">
+        <!-- Modal header -->
+        <div style="display:flex;align-items:flex-start;gap:14px;padding:22px 22px 16px;border-bottom:1px solid #f3f4f6">
+          <div style="width:44px;height:44px;border-radius:16px;background:#fff8e6;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px">🛡️</div>
+          <div style="flex:1">
+            <div style="font-weight:900;font-size:15px;color:#111827;margin-bottom:2px">Digital Piracy Protection</div>
+            <div style="font-size:11px;color:#9ca3af">Service Overview</div>
+          </div>
+          <div style="width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#9ca3af;cursor:pointer">×</div>
         </div>
-        <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:#6b7280">Step 3 of 4</span><span style="font-size:12px;color:#6b7280">67% complete</span></div>
-      </div>
-      <div style="padding:20px 24px">
-        <h2 style="font-size:22px;font-weight:900;color:#111827;margin-bottom:2px">Select Services</h2>
-        <p style="font-size:13px;color:#6b7280;margin-bottom:4px">Choose the protection services you need. <span style="color:#FFA500;font-weight:700">Select at least one.</span></p>
-        <div style="height:1px;background:#f3f4f6;margin:14px 0"></div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
-
-          <!-- Digital Piracy — EXPANDED (spans both columns via wrapper) -->
-          <div style="grid-column:1 / -1;border:2px solid #FFA500;border-radius:14px;overflow:hidden;box-shadow:0 4px 16px rgba(255,165,0,0.12)">
-            <!-- Card header row -->
-            <div style="padding:16px;background:#fff8e6;display:flex;align-items:flex-start;gap:10px">
-              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
-              <div style="flex:1">
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
-                  <span style="font-size:16px">🛡️</span>
-                  <span style="font-weight:800;color:#111827;font-size:13px">Digital Piracy Protection</span>
-                </div>
-                <div style="font-size:12px;color:#6b7280;line-height:1.4">Detect and remove unauthorized copies of your digital content.</div>
-              </div>
-              <span style="font-size:12px;font-weight:700;color:#6b7280;cursor:pointer;white-space:nowrap">Close ✕</span>
-            </div>
-            <!-- Expanded detail panel -->
-            <div style="padding:18px 20px;background:#fff;border-top:1px solid #fde68a">
-              <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:12px">Digital Piracy Protection — What's Included</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-                <div style="background:#f9fafb;border-radius:10px;padding:12px">
-                  <div style="font-size:16px;margin-bottom:4px">🔎</div>
-                  <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:2px">Piracy Detection</div>
-                  <div style="font-size:11px;color:#6b7280;line-height:1.5">Continuous scanning of torrent sites, cyberlockers, and streaming platforms for your content.</div>
-                </div>
-                <div style="background:#f9fafb;border-radius:10px;padding:12px">
-                  <div style="font-size:16px;margin-bottom:4px">🗑️</div>
-                  <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:2px">Takedown Requests</div>
-                  <div style="font-size:11px;color:#6b7280;line-height:1.5">Automated and manual takedown notices sent to hosting providers globally.</div>
-                </div>
-                <div style="background:#f9fafb;border-radius:10px;padding:12px">
-                  <div style="font-size:16px;margin-bottom:4px">📈</div>
-                  <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:2px">Impact Reports</div>
-                  <div style="font-size:11px;color:#6b7280;line-height:1.5">Monthly reports on infringements found, removed, and estimated revenue protected.</div>
-                </div>
-                <div style="background:#f9fafb;border-radius:10px;padding:12px">
-                  <div style="font-size:16px;margin-bottom:4px">⚡</div>
-                  <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:2px">Fast Removal SLA</div>
-                  <div style="font-size:11px;color:#6b7280;line-height:1.5">Priority takedowns with guaranteed response within 24–48 hours.</div>
-                </div>
-              </div>
-              <div style="background:#fffbeb;border:1px solid rgba(255,165,0,0.3);border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;color:#92400e">
-                <strong>Best for:</strong> Software companies, media publishers, course creators, and any business distributing licensed digital content.
-              </div>
-              <button style="width:100%;padding:12px;background:#FFA500;color:#111827;font-weight:800;font-size:13px;border:none;border-radius:10px;cursor:pointer">+ Select Digital Piracy Protection</button>
+        <!-- Modal body -->
+        <div style="padding:18px 22px;max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:16px">
+          <p style="font-size:13px;color:#374151;line-height:1.6">Protects your digital assets by detecting and removing unauthorized sharing, leaks, and illegal distributions across all major platforms.</p>
+          <!-- What We Cover -->
+          <div>
+            <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:10px">What We Cover</p>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">Unauthorized Video Sharing</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">Article Piracy</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">Unauthorized Image Usage</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">Social Media Piracy Posts</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">Audio &amp; Music Piracy</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">APK Piracy</span></div>
             </div>
           </div>
-
-          <!-- Brand Protection -->
-          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
-              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
-              <div>
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">🔏</span><span style="font-weight:800;color:#111827;font-size:13px">Brand Protection</span></div>
-                <div style="font-size:12px;color:#6b7280;line-height:1.4">Safeguard your brand identity from misuse and impersonation.</div>
-              </div>
+          <!-- Key Benefits -->
+          <div>
+            <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:10px">Key Benefits</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <span style="padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;background:rgba(255,165,0,0.1);color:#92400e;border:1.5px solid rgba(255,165,0,0.25)">✦ Protects revenue</span>
+              <span style="padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;background:rgba(255,165,0,0.1);color:#92400e;border:1.5px solid rgba(255,165,0,0.25)">✦ Secures digital assets</span>
+              <span style="padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;background:rgba(255,165,0,0.1);color:#92400e;border:1.5px solid rgba(255,165,0,0.25)">✦ Preserves creator rights</span>
             </div>
-            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
           </div>
-
-          <!-- Threat Intelligence -->
-          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
-              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
-              <div>
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">👁️</span><span style="font-weight:800;color:#111827;font-size:13px">Threat Intelligence</span></div>
-                <div style="font-size:12px;color:#6b7280;line-height:1.4">Real-time cyber threat intelligence and actionable insights.</div>
-              </div>
-            </div>
-            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
-          </div>
-
-          <!-- Identity Theft -->
-          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
-              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
-              <div>
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">🪪</span><span style="font-weight:800;color:#111827;font-size:13px">Identity Theft Protection</span></div>
-                <div style="font-size:12px;color:#6b7280;line-height:1.4">Monitor and protect identities from theft and fraud.</div>
-              </div>
-            </div>
-            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
-          </div>
-
-          <!-- Business Intelligence -->
-          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
-              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
-              <div>
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">📊</span><span style="font-weight:800;color:#111827;font-size:13px">Business Intelligence</span></div>
-                <div style="font-size:12px;color:#6b7280;line-height:1.4">Data-driven insights to strengthen your competitive advantage.</div>
-              </div>
-            </div>
-            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
-          </div>
-
-          <!-- Counterfeit -->
-          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
-              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
-              <div>
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">🏷️</span><span style="font-weight:800;color:#111827;font-size:13px">Counterfeit Protection</span></div>
-                <div style="font-size:12px;color:#6b7280;line-height:1.4">Identify and eliminate counterfeit products affecting your brand.</div>
-              </div>
-            </div>
-            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
-          </div>
-
-          <!-- Reputation -->
-          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
-              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
-              <div>
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">⭐</span><span style="font-weight:800;color:#111827;font-size:13px">Reputation Management</span></div>
-                <div style="font-size:12px;color:#6b7280;line-height:1.4">Monitor and improve your online reputation across platforms.</div>
-              </div>
-            </div>
-            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
-          </div>
-
-          <!-- Legal -->
-          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
-              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
-              <div>
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">⚖️</span><span style="font-weight:800;color:#111827;font-size:13px">Legal Add-ons</span></div>
-                <div style="font-size:12px;color:#6b7280;line-height:1.4">Specialized legal support for IP disputes and enforcement.</div>
-              </div>
-            </div>
-            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
-          </div>
-
         </div>
-
-        <div style="display:flex;gap:12px">
-          <button style="flex:0 0 auto;padding:13px 22px;border:1.5px solid #e5e7eb;border-radius:12px;background:#fff;color:#6b7280;font-weight:600;font-size:14px;cursor:pointer">← Back</button>
-          <button style="flex:1;padding:13px;background:#FFA500;color:#111827;font-weight:800;font-size:14px;border:none;border-radius:12px;cursor:pointer">Continue to Review →</button>
+        <!-- Modal footer -->
+        <div style="padding:14px 22px;border-top:1px solid #f3f4f6">
+          <button style="width:100%;padding:12px;background:#FFA500;color:#111827;font-weight:700;font-size:14px;border:none;border-radius:16px;cursor:pointer">Got it</button>
         </div>
       </div>
-      <div class="footer-bar"></div>
+      <!-- Background screen (dimmed) -->
+      <div class="screen" style="pointer-events:none;opacity:0.35">
+        <div class="portal-header">
+          <div class="logo"><span>BYTES</span><span>CARE</span></div>
+          <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+        </div>
+        <div style="padding:20px 24px">
+          <h2 style="font-size:22px;font-weight:900;color:#111827;margin-bottom:2px">Select Services</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px">
+            <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff;height:90px"></div>
+            <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff;height:90px"></div>
+            <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff;height:90px"></div>
+            <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff;height:90px"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- State C: Digital Piracy selected + Brand Protection also selected -->
-    <div style="margin-bottom:10px;font-weight:700;color:#374151;font-size:12px">C – After selecting services (card turns orange with ✓ checkbox, detail textarea appears below selected card spanning full width)</div>
+    <!-- State C: Service selected — textarea appears INSIDE the card -->
+    <div style="margin-bottom:10px;font-weight:700;color:#374151;font-size:12px">C – After selecting a service: card turns orange with ✓, textarea appears inside the card below a divider (prompt text from svc.prompt)</div>
     <div class="screen" style="max-width:700px">
       <div class="portal-header">
         <div class="logo"><span>BYTES</span><span>CARE</span></div>
@@ -1602,47 +1569,63 @@
       <div style="padding:20px 24px">
         <h2 style="font-size:22px;font-weight:900;color:#111827;margin-bottom:2px">Select Services</h2>
         <p style="font-size:13px;color:#6b7280;margin-bottom:4px">Choose the protection services you need. <span style="color:#FFA500;font-weight:700">Select at least one.</span></p>
-        <div style="height:1px;background:#f3f4f6;margin:14px 0"></div>
+        <!-- "N services selected" bar -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:16px;background:rgba(255,165,0,0.08);border:1.5px solid rgba(255,165,0,0.2);margin:12px 0">
+          <span style="font-size:13px;font-weight:600;color:#92400e">2 services selected</span>
+          <span style="font-size:12px;color:#9ca3af;cursor:pointer">Clear all</span>
+        </div>
+        <div style="height:1px;background:#f3f4f6;margin:10px 0 14px"></div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
 
-          <!-- Digital Piracy — SELECTED -->
-          <div style="border:2px solid #FFA500;border-radius:14px;padding:16px;background:#fff8e6;cursor:pointer">
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
-              <div style="width:20px;height:20px;border-radius:5px;background:#FFA500;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;flex-shrink:0;margin-top:2px">✓</div>
-              <div>
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">🛡️</span><span style="font-weight:800;color:#111827;font-size:13px">Digital Piracy Protection</span></div>
-                <div style="font-size:12px;color:#6b7280;line-height:1.4">Detect and remove unauthorized copies of your digital content.</div>
+          <!-- Digital Piracy — SELECTED with textarea inside card -->
+          <div style="border:2px solid #FFA500;border-radius:16px;background:#fffbeb;box-shadow:0 0 0 4px rgba(255,165,0,0.1);overflow:hidden">
+            <button style="text-align:left;display:flex;align-items:flex-start;gap:10px;padding:14px 14px 8px;width:100%;background:none;border:none;cursor:pointer">
+              <div style="width:20px;height:20px;border-radius:6px;background:#FFA500;border:2px solid #FFA500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+                <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="#111827" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
+                  <span style="font-size:15px;color:#FFA500">🛡️</span>
+                  <span style="font-weight:700;font-size:13px;color:#111827">Digital Piracy Protection</span>
+                </div>
+                <p style="font-size:11px;color:#9ca3af;line-height:1.4">Detect and remove unauthorized copies of your digital content.</p>
+              </div>
+            </button>
+            <div style="padding:0 14px 6px"><span style="font-size:12px;font-weight:600;color:#FFA500;cursor:pointer">Know more →</span></div>
+            <!-- Textarea inside card, below divider -->
+            <div style="padding:0 14px 14px">
+              <div style="border-top:1px solid rgba(255,165,0,0.2);padding-top:10px">
+                <label style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#92400e;margin-bottom:6px">What content needs protection? (e.g. YouTube videos, Instagram reels, music, courses, eBooks)</label>
+                <textarea rows="3" placeholder="Describe what you need…" style="width:100%;padding:10px 12px;border:2px solid #e5e7eb;border-radius:12px;font-size:13px;color:#111827;resize:none;outline:none;background:#fff;box-sizing:border-box;font-family:inherit"></textarea>
               </div>
             </div>
-            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
           </div>
 
-          <!-- Digital Piracy textarea — spans both columns -->
-          <div style="grid-column:1 / -1;background:#fff;border:1.5px solid #FFA500;border-radius:12px;padding:14px">
-            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#92400e;margin-bottom:6px">Tell us more about your needs for Digital Piracy Protection</label>
-            <textarea style="width:100%;border:1.5px solid #e5e7eb;border-radius:8px;padding:10px;font-size:13px;color:#374151;resize:none;font-family:inherit;outline:none;box-sizing:border-box" rows="2" placeholder="e.g. We distribute software on 5 platforms and need ongoing monitoring..."></textarea>
-          </div>
-
-          <!-- Brand Protection — SELECTED -->
-          <div style="border:2px solid #FFA500;border-radius:14px;padding:16px;background:#fff8e6;cursor:pointer">
-            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
-              <div style="width:20px;height:20px;border-radius:5px;background:#FFA500;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;flex-shrink:0;margin-top:2px">✓</div>
-              <div>
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">🔏</span><span style="font-weight:800;color:#111827;font-size:13px">Brand Protection</span></div>
-                <div style="font-size:12px;color:#6b7280;line-height:1.4">Safeguard your brand identity from misuse and impersonation.</div>
+          <!-- Brand Protection — SELECTED with textarea inside card -->
+          <div style="border:2px solid #FFA500;border-radius:16px;background:#fffbeb;box-shadow:0 0 0 4px rgba(255,165,0,0.1);overflow:hidden">
+            <button style="text-align:left;display:flex;align-items:flex-start;gap:10px;padding:14px 14px 8px;width:100%;background:none;border:none;cursor:pointer">
+              <div style="width:20px;height:20px;border-radius:6px;background:#FFA500;border:2px solid #FFA500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+                <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="#111827" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
+                  <span style="font-size:15px;color:#FFA500">🔏</span>
+                  <span style="font-weight:700;font-size:13px;color:#111827">Brand Protection</span>
+                </div>
+                <p style="font-size:11px;color:#9ca3af;line-height:1.4">Safeguard your brand identity from misuse and impersonation.</p>
+              </div>
+            </button>
+            <div style="padding:0 14px 6px"><span style="font-size:12px;font-weight:600;color:#FFA500;cursor:pointer">Know more →</span></div>
+            <div style="padding:0 14px 14px">
+              <div style="border-top:1px solid rgba(255,165,0,0.2);padding-top:10px">
+                <label style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#92400e;margin-bottom:6px">What brand issues are you facing? (e.g. fake accounts, counterfeit products, impersonation)</label>
+                <textarea rows="3" placeholder="Describe what you need…" style="width:100%;padding:10px 12px;border:2px solid #e5e7eb;border-radius:12px;font-size:13px;color:#111827;resize:none;outline:none;background:#fff;box-sizing:border-box;font-family:inherit"></textarea>
               </div>
             </div>
-            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
           </div>
 
-          <!-- Brand Protection textarea -->
-          <div style="grid-column:1 / -1;background:#fff;border:1.5px solid #FFA500;border-radius:12px;padding:14px">
-            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#92400e;margin-bottom:6px">Tell us more about your needs for Brand Protection</label>
-            <textarea style="width:100%;border:1.5px solid #e5e7eb;border-radius:8px;padding:10px;font-size:13px;color:#374151;resize:none;font-family:inherit;outline:none;box-sizing:border-box" rows="2" placeholder="e.g. Our brand name is being misused on social media and e-commerce sites..."></textarea>
-          </div>
-
-          <!-- Threat Intelligence -->
+          <!-- Threat Intelligence — unselected -->
           <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
             <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
               <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
