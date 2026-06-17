@@ -431,13 +431,12 @@
         <table>
           <thead>
             <tr>
-              <th>Application ID</th>
-              <th>Name / Email</th>
+              <th>App ID</th>
+              <th>Customer</th>
               <th>Type</th>
               <th>Services</th>
-              <th>Country</th>
-              <th>Status</th>
               <th>Submitted</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -445,42 +444,38 @@
             <tr>
               <td><span class="app-id">#BC-2025-0042</span></td>
               <td><div class="customer-name">Acme Corp</div><div class="customer-email">john@example.com</div></td>
-              <td>Company</td>
-              <td>Digital Piracy, Brand</td>
-              <td>India</td>
-              <td><span class="badge badge-review">Under Review</span></td>
-              <td>14 Jan 2025</td>
-              <td><a class="review-link" href="#">View →</a></td>
+              <td><span style="background:#dbeafe;color:#1d4ed8;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px">Company</span></td>
+              <td style="color:#6b7280;font-size:12px">2 services</td>
+              <td style="color:#6b7280;font-size:12px">14 Jan 2025</td>
+              <td><span style="background:#fef3c7;color:#d97706;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px">Pending Review</span></td>
+              <td><a class="review-link" href="#" style="color:#FFA500">Review →</a></td>
             </tr>
             <tr>
               <td><span class="app-id">#BC-2025-0043</span></td>
               <td><div class="customer-name">Priyanka Choudhary</div><div class="customer-email">priyanka@example.com</div></td>
-              <td>Individual</td>
-              <td>Reputation Mgmt</td>
-              <td>India</td>
-              <td><span class="badge badge-agreement">Action Required</span></td>
-              <td>16 Jan 2025</td>
-              <td><a class="review-link" href="#">View →</a></td>
+              <td><span style="background:#fce7f3;color:#be185d;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px">Individual</span></td>
+              <td style="color:#6b7280;font-size:12px">1 service</td>
+              <td style="color:#6b7280;font-size:12px">16 Jan 2025</td>
+              <td><span style="background:#dbeafe;color:#1d4ed8;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px">Agreement Pending</span></td>
+              <td><a class="review-link" href="#" style="color:#FFA500">Review →</a></td>
             </tr>
             <tr>
               <td><span class="app-id">#BC-2025-0044</span></td>
               <td><div class="customer-name">Nexgen Pvt Ltd</div><div class="customer-email">legal@nexgen.com</div></td>
-              <td>Company</td>
-              <td>Brand, Counterfeit</td>
-              <td>India</td>
-              <td><span class="badge badge-payment">Payment Required</span></td>
-              <td>18 Jan 2025</td>
-              <td><a class="review-link" href="#">View →</a></td>
+              <td><span style="background:#dbeafe;color:#1d4ed8;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px">Company</span></td>
+              <td style="color:#6b7280;font-size:12px">2 services</td>
+              <td style="color:#6b7280;font-size:12px">18 Jan 2025</td>
+              <td><span style="background:#ede9fe;color:#7c3aed;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px">Payment Pending</span></td>
+              <td><a class="review-link" href="#" style="color:#FFA500">Review →</a></td>
             </tr>
             <tr>
               <td><span class="app-id">#BC-2025-0045</span></td>
               <td><div class="customer-name">MediaCo Inc</div><div class="customer-email">ops@mediaco.com</div></td>
-              <td>Company</td>
-              <td>Digital Piracy, Threat Intel</td>
-              <td>US</td>
-              <td><span class="badge badge-active">Active</span></td>
-              <td>20 Jan 2025</td>
-              <td><a class="review-link" href="#">View →</a></td>
+              <td><span style="background:#dbeafe;color:#1d4ed8;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px">Company</span></td>
+              <td style="color:#6b7280;font-size:12px">2 services</td>
+              <td style="color:#6b7280;font-size:12px">20 Jan 2025</td>
+              <td><span style="background:#dcfce7;color:#16a34a;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px">Active</span></td>
+              <td><a class="review-link" href="#" style="color:#FFA500">Review →</a></td>
             </tr>
           </tbody>
         </table>
@@ -491,12 +486,13 @@
 
   <!-- Agreement Tab -->
   <div id="sales-agreement" class="screen-group">
-    <div class="screen-group-title">Sales Portal — Agreement Tab</div>
-    <div class="screen-label">Sales configures the agreement type and sends it to the customer</div>
+    <div class="screen-group-title">Sales Portal — Application Detail: Agreement Tab</div>
+    <div class="screen-label">max-width 900px centered layout. Agreement tab active. Shows existing agreements + Send Agreement form (Standard Template selected).</div>
 
-    <div class="screen">
-      <div class="portal-header">
-        <div style="display:flex;align-items:center;gap:10px">
+    <div class="screen" style="max-width:960px">
+      <!-- Header -->
+      <div style="background:#fff;border-bottom:1px solid #f3f4f6;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:16px">
           <a href="#" style="font-size:13px;font-weight:600;color:#6b7280;text-decoration:none">← All Applications</a>
           <span style="color:#e5e7eb">|</span>
           <div class="logo"><span>BYTES</span><span>CARE</span></div>
@@ -504,146 +500,190 @@
         <button class="btn-signout">Sign Out</button>
       </div>
 
-      <!-- App detail header -->
-      <div style="padding:16px 24px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:12px">
-          <a href="#" style="font-size:13px;font-weight:600;color:#6b7280;text-decoration:none">←</a>
-          <h1 style="font-size:16px;font-weight:900;color:#111827">#BC-2025-0042 — Acme Corp</h1>
-          <span class="badge badge-review">Under Review</span>
-        </div>
-        <span style="font-size:12px;color:#9ca3af">Submitted 14 Jan 2025</span>
-      </div>
-      <!-- Tabs -->
-      <div style="display:flex;gap:8px;padding:12px 24px;border-bottom:1px solid #f3f4f6;flex-wrap:wrap">
-        <div style="padding:7px 16px;border-radius:999px;background:#111827;color:#fff;font-size:12px;font-weight:700;cursor:pointer">Overview</div>
-        <div style="padding:7px 16px;border-radius:999px;background:#FFA500;color:#111827;font-size:12px;font-weight:700;border:1.5px solid #FFA500;cursor:pointer">Agreement</div>
-        <div style="padding:7px 16px;border-radius:999px;background:#fff;color:#6b7280;font-size:12px;font-weight:600;border:1.5px solid #e5e7eb;cursor:pointer">Payment</div>
-        <div style="padding:7px 16px;border-radius:999px;background:#fff;color:#6b7280;font-size:12px;font-weight:600;border:1.5px solid #e5e7eb;cursor:pointer">Ops Requirements</div>
-        <div style="padding:7px 16px;border-radius:999px;background:#fff;color:#6b7280;font-size:12px;font-weight:600;border:1.5px solid #e5e7eb;cursor:pointer">Questions</div>
-        <div style="padding:7px 16px;border-radius:999px;background:#fff;color:#6b7280;font-size:12px;font-weight:600;border:1.5px solid #e5e7eb;cursor:pointer">Activity Log</div>
-      </div>
-
-      <div class="app-detail-layout">
-        <!-- Sidebar -->
-        <div class="app-sidebar">
-          <div class="customer-card">
-            <div class="customer-avatar">A</div>
-            <div class="customer-name-big">Acme Corp</div>
-            <div class="customer-meta">Company · India</div>
-            <div style="margin-top:12px">
-              <div class="customer-detail-row"><span class="detail-key">App ID</span><span class="detail-val" style="font-family:monospace">#BC-2025-0042</span></div>
-              <div class="customer-detail-row"><span class="detail-key">Email</span><span class="detail-val">john@example.com</span></div>
-              <div class="customer-detail-row"><span class="detail-key">Status</span><span class="detail-val"><span class="badge badge-review" style="font-size:10px">Under Review</span></span></div>
-              <div class="customer-detail-row"><span class="detail-key">Services</span><span class="detail-val">Digital Piracy Protection, Brand Protection</span></div>
-              <div class="customer-detail-row"><span class="detail-key">Submitted</span><span class="detail-val">14 Jan 2025</span></div>
-            </div>
+      <div style="max-width:900px;margin:0 auto;padding:28px 24px;padding-bottom:100px">
+        <!-- Customer Summary Card -->
+        <div style="background:#fff;border-radius:20px;padding:24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+            <span style="font-family:monospace;font-size:12px;color:#9ca3af;background:#f3f4f6;border-radius:6px;padding:2px 8px">BC-2025-0042</span>
+            <span style="background:#fef3c7;color:#d97706;font-size:11px;font-weight:700;border-radius:999px;padding:3px 10px">Pending Review</span>
           </div>
-
-          <!-- Steps -->
-          <div class="steps-row">
-            <div class="step-pill step-active">1. Agreement</div>
-            <div class="step-pill step-todo">2. Payment</div>
-            <div class="step-pill step-todo">3. Ops</div>
+          <div style="font-size:22px;font-weight:900;color:#111827;margin-bottom:4px">Acme Corp</div>
+          <div style="font-size:14px;color:#9ca3af;margin-bottom:14px">john@example.com</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+            <span style="font-size:12px;color:#374151;background:#f3f4f6;border-radius:999px;padding:4px 12px;font-weight:500">Company</span>
+            <span style="font-size:12px;color:#374151;background:#f3f4f6;border-radius:999px;padding:4px 12px;font-weight:500">India</span>
+            <span style="font-size:12px;color:#374151;background:#f3f4f6;border-radius:999px;padding:4px 12px;font-weight:500">Submitted Jan 14, 2025</span>
           </div>
-          <div style="font-size:12px;color:#9ca3af;text-align:center">Complete all 3 steps to send to ops team</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span style="font-size:11px;color:#d97706;border:1px solid #fde68a;background:#fef9c3;border-radius:999px;padding:3px 10px;font-weight:600">Digital Piracy Protection</span>
+            <span style="font-size:11px;color:#d97706;border:1px solid #fde68a;background:#fef9c3;border-radius:999px;padding:3px 10px;font-weight:600">Brand Protection</span>
+          </div>
         </div>
 
-        <!-- Main -->
-        <div class="app-main">
-          <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px">Agreement</div>
-          <div style="font-size:12px;color:#9ca3af;margin-bottom:20px">Send agreement documents to the customer for signing</div>
-
-          <!-- Send Agreement -->
-          <div class="tab-section" style="background:#f9fafb;border:1.5px solid #f3f4f6;border-radius:16px;padding:16px;margin-bottom:20px">
-            <div class="tab-section-label">Send Agreement</div>
-            <div class="form-row form-col-2" style="margin-bottom:12px">
-              <div class="form-field">
-                <label>Agreement Type</label>
-                <select class="form-input">
-                  <option>Service Agreement</option>
-                  <option>Letter of Authority (LOA)</option>
-                </select>
-              </div>
-              <div class="form-field">
-                <label>Document Label</label>
-                <input class="form-input" value="Service Agreement" />
-              </div>
-            </div>
-            <button style="padding:10px 20px;background:#3b82f6;color:#fff;font-weight:700;font-size:13px;border:none;border-radius:10px;cursor:pointer">Send Agreement to Customer →</button>
-          </div>
-
-          <!-- Agreement type -->
-          <div class="tab-section">
-            <div class="tab-section-label">Agreement Type</div>
-            <div class="agreement-type-grid">
-              <div class="agr-type-card sel">
-                <div class="agr-type-icon">📄</div>
-                <div class="agr-type-title">Template (PandaDoc)</div>
-                <div class="agr-type-desc">Auto-generate from PandaDoc template. Customer signs in portal.</div>
-              </div>
-              <div class="agr-type-card">
-                <div class="agr-type-icon">📁</div>
-                <div class="agr-type-title">Upload Unsigned</div>
-                <div class="agr-type-desc">Upload doc, send via PandaDoc for customer to sign.</div>
-              </div>
-            </div>
-            <div class="agr-type-card" style="border:2px solid #e5e7eb;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px">
-              <div class="agr-type-icon">✅</div>
+        <!-- Stepper -->
+        <div style="display:flex;align-items:center;background:#fff;border-radius:16px;padding:16px 24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);gap:0">
+          <!-- Step 1: Agreement (active) -->
+          <div style="display:flex;align-items:center;flex:1">
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;background:#fff7ed;flex:1;cursor:pointer">
+              <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:#fff7ed;color:#FFA500;border:2px solid #FFA500;flex-shrink:0">1</div>
               <div>
-                <div class="agr-type-title">Pre-signed (Already Signed)</div>
-                <div class="agr-type-desc">Upload a doc already signed. Skips customer signing step.</div>
+                <div style="font-size:13px;font-weight:700;color:#111827">Agreement</div>
+                <div style="font-size:11px;color:#9ca3af">Pending</div>
+              </div>
+            </div>
+            <div style="width:24px;height:2px;background:#e5e7eb;flex-shrink:0"></div>
+          </div>
+          <!-- Step 2: Payment (pending) -->
+          <div style="display:flex;align-items:center;flex:1">
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;flex:1;cursor:pointer">
+              <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:#f3f4f6;color:#9ca3af;flex-shrink:0">2</div>
+              <div>
+                <div style="font-size:13px;font-weight:500;color:#6b7280">Payment</div>
+                <div style="font-size:11px;color:#9ca3af">Pending</div>
+              </div>
+            </div>
+            <div style="width:24px;height:2px;background:#e5e7eb;flex-shrink:0"></div>
+          </div>
+          <!-- Step 3: Ops (pending) -->
+          <div style="display:flex;align-items:center;flex:1">
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;flex:1;cursor:pointer">
+              <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:#f3f4f6;color:#9ca3af;flex-shrink:0">3</div>
+              <div>
+                <div style="font-size:13px;font-weight:500;color:#6b7280">Ops Requirements</div>
+                <div style="font-size:11px;color:#9ca3af">Pending</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content Card -->
+        <div style="background:#fff;border-radius:20px;padding:28px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
+          <!-- Existing agreements list -->
+          <div style="margin-bottom:24px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <span style="font-size:13px;font-weight:700;color:#374151">Agreements sent (2)</span>
+              <div style="display:flex;gap:10px">
+                <button style="font-size:12px;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:4px 10px;cursor:pointer;font-weight:600">Sync from PandaDoc</button>
+                <button style="font-size:12px;color:#dc2626;background:none;border:none;cursor:pointer;font-weight:600">Reset all</button>
+              </div>
+            </div>
+            <!-- Agreement row: signed -->
+            <div style="padding:10px 14px;margin-bottom:8px;border-radius:10px;background:#f0fdf4;border:1.5px solid #bbf7d0">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:#111827;display:flex;align-items:center;gap:6px">
+                    Service Agreement
+                    <span style="font-size:11px;font-weight:700;color:#16a34a;background:#dcfce7;border-radius:999px;padding:2px 8px">✓ Signed</span>
+                  </div>
+                  <div style="font-size:11px;color:#9ca3af;margin-top:2px">Standard Template · sent Jan 10, 2025 · signed Jan 12, 2025</div>
+                </div>
+                <div style="display:flex;gap:8px;flex-shrink:0">
+                  <button style="font-size:12px;color:#dc2626;background:none;border:none;cursor:pointer;font-weight:600">Remove</button>
+                </div>
+              </div>
+            </div>
+            <!-- Agreement row: pending -->
+            <div style="padding:10px 14px;margin-bottom:8px;border-radius:10px;background:#f9fafb;border:1.5px solid #e5e7eb">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:#111827;display:flex;align-items:center;gap:6px">
+                    Letter of Authorization
+                    <span style="font-size:11px;font-weight:600;color:#d97706;background:#fef9c3;border-radius:999px;padding:2px 8px">Pending</span>
+                  </div>
+                  <div style="font-size:11px;color:#9ca3af;margin-top:2px">Standard Template · sent Jan 10, 2025</div>
+                </div>
+                <div style="display:flex;gap:8px;flex-shrink:0">
+                  <button style="font-size:12px;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:4px 10px;cursor:pointer;font-weight:600">Refresh Link</button>
+                  <button style="font-size:12px;color:#16a34a;background:#dcfce7;border:1px solid #bbf7d0;border-radius:6px;padding:4px 10px;cursor:pointer;font-weight:600">Mark Signed</button>
+                  <button style="font-size:12px;color:#dc2626;background:none;border:none;cursor:pointer;font-weight:600">Remove</button>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Template fields -->
-          <div class="tab-section" style="margin-top:16px">
-            <div class="tab-section-label">Document Label</div>
-            <input class="form-input" value="Service Agreement" style="margin-bottom:12px" />
+          <!-- Send Agreement form -->
+          <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <h3 style="font-weight:700;color:#111827;font-size:15px;margin:0">Add Another Agreement</h3>
+              <button style="font-size:12px;color:#9ca3af;background:none;border:none;cursor:pointer">Cancel</button>
+            </div>
+            <p style="font-size:13px;color:#9ca3af;margin-bottom:16px">You can send multiple documents — e.g. Service Agreement + LOA.</p>
 
-            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:14px">
-              📄 A PandaDoc document will be generated from your template and sent to the customer for signing.
+            <!-- Document Label -->
+            <div style="margin-bottom:14px">
+              <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Document Label (optional)</label>
+              <input type="text" placeholder="e.g. Service Agreement, Letter of Authorization"
+                style="width:100%;padding:9px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;color:#111827;background:#f9fafb;box-sizing:border-box" />
             </div>
 
-            <button class="save-btn" style="background:#3b82f6;color:#fff">Send Agreement to Customer →</button>
-          </div>
-
-          <!-- Agreement already sent -->
-          <div class="tab-section" style="margin-top:20px">
-            <div class="tab-section-label">Current Agreements</div>
-            <div class="agreement-card">
-              <div class="agreement-header">
-                <div style="display:flex;align-items:center;gap:8px">
-                  <span style="font-size:12px;font-weight:700;color:#6b7280">Service Agreement</span>
-                  <span style="background:#fef9c3;color:#d97706;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px">Pending Signature</span>
-                </div>
-                <div style="display:flex;gap:8px">
-                  <button style="font-size:11px;padding:5px 10px;border-radius:8px;border:1.5px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;cursor:pointer;font-weight:600">Sync Status</button>
-                  <button style="font-size:11px;padding:5px 10px;border-radius:8px;border:1.5px solid #fecaca;background:#fff;color:#dc2626;cursor:pointer;font-weight:600">Remove</button>
+            <!-- Card 1: Standard Template (selected) -->
+            <div style="border:2px solid #FFA500;border-radius:16px;padding:20px;margin-bottom:12px;cursor:pointer;background:#fff7ed">
+              <div style="display:flex;align-items:flex-start;gap:12px">
+                <div style="width:20px;height:20px;border-radius:50%;border:2px solid #FFA500;background:#FFA500;flex-shrink:0;margin-top:2px"></div>
+                <div style="flex:1">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <span style="font-weight:700;font-size:14px;color:#111827">📄 Use Standard Template</span>
+                    <span style="font-size:11px;color:#9ca3af;font-weight:500">No upload needed</span>
+                  </div>
+                  <p style="font-size:13px;color:#6b7280;margin-top:6px;line-height:1.5">Send the standard Bytescare service agreement via PandaDoc. Customer signs on their portal.</p>
                 </div>
               </div>
-              <div class="agreement-body">📄 PandaDoc signing frame (customer signs here in their portal)</div>
             </div>
+
+            <!-- Card 2: Upload Unsigned Draft -->
+            <div style="border:2px solid #e5e7eb;border-radius:16px;padding:20px;margin-bottom:12px;cursor:pointer;background:#fff">
+              <div style="display:flex;align-items:flex-start;gap:12px">
+                <div style="width:20px;height:20px;border-radius:50%;border:2px solid #d1d5db;background:transparent;flex-shrink:0;margin-top:2px"></div>
+                <div style="flex:1">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <span style="font-weight:700;font-size:14px;color:#111827">⬆️ Upload Unsigned Draft</span>
+                    <span style="font-size:11px;color:#9ca3af;font-weight:500">Customer will sign</span>
+                  </div>
+                  <p style="font-size:13px;color:#6b7280;margin-top:6px;line-height:1.5">Upload a PDF or DOCX — customer signs it via PandaDoc on their portal.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Upload Signed Document -->
+            <div style="border:2px solid #e5e7eb;border-radius:16px;padding:20px;margin-bottom:16px;cursor:pointer;background:#fff">
+              <div style="display:flex;align-items:flex-start;gap:12px">
+                <div style="width:20px;height:20px;border-radius:50%;border:2px solid #d1d5db;background:transparent;flex-shrink:0;margin-top:2px"></div>
+                <div style="flex:1">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <span style="font-weight:700;font-size:14px;color:#111827">✅ Upload Signed Document</span>
+                    <span style="font-size:11px;color:#9ca3af;font-weight:500">Already complete</span>
+                  </div>
+                  <p style="font-size:13px;color:#6b7280;margin-top:6px;line-height:1.5">Upload an already-signed document. No customer action needed.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action button (appears when type selected) -->
+            <button style="width:100%;padding:12px;background:#FFA500;color:#fff;font-weight:700;font-size:15px;border:none;border-radius:10px;cursor:pointer">
+              Send Template for Signing →
+            </button>
           </div>
         </div>
       </div>
 
-      <div class="bottom-bar">
-        <span class="all-done-text">Complete Agreement → Payment → Ops to enable sending to ops team</span>
-        <button class="send-ops-btn" disabled>Send to Ops Team →</button>
+      <!-- Sticky bottom bar -->
+      <div style="position:sticky;bottom:0;background:#fff;border-top:1px solid #f3f4f6;padding:14px 24px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:13px;color:#9ca3af">Complete all 3 steps to send to ops team</span>
+        <button style="padding:11px 24px;background:#e5e7eb;color:#9ca3af;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:not-allowed" disabled>Send to Ops Team →</button>
       </div>
     </div>
-    <div class="screen-note">Sales can add multiple agreements. "Sync Status" manually checks PandaDoc if the webhook didn't fire.</div>
+    <div class="screen-note">Existing agreements shown first with Sync + Reset actions. 3 option cards replace old dropdown. Active card has orange border + #fff7ed bg. Button text changes: "Send Template for Signing →" / "Upload &amp; Send for Signing →" / "Upload &amp; Mark Complete →". "Refresh Link" shown only for PandaDoc agreements that aren't signed yet.</div>
   </div>
 
-  <!-- Payment Tab – Online -->
+  <!-- Payment Tab -->
   <div id="sales-payment-portal" class="screen-group">
-    <div class="screen-group-title">Sales Portal — Payment Tab (Online / Razorpay)</div>
-    <div class="screen-label">Customer will pay online via Razorpay on their portal</div>
+    <div class="screen-group-title">Sales Portal — Application Detail: Payment Tab</div>
+    <div class="screen-label">Agreement done (step 1 complete). Payment tab active. "Via Onboarding Portal" method selected (orange border). Amber warning visible.</div>
 
-    <div class="screen">
-      <div class="portal-header">
-        <div style="display:flex;align-items:center;gap:10px">
+    <div class="screen" style="max-width:960px">
+      <!-- Header -->
+      <div style="background:#fff;border-bottom:1px solid #f3f4f6;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:16px">
           <a href="#" style="font-size:13px;font-weight:600;color:#6b7280;text-decoration:none">← All Applications</a>
           <span style="color:#e5e7eb">|</span>
           <div class="logo"><span>BYTES</span><span>CARE</span></div>
@@ -651,76 +691,163 @@
         <button class="btn-signout">Sign Out</button>
       </div>
 
-      <div class="app-detail-layout">
-        <div class="app-sidebar">
-          <div class="customer-card">
-            <div class="customer-avatar">A</div>
-            <div class="customer-name-big">Acme Corp</div>
-            <div class="customer-meta">Company · India</div>
-            <div style="margin-top:10px">
-              <div class="customer-detail-row"><span class="detail-key">App ID</span><span class="detail-val" style="font-family:monospace">#BC-2025-0042</span></div>
-              <div class="customer-detail-row"><span class="detail-key">Status</span><span class="detail-val"><span class="badge badge-payment" style="font-size:10px">Payment Required</span></span></div>
-            </div>
+      <div style="max-width:900px;margin:0 auto;padding:28px 24px;padding-bottom:100px">
+        <!-- Customer Summary Card -->
+        <div style="background:#fff;border-radius:20px;padding:24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+            <span style="font-family:monospace;font-size:12px;color:#9ca3af;background:#f3f4f6;border-radius:6px;padding:2px 8px">BC-2025-0042</span>
+            <span style="background:#ede9fe;color:#7c3aed;font-size:11px;font-weight:700;border-radius:999px;padding:3px 10px">Payment Pending</span>
           </div>
-          <div class="steps-row">
-            <div class="step-pill step-done">✓ Agreement</div>
-            <div class="step-pill step-active">2. Payment</div>
-            <div class="step-pill step-todo">3. Ops</div>
+          <div style="font-size:22px;font-weight:900;color:#111827;margin-bottom:4px">Acme Corp</div>
+          <div style="font-size:14px;color:#9ca3af;margin-bottom:14px">john@example.com</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+            <span style="font-size:12px;color:#374151;background:#f3f4f6;border-radius:999px;padding:4px 12px;font-weight:500">Company</span>
+            <span style="font-size:12px;color:#374151;background:#f3f4f6;border-radius:999px;padding:4px 12px;font-weight:500">India</span>
+            <span style="font-size:12px;color:#374151;background:#f3f4f6;border-radius:999px;padding:4px 12px;font-weight:500">Submitted Jan 14, 2025</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span style="font-size:11px;color:#d97706;border:1px solid #fde68a;background:#fef9c3;border-radius:999px;padding:3px 10px;font-weight:600">Digital Piracy Protection</span>
+            <span style="font-size:11px;color:#d97706;border:1px solid #fde68a;background:#fef9c3;border-radius:999px;padding:3px 10px;font-weight:600">Brand Protection</span>
           </div>
         </div>
 
-        <div class="app-main">
-          <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px">Payment</div>
-          <div style="font-size:12px;color:#9ca3af;margin-bottom:20px">Enable payment link for the customer</div>
-
-          <!-- Enable Payment card -->
-          <div style="background:#f9fafb;border:1.5px solid #f3f4f6;border-radius:16px;padding:16px;margin-bottom:20px">
-            <div class="tab-section-label">Enable Payment for Customer</div>
-            <div class="form-row form-col-2" style="margin-bottom:12px">
-              <div class="form-field"><label>Plan</label>
-                <select class="form-input">
-                  <option>Standard</option><option selected>Professional</option><option>Business</option><option>Custom</option>
-                </select>
-              </div>
-              <div class="form-field"><label>Amount (INR)</label><input class="form-input" value="24999" /></div>
-            </div>
-            <div class="form-row form-col-2" style="margin-bottom:12px">
-              <div class="form-field"><label>Frequency</label>
-                <select class="form-input"><option selected>Monthly</option><option>Quarterly</option><option>Annually</option></select>
-              </div>
-              <div class="form-field"><label>Duration</label>
-                <select class="form-input"><option>6 Months</option><option selected>12 months</option><option>24 months</option></select>
+        <!-- Stepper -->
+        <div style="display:flex;align-items:center;background:#fff;border-radius:16px;padding:16px 24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);gap:0">
+          <!-- Step 1: Agreement (done) -->
+          <div style="display:flex;align-items:center;flex:1">
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;flex:1;cursor:pointer">
+              <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:#FFA500;color:#fff;flex-shrink:0">✓</div>
+              <div>
+                <div style="font-size:13px;font-weight:500;color:#6b7280">Agreement</div>
+                <div style="font-size:11px;color:#16a34a">Done</div>
               </div>
             </div>
-            <button class="save-btn">Enable Payment for Customer →</button>
+            <div style="width:24px;height:2px;background:#FFA500;flex-shrink:0"></div>
+          </div>
+          <!-- Step 2: Payment (active) -->
+          <div style="display:flex;align-items:center;flex:1">
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;background:#fff7ed;flex:1;cursor:pointer">
+              <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:#fff7ed;color:#FFA500;border:2px solid #FFA500;flex-shrink:0">2</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#111827">Payment</div>
+                <div style="font-size:11px;color:#9ca3af">Pending</div>
+              </div>
+            </div>
+            <div style="width:24px;height:2px;background:#e5e7eb;flex-shrink:0"></div>
+          </div>
+          <!-- Step 3: Ops (pending) -->
+          <div style="display:flex;align-items:center;flex:1">
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;flex:1;cursor:pointer">
+              <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:#f3f4f6;color:#9ca3af;flex-shrink:0">3</div>
+              <div>
+                <div style="font-size:13px;font-weight:500;color:#6b7280">Ops Requirements</div>
+                <div style="font-size:11px;color:#9ca3af">Pending</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content Card -->
+        <div style="background:#fff;border-radius:20px;padding:28px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
+          <!-- Row 1: Currency + Plan Name (1fr 2fr) -->
+          <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:16px">
+            <div>
+              <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Currency</label>
+              <select style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;color:#111827;background:#f9fafb">
+                <option selected>INR</option>
+                <option>USD</option>
+                <option>GBP</option>
+                <option>EUR</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Plan Name</label>
+              <input type="text" value="Pro Protection Plan" placeholder="e.g. Pro Protection Plan"
+                style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;color:#111827;background:#f9fafb;box-sizing:border-box" />
+            </div>
           </div>
 
-          <!-- Payment status card -->
-          <div style="background:#fff;border:1.5px solid #f3f4f6;border-radius:16px;padding:16px;margin-bottom:16px">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-              <div class="tab-section-label" style="margin-bottom:0">Payment Status</div>
-              <span style="background:#f0fdf4;color:#166534;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1px solid #bbf7d0">✓ Payment Received</span>
-            </div>
-            <div class="chip-row">
-              <div class="chip"><div class="chip-label">Plan</div><div class="chip-value">Professional</div></div>
-              <div class="chip"><div class="chip-label">Amount</div><div class="chip-value">INR 24,999</div></div>
-              <div class="chip"><div class="chip-label">Frequency</div><div class="chip-value">Monthly</div></div>
-              <div class="chip"><div class="chip-label">Duration</div><div class="chip-value">12 months</div></div>
+          <!-- Row 2: Amount -->
+          <div style="margin-bottom:16px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Amount (INR)</label>
+            <input type="number" value="24999" placeholder="0"
+              style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;color:#111827;background:#f9fafb;box-sizing:border-box" />
+          </div>
+
+          <!-- Row 3: Billing Frequency pills -->
+          <div style="margin-bottom:16px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:8px">Billing Frequency</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button style="padding:7px 16px;border-radius:999px;border:1.5px solid #FFA500;background:#fff7ed;color:#FFA500;font-weight:700;font-size:13px;cursor:pointer">Monthly</button>
+              <button style="padding:7px 16px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:13px;cursor:pointer">Quarterly</button>
+              <button style="padding:7px 16px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:13px;cursor:pointer">Bi-annually</button>
+              <button style="padding:7px 16px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:13px;cursor:pointer">Annually</button>
             </div>
           </div>
 
-          <div style="background:#fffbeb;border:1.5px solid rgba(255,165,0,0.3);border-radius:12px;padding:12px 14px;font-size:12px;color:#92400e;margin-bottom:16px">
-            ⚠️ Once enabled, the customer will receive an email with a payment link. Status moves to payment_pending after all agreements are signed.
+          <!-- Row 4: Service Duration pills -->
+          <div style="margin-bottom:16px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:8px">Service Duration</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button style="padding:7px 16px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:13px;cursor:pointer">3 Months</button>
+              <button style="padding:7px 16px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:13px;cursor:pointer">6 Months</button>
+              <button style="padding:7px 16px;border-radius:999px;border:1.5px solid #FFA500;background:#fff7ed;color:#FFA500;font-weight:700;font-size:13px;cursor:pointer">1 Year</button>
+              <button style="padding:7px 16px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:13px;cursor:pointer">Custom</button>
+            </div>
           </div>
+
+          <!-- Row 5: Start Date + End Date (auto) -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+            <div>
+              <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Start Date</label>
+              <input type="date" value="2025-02-01"
+                style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;color:#111827;background:#f9fafb;box-sizing:border-box" />
+            </div>
+            <div>
+              <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">End Date (auto)</label>
+              <div style="padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;color:#9ca3af;background:#f3f4f6;min-height:42px">
+                February 1, 2026
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 6: Payment Method -->
+          <div style="margin-bottom:20px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:10px">Payment Method</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <!-- Portal (selected) -->
+              <div style="border:2px solid #FFA500;border-radius:12px;padding:16px;cursor:pointer;background:#fff7ed">
+                <div style="font-size:22px;margin-bottom:6px">💳</div>
+                <div style="font-weight:700;font-size:13px;color:#111827;margin-bottom:4px">Via Onboarding Portal</div>
+                <div style="font-size:12px;color:#9ca3af">Customer pays on their status page (Razorpay)</div>
+              </div>
+              <!-- Offline -->
+              <div style="border:2px solid #e5e7eb;border-radius:12px;padding:16px;cursor:pointer;background:#fff">
+                <div style="font-size:22px;margin-bottom:6px">🤝</div>
+                <div style="font-weight:700;font-size:13px;color:#111827;margin-bottom:4px">Offline / Manual</div>
+                <div style="font-size:12px;color:#9ca3af">Payment handled outside the portal</div>
+              </div>
+            </div>
+            <!-- Amber notice (shown when portal selected) -->
+            <div style="margin-top:10px;padding:10px 14px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;font-size:12px;color:#92400e">
+              ⚠️ Customer will receive an email notification when you save.
+            </div>
+          </div>
+
+          <!-- Save button -->
+          <button style="width:100%;padding:12px;background:#FFA500;color:#fff;font-weight:700;font-size:15px;border:none;border-radius:10px;cursor:pointer">
+            Save &amp; Notify Customer →
+          </button>
         </div>
       </div>
 
-      <div class="bottom-bar">
-        <span class="all-done-text">Complete all 3 steps to enable sending</span>
-        <button class="send-ops-btn" disabled>Send to Ops Team →</button>
+      <!-- Sticky bottom bar -->
+      <div style="position:sticky;bottom:0;background:#fff;border-top:1px solid #f3f4f6;padding:14px 24px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:13px;color:#9ca3af">Complete all 3 steps to send to ops team</span>
+        <button style="padding:11px 24px;background:#e5e7eb;color:#9ca3af;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:not-allowed" disabled>Send to Ops Team →</button>
       </div>
     </div>
-    <div class="screen-note">When saved with "Portal" method: customer gets an email with a link to pay. Status moves to payment_pending only after all agreements are signed.</div>
+    <div class="screen-note">Form fields: Currency dropdown (INR/USD/GBP/EUR) + Plan Name text input · Amount · Billing Frequency pill group (Monthly selected) · Service Duration pill group (1 Year selected) · Start Date + End Date (auto-calculated, readonly gray) · Payment Method 2-card grid (Portal selected = orange border). Amber notice shows when Portal selected. Button: "Save &amp; Notify Customer →". If no agreement done: shows a locked 🔒 placeholder instead of the form.</div>
   </div>
 
   <!-- Payment Tab – Offline -->
@@ -833,12 +960,13 @@
 
   <!-- Ops Tab -->
   <div id="sales-ops" class="screen-group">
-    <div class="screen-group-title">Sales Portal — Ops Requirements Tab</div>
-    <div class="screen-label">Sales fills client's assets and monitoring requirements for the ops team</div>
+    <div class="screen-group-title">Sales Portal — Application Detail: Ops Requirements Tab</div>
+    <div class="screen-label">All 3 steps done (agreement + payment complete). Ops tab active. "Send to Ops Team →" button enabled in bottom bar.</div>
 
-    <div class="screen">
-      <div class="portal-header">
-        <div style="display:flex;align-items:center;gap:10px">
+    <div class="screen" style="max-width:960px">
+      <!-- Header -->
+      <div style="background:#fff;border-bottom:1px solid #f3f4f6;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:16px">
           <a href="#" style="font-size:13px;font-weight:600;color:#6b7280;text-decoration:none">← All Applications</a>
           <span style="color:#e5e7eb">|</span>
           <div class="logo"><span>BYTES</span><span>CARE</span></div>
@@ -846,89 +974,157 @@
         <button class="btn-signout">Sign Out</button>
       </div>
 
-      <div class="app-detail-layout">
-        <div class="app-sidebar">
-          <div class="customer-card">
-            <div class="customer-avatar">P</div>
-            <div class="customer-name-big">Priyanka Choudhary</div>
-            <div class="customer-meta">Individual · India</div>
+      <div style="max-width:900px;margin:0 auto;padding:28px 24px;padding-bottom:100px">
+        <!-- Customer Summary Card -->
+        <div style="background:#fff;border-radius:20px;padding:24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+            <span style="font-family:monospace;font-size:12px;color:#9ca3af;background:#f3f4f6;border-radius:6px;padding:2px 8px">BC-2025-0043</span>
+            <span style="background:#ccfbf1;color:#0d9488;font-size:11px;font-weight:700;border-radius:999px;padding:3px 10px">Ops Setup</span>
           </div>
-          <div class="steps-row">
-            <div class="step-pill step-done">✓ Agreement</div>
-            <div class="step-pill step-done">✓ Payment</div>
-            <div class="step-pill step-active">3. Ops</div>
+          <div style="font-size:22px;font-weight:900;color:#111827;margin-bottom:4px">Priyanka Choudhary</div>
+          <div style="font-size:14px;color:#9ca3af;margin-bottom:14px">priyanka@example.com</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+            <span style="font-size:12px;color:#374151;background:#f3f4f6;border-radius:999px;padding:4px 12px;font-weight:500">Individual</span>
+            <span style="font-size:12px;color:#374151;background:#f3f4f6;border-radius:999px;padding:4px 12px;font-weight:500">India</span>
+            <span style="font-size:12px;color:#374151;background:#f3f4f6;border-radius:999px;padding:4px 12px;font-weight:500">Submitted Jan 16, 2025</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span style="font-size:11px;color:#d97706;border:1px solid #fde68a;background:#fef9c3;border-radius:999px;padding:3px 10px;font-weight:600">Reputation Management</span>
           </div>
         </div>
 
-        <div class="app-main">
-          <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:4px">Ops Requirements</div>
-          <div style="font-size:12px;color:#9ca3af;margin-bottom:20px">Fill client's digital assets for ops to set up monitoring</div>
-
-          <div class="form-field" style="margin-bottom:14px">
-            <label>Websites / URLs to Protect</label>
-            <textarea class="form-input" rows="2" placeholder="https://example.com&#10;https://shop.example.com"></textarea>
-          </div>
-          <div class="form-field" style="margin-bottom:14px">
-            <label>YouTube Channels</label>
-            <input class="form-input" placeholder="https://youtube.com/@channel" />
-          </div>
-          <div class="form-field" style="margin-bottom:14px">
-            <label>Social Media Handles</label>
-            <input class="form-input" placeholder="@handle on Instagram, Twitter/X, etc." />
-          </div>
-          <div class="form-field" style="margin-bottom:14px">
-            <label>Brand / Trademark Names</label>
-            <input class="form-input" placeholder="Brand name, product names..." />
-          </div>
-
-          <div style="margin-bottom:14px">
-            <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:8px">Monitoring Platforms</div>
-            <div class="platform-grid">
-              <div class="platform-chip sel">YouTube</div>
-              <div class="platform-chip sel">Instagram</div>
-              <div class="platform-chip">Facebook</div>
-              <div class="platform-chip">Twitter/X</div>
-              <div class="platform-chip">TikTok</div>
-              <div class="platform-chip sel">Amazon</div>
-              <div class="platform-chip">Flipkart</div>
-              <div class="platform-chip">Google</div>
-              <div class="platform-chip">App Stores</div>
-              <div class="platform-chip">Dark Web</div>
-              <div class="platform-chip">LinkedIn</div>
-              <div class="platform-chip">Pinterest</div>
-            </div>
-          </div>
-
-          <div class="form-row form-col-2" style="margin-bottom:14px">
-            <div class="form-field">
-              <label>Priority</label>
-              <div class="pill-group">
-                <div class="pill-btn sel">Standard</div>
-                <div class="pill-btn">High</div>
-                <div class="pill-btn">Critical</div>
+        <!-- Stepper (all 3 done) -->
+        <div style="display:flex;align-items:center;background:#fff;border-radius:16px;padding:16px 24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);gap:0">
+          <!-- Step 1: Agreement (done) -->
+          <div style="display:flex;align-items:center;flex:1">
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;flex:1;cursor:pointer">
+              <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:#FFA500;color:#fff;flex-shrink:0">✓</div>
+              <div>
+                <div style="font-size:13px;font-weight:500;color:#6b7280">Agreement</div>
+                <div style="font-size:11px;color:#16a34a">Done</div>
               </div>
             </div>
-            <div class="form-field">
-              <label>SLA Start Date</label>
-              <input class="form-input" type="date" value="2026-06-10" />
+            <div style="width:24px;height:2px;background:#FFA500;flex-shrink:0"></div>
+          </div>
+          <!-- Step 2: Payment (done) -->
+          <div style="display:flex;align-items:center;flex:1">
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;flex:1;cursor:pointer">
+              <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:#FFA500;color:#fff;flex-shrink:0">✓</div>
+              <div>
+                <div style="font-size:13px;font-weight:500;color:#6b7280">Payment</div>
+                <div style="font-size:11px;color:#16a34a">Done</div>
+              </div>
+            </div>
+            <div style="width:24px;height:2px;background:#FFA500;flex-shrink:0"></div>
+          </div>
+          <!-- Step 3: Ops (active) -->
+          <div style="display:flex;align-items:center;flex:1">
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;background:#fff7ed;flex:1;cursor:pointer">
+              <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:#fff7ed;color:#FFA500;border:2px solid #FFA500;flex-shrink:0">3</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#111827">Ops Requirements</div>
+                <div style="font-size:11px;color:#9ca3af">Pending</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content Card -->
+        <div style="background:#fff;border-radius:20px;padding:28px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
+          <!-- Client Contact (readonly) -->
+          <div style="margin-bottom:20px">
+            <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:8px">Client Contact</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <input type="text" readonly value="Priyanka Choudhary"
+                style="padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;color:#6b7280;background:#f3f4f6;box-sizing:border-box" />
+              <input type="text" readonly value="priyanka@example.com"
+                style="padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;color:#6b7280;background:#f3f4f6;box-sizing:border-box" />
             </div>
           </div>
 
-          <div class="form-field" style="margin-bottom:14px">
-            <label>Special Instructions</label>
-            <textarea class="form-input" rows="2" placeholder="Any special notes for the ops team..."></textarea>
+          <!-- Assets 2x2 grid -->
+          <div style="margin-bottom:20px">
+            <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:8px">Assets</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div>
+                <label style="font-size:12px;color:#6b7280;display:block;margin-bottom:4px">Websites / URLs</label>
+                <textarea rows="3" placeholder="https://example.com&#10;https://brand.com"
+                  style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;color:#111827;background:#f9fafb;resize:vertical;box-sizing:border-box;font-family:inherit"></textarea>
+              </div>
+              <div>
+                <label style="font-size:12px;color:#6b7280;display:block;margin-bottom:4px">YouTube Channels</label>
+                <textarea rows="3" placeholder="Channel name or URL"
+                  style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;color:#111827;background:#f9fafb;resize:vertical;box-sizing:border-box;font-family:inherit"></textarea>
+              </div>
+              <div>
+                <label style="font-size:12px;color:#6b7280;display:block;margin-bottom:4px">Social Media Handles</label>
+                <textarea rows="3" placeholder="@handle or profile URL"
+                  style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;color:#111827;background:#f9fafb;resize:vertical;box-sizing:border-box;font-family:inherit"></textarea>
+              </div>
+              <div>
+                <label style="font-size:12px;color:#6b7280;display:block;margin-bottom:4px">Brand Names / Keywords</label>
+                <textarea rows="3" placeholder="Brand name, trademark, keywords"
+                  style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;color:#111827;background:#f9fafb;resize:vertical;box-sizing:border-box;font-family:inherit"></textarea>
+              </div>
+            </div>
           </div>
 
-          <button class="save-btn">Save Ops Requirements →</button>
+          <!-- Monitoring Platforms -->
+          <div style="margin-bottom:20px">
+            <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:8px">Monitoring Platforms</label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #FFA500;background:#fff7ed;color:#FFA500;font-weight:700;font-size:12px;cursor:pointer">YouTube</button>
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #FFA500;background:#fff7ed;color:#FFA500;font-weight:700;font-size:12px;cursor:pointer">Instagram</button>
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:12px;cursor:pointer">Facebook</button>
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:12px;cursor:pointer">Twitter/X</button>
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:12px;cursor:pointer">TikTok</button>
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:12px;cursor:pointer">Amazon</button>
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:12px;cursor:pointer">Flipkart</button>
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:12px;cursor:pointer">Google Search</button>
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:12px;cursor:pointer">App Stores</button>
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:12px;cursor:pointer">Dark Web</button>
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:12px;cursor:pointer">LinkedIn</button>
+              <button style="padding:6px 14px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:12px;cursor:pointer">Pinterest</button>
+            </div>
+          </div>
+
+          <!-- Priority Level -->
+          <div style="margin-bottom:16px">
+            <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:8px">Priority Level</label>
+            <div style="display:flex;gap:8px">
+              <button style="padding:7px 16px;border-radius:999px;border:1.5px solid #FFA500;background:#fff7ed;color:#FFA500;font-weight:700;font-size:13px;cursor:pointer">Standard</button>
+              <button style="padding:7px 16px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:13px;cursor:pointer">High</button>
+              <button style="padding:7px 16px;border-radius:999px;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;font-weight:500;font-size:13px;cursor:pointer">Critical</button>
+            </div>
+          </div>
+
+          <!-- Special Instructions -->
+          <div style="margin-bottom:16px">
+            <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px">Special Instructions</label>
+            <textarea rows="5" placeholder="Any specific notes or requirements for the ops team..."
+              style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;color:#111827;background:#f9fafb;resize:vertical;box-sizing:border-box;font-family:inherit"></textarea>
+          </div>
+
+          <!-- SLA Start Date -->
+          <div style="margin-bottom:20px">
+            <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px">SLA Start Date</label>
+            <input type="date" value="2025-02-01"
+              style="padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;color:#111827;background:#f9fafb;box-sizing:border-box" />
+          </div>
+
+          <button style="width:100%;padding:12px;background:#FFA500;color:#fff;font-weight:700;font-size:15px;border:none;border-radius:10px;cursor:pointer">
+            Save Ops Requirements
+          </button>
         </div>
       </div>
 
-      <div class="bottom-bar" style="background:#111827">
-        <span style="font-size:13px;color:#9ca3af">All 3 steps done — ops will receive full requirements email</span>
-        <button class="send-ops-btn" style="background:#FFA500;color:#111827">✓ Send to Ops Team →</button>
+      <!-- Sticky bottom bar (all done → enabled) -->
+      <div style="position:sticky;bottom:0;background:#111827;border-top:1px solid #f3f4f6;padding:14px 24px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:13px;color:#9ca3af">All 3 steps complete — ready to send to ops team</span>
+        <button style="padding:11px 24px;background:#FFA500;color:#111827;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer">✓ Send to Ops Team →</button>
       </div>
     </div>
-    <div class="screen-note">When "Send to Ops Team" is clicked, ops receives an email with all client details, assets, platforms, and requirements.</div>
+    <div class="screen-note">Client Contact section shows readonly name + email (gray bg). Assets in a 2x2 textarea grid. Monitoring Platforms are toggle pills (orange = selected). Priority pill group (Standard selected). Special Instructions textarea (5 rows). SLA Start Date. "Save Ops Requirements" button. When all 3 steps done, bottom bar goes dark (#111827) with orange "Send to Ops Team →" button enabled.</div>
   </div>
 
   <!-- ══════════════════════════════════════════════ -->
