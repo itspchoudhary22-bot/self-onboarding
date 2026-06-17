@@ -558,6 +558,7 @@
 
         <!-- Tab Content Card -->
         <div style="background:#fff;border-radius:20px;padding:28px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
+          <h2 style="font-size:18px;font-weight:800;color:#111827;margin-bottom:20px;margin-top:0">Agreement</h2>
           <!-- Existing agreements list -->
           <div style="margin-bottom:24px">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
@@ -671,9 +672,13 @@
       </div>
 
       <!-- Sticky bottom bar -->
-      <div style="position:sticky;bottom:0;background:#fff;border-top:1px solid #f3f4f6;padding:14px 24px;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:13px;color:#9ca3af">Complete all 3 steps to send to ops team</span>
-        <button style="padding:11px 24px;background:#e5e7eb;color:#9ca3af;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:not-allowed" disabled>Send to Ops Team →</button>
+      <div style="position:sticky;bottom:0;background:#fff;border-top:1px solid #f3f4f6;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#f3f4f6;color:#9ca3af;border:1.5px solid #e5e7eb">○ Agreement</span>
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#f3f4f6;color:#9ca3af;border:1.5px solid #e5e7eb">○ Payment</span>
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#f3f4f6;color:#9ca3af;border:1.5px solid #e5e7eb">○ Ops Requirements</span>
+        </div>
+        <button style="padding:10px 22px;background:#e5e7eb;color:#9ca3af;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:not-allowed" disabled>Send to Operations Team →</button>
       </div>
     </div>
     <div class="screen-note">Existing agreements shown first with Sync + Reset actions. 3 option cards replace old dropdown. Active card has orange border + #fff7ed bg. Button text changes: "Send Template for Signing →" / "Upload &amp; Send for Signing →" / "Upload &amp; Mark Complete →". "Refresh Link" shown only for PandaDoc agreements that aren't signed yet.</div>
@@ -753,6 +758,7 @@
 
         <!-- Tab Content Card -->
         <div style="background:#fff;border-radius:20px;padding:28px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
+          <h2 style="font-size:18px;font-weight:800;color:#111827;margin-bottom:20px;margin-top:0">Payment Details</h2>
           <!-- Row 1: Currency + Plan Name (1fr 2fr) -->
           <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:16px">
             <div>
@@ -846,9 +852,13 @@
       </div>
 
       <!-- Sticky bottom bar -->
-      <div style="position:sticky;bottom:0;background:#fff;border-top:1px solid #f3f4f6;padding:14px 24px;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:13px;color:#9ca3af">Complete all 3 steps to send to ops team</span>
-        <button style="padding:11px 24px;background:#e5e7eb;color:#9ca3af;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:not-allowed" disabled>Send to Ops Team →</button>
+      <div style="position:sticky;bottom:0;background:#fff;border-top:1px solid #f3f4f6;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#dcfce7;color:#16a34a;border:1.5px solid #bbf7d0">✓ Agreement</span>
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#f3f4f6;color:#9ca3af;border:1.5px solid #e5e7eb">○ Payment</span>
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#f3f4f6;color:#9ca3af;border:1.5px solid #e5e7eb">○ Ops Requirements</span>
+        </div>
+        <button style="padding:10px 22px;background:#e5e7eb;color:#9ca3af;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:not-allowed" disabled>Send to Operations Team →</button>
       </div>
     </div>
     <div class="screen-note">Form fields: Currency dropdown (INR/USD/GBP/EUR) + Plan Name text input · Amount · Billing Frequency pill group (Monthly selected) · Service Duration pill group (1 Year selected) · Start Date + End Date (auto-calculated, readonly gray) · Payment Method 2-card grid (Portal selected = orange border). Amber notice shows when Portal selected. Button: "Save &amp; Notify Customer →". If no agreement done: shows a locked 🔒 placeholder instead of the form.</div>
@@ -916,6 +926,7 @@
 
         <!-- Tab Content Card -->
         <div style="background:#fff;border-radius:20px;padding:28px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
+          <h2 style="font-size:18px;font-weight:800;color:#111827;margin-bottom:20px;margin-top:0">Payment Details</h2>
           <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:16px">
             <div>
               <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Currency</label>
@@ -992,15 +1003,17 @@
       </div>
 
       <!-- Sticky bottom bar -->
-      <div style="position:sticky;bottom:0;background:#fff;border-top:1px solid #f3f4f6;padding:14px 24px;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:13px;color:#9ca3af">Complete all 3 steps to send to ops team</span>
-        <button style="padding:11px 24px;background:#e5e7eb;color:#9ca3af;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:not-allowed" disabled>Send to Ops Team →</button>
+      <div style="position:sticky;bottom:0;background:#fff;border-top:1px solid #f3f4f6;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#dcfce7;color:#16a34a;border:1.5px solid #bbf7d0">✓ Agreement</span>
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#f3f4f6;color:#9ca3af;border:1.5px solid #e5e7eb">○ Payment</span>
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#f3f4f6;color:#9ca3af;border:1.5px solid #e5e7eb">○ Ops Requirements</span>
+        </div>
+        <button style="padding:10px 22px;background:#e5e7eb;color:#9ca3af;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:not-allowed" disabled>Send to Operations Team →</button>
       </div>
     </div>
     <div class="screen-note">Identical to the Payment Tab (Online) screen except: Offline / Manual card has orange border, Via Onboarding Portal has gray border, amber warning notice is NOT shown. On save, status moves directly to ops_setup — no payment link is sent to customer.</div>
   </div>
-      </div>
-    </div>
     <div class="screen-note">Offline payment: status goes to ops_setup immediately. Sales fills "Confirm Payment Received" when money is actually received. Ops gets auto-notified.</div>
   </div>
 
@@ -1077,6 +1090,7 @@
 
         <!-- Tab Content Card -->
         <div style="background:#fff;border-radius:20px;padding:28px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
+          <h2 style="font-size:18px;font-weight:800;color:#111827;margin-bottom:20px;margin-top:0">Operational Requirements</h2>
           <!-- Client Contact (readonly) -->
           <div style="margin-bottom:20px">
             <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:8px">Client Contact</label>
@@ -1164,10 +1178,14 @@
         </div>
       </div>
 
-      <!-- Sticky bottom bar (all done → enabled) -->
-      <div style="position:sticky;bottom:0;background:#111827;border-top:1px solid #f3f4f6;padding:14px 24px;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:13px;color:#9ca3af">All 3 steps complete — ready to send to ops team</span>
-        <button style="padding:11px 24px;background:#FFA500;color:#111827;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer">✓ Send to Ops Team →</button>
+      <!-- Sticky bottom bar (all done → orange button enabled) -->
+      <div style="position:sticky;bottom:0;background:#fff;border-top:1px solid #f3f4f6;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#dcfce7;color:#16a34a;border:1.5px solid #bbf7d0">✓ Agreement</span>
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#dcfce7;color:#16a34a;border:1.5px solid #bbf7d0">✓ Payment</span>
+          <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 12px;background:#f3f4f6;color:#9ca3af;border:1.5px solid #e5e7eb">○ Ops Requirements</span>
+        </div>
+        <button style="padding:10px 22px;background:#FFA500;color:#fff;font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer">Send to Operations Team →</button>
       </div>
     </div>
     <div class="screen-note">Client Contact section shows readonly name + email (gray bg). Assets in a 2x2 textarea grid. Monitoring Platforms are toggle pills (orange = selected). Priority pill group (Standard selected). Special Instructions textarea (5 rows). SLA Start Date. "Save Ops Requirements" button. When all 3 steps done, bottom bar goes dark (#111827) with orange "Send to Ops Team →" button enabled.</div>
