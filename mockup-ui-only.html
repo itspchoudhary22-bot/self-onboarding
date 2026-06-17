@@ -999,6 +999,47 @@
           <button style="width:100%;padding:12px;background:#FFA500;color:#fff;font-weight:700;font-size:15px;border:none;border-radius:10px;cursor:pointer">
             Save &amp; Notify Customer →
           </button>
+
+          <!-- Confirm Payment Received (shown after offline plan is saved) -->
+          <div style="margin-top:28px;border-top:2px dashed #e5e7eb;padding-top:24px">
+            <div style="font-size:15px;font-weight:800;color:#111827;margin-bottom:4px">💰 Confirm Payment Received</div>
+            <div style="font-size:13px;color:#9ca3af;margin-bottom:18px">Once the customer has paid offline, record the receipt details here. Ops team will be notified automatically.</div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Reference / Transaction No.</label>
+                <input type="text" placeholder="e.g. CHQ-2024-001 or UTR number"
+                  style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;color:#111827;background:#f9fafb;box-sizing:border-box" />
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Payment Date</label>
+                <input type="date" value="2025-02-10"
+                  style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;color:#111827;background:#f9fafb;box-sizing:border-box" />
+              </div>
+            </div>
+
+            <div style="margin-bottom:14px">
+              <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Payment Mode</label>
+              <select style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;color:#111827;background:#f9fafb">
+                <option>Select mode</option>
+                <option selected>Bank Transfer / NEFT</option>
+                <option>UPI</option>
+                <option>Cheque</option>
+                <option>Cash</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom:16px">
+              <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Notes (optional)</label>
+              <textarea rows="2" placeholder="Any additional notes..."
+                style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;color:#111827;background:#f9fafb;resize:none;box-sizing:border-box;font-family:inherit"></textarea>
+            </div>
+
+            <button style="width:100%;padding:12px;background:#16a34a;color:#fff;font-weight:700;font-size:15px;border:none;border-radius:10px;cursor:pointer">
+              ✓ Mark Payment Received &amp; Notify Ops
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1013,8 +1054,6 @@
       </div>
     </div>
     <div class="screen-note">Identical to the Payment Tab (Online) screen except: Offline / Manual card has orange border, Via Onboarding Portal has gray border, amber warning notice is NOT shown. On save, status moves directly to ops_setup — no payment link is sent to customer.</div>
-  </div>
-    <div class="screen-note">Offline payment: status goes to ops_setup immediately. Sales fills "Confirm Payment Received" when money is actually received. Ops gets auto-notified.</div>
   </div>
 
   <!-- Ops Tab -->
