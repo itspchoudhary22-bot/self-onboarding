@@ -1189,51 +1189,77 @@
       </div>
       <div style="padding:24px;max-width:640px;margin:0 auto">
         <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
-          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Your Details</h2>
-          <p style="font-size:13px;color:#9ca3af;margin-bottom:24px">Personal and contact information</p>
+          <div style="display:inline-flex;align-items:center;gap:6px;background:#fff8e6;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:16px">👤 Individual</div>
+          <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Personal Details</h2>
+          <p style="font-size:13px;color:#9ca3af;margin-bottom:20px">Your legal information required for documentation.</p>
 
+          <!-- Section: Identity -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;white-space:nowrap">Identity &amp; Legal</span>
+            <div style="flex:1;height:1px;background:#f3f4f6"></div>
+          </div>
           <div class="form-row form-col-2" style="margin-bottom:14px">
             <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Full Legal Name *</label><input class="form-input" placeholder="As on government ID" /></div>
             <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">National ID Number *</label><input class="form-input" placeholder="Aadhar / Passport / etc." /></div>
           </div>
-
           <div class="form-field" style="margin-bottom:14px">
-            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload ID Proof *</label>
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload National ID Proof *</label>
             <div style="border:2px dashed #e5e7eb;border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:#f9fafb">
-              <div style="font-size:24px;margin-bottom:6px">📎</div>
+              <div style="font-size:22px;margin-bottom:6px">☁️</div>
               <div style="font-size:13px;font-weight:600;color:#374151">Click to upload or drag & drop</div>
               <div style="font-size:11px;color:#9ca3af;margin-top:3px">PDF, JPG, PNG up to 10MB</div>
             </div>
           </div>
 
-          <div class="form-row form-col-2" style="margin-bottom:14px">
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Contact Number *</label><input class="form-input" placeholder="+91 98765 43210" /></div>
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Official Email *</label><input class="form-input" placeholder="work@company.com" /></div>
+          <!-- Section: Contact -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:4px">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;white-space:nowrap">Contact &amp; Address</span>
+            <div style="flex:1;height:1px;background:#f3f4f6"></div>
           </div>
-
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Contact Number <span style="color:#9ca3af;font-weight:400">(optional)</span></label>
+            <input class="form-input" placeholder="+91 98765 43210" />
+          </div>
           <div class="form-field" style="margin-bottom:14px">
             <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Registered Address *</label>
             <textarea class="form-input" rows="2" placeholder="Full address..."></textarea>
           </div>
-
           <div class="form-row form-col-2" style="margin-bottom:14px">
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Pincode</label><input class="form-input" placeholder="110001" /></div>
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Mailing Address</label><input class="form-input" placeholder="If different from above" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Pincode / ZIP *</label><input class="form-input" placeholder="110001" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">City</label><input class="form-input" placeholder="New Delhi" /></div>
+          </div>
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Mailing Address *</label>
+            <input class="form-input" placeholder="If different from registered address" />
           </div>
 
+          <!-- Section: Professional -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:4px">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;white-space:nowrap">Professional Information</span>
+            <div style="flex:1;height:1px;background:#f3f4f6"></div>
+          </div>
           <div class="form-row form-col-2" style="margin-bottom:14px">
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Designation</label><input class="form-input" placeholder="e.g. Content Creator" /></div>
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Social Media Handles</label><input class="form-input" placeholder="@handle" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Official Email Address *</label><input class="form-input" placeholder="work@company.com" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Designation *</label><input class="form-input" placeholder="e.g. Content Creator" /></div>
+          </div>
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Nature of Work *</label>
+            <input class="form-input" placeholder="Brief description of your work or content..." />
           </div>
 
+          <!-- Section: Online Presence -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:4px">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;white-space:nowrap">Online Presence</span>
+            <div style="flex:1;height:1px;background:#f3f4f6"></div>
+          </div>
           <div class="form-field" style="margin-bottom:24px">
-            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Nature of Work</label>
-            <textarea class="form-input" rows="2" placeholder="Brief description of your work or content..."></textarea>
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Social Media Handles *</label>
+            <textarea class="form-input" rows="3" placeholder="Instagram: @yourhandle&#10;YouTube: https://youtube.com/@channel&#10;Twitter: @yourhandle"></textarea>
           </div>
 
           <div style="display:flex;gap:12px">
-            <button style="flex:0 0 auto;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
-            <button class="save-btn">Continue →</button>
+            <button style="flex:1;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
+            <button style="flex:2;padding:12px;background:#FFA500;color:#111827;font-weight:800;font-size:14px;border:none;border-radius:10px;cursor:pointer">Continue →</button>
           </div>
         </div>
       </div>
@@ -1258,52 +1284,104 @@
       </div>
       <div style="padding:24px;max-width:640px;margin:0 auto">
         <div style="background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+          <div style="display:inline-flex;align-items:center;gap:6px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;color:#1e40af;margin-bottom:16px">🏢 Company</div>
           <h2 style="font-size:20px;font-weight:900;color:#111827;margin-bottom:4px">Company Details</h2>
-          <p style="font-size:13px;color:#9ca3af;margin-bottom:24px">Business and signatory information</p>
 
-          <div class="form-row form-col-2" style="margin-bottom:14px">
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Company Name *</label><input class="form-input" placeholder="Nexgen Pvt Ltd" /></div>
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Registration Number *</label><input class="form-input" placeholder="CIN / Reg No." /></div>
+          <!-- Company Identity -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;white-space:nowrap">Company Identity</span>
+            <div style="flex:1;height:1px;background:#f3f4f6"></div>
           </div>
-
           <div class="form-row form-col-2" style="margin-bottom:14px">
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload Reg. Certificate *</label>
-              <div style="border:2px dashed #e5e7eb;border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:#f9fafb">
-                <div style="font-size:18px;margin-bottom:4px">📎</div><div style="font-size:12px;color:#9ca3af">Upload PDF / JPG</div>
-              </div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Company / Entity Name *</label><input class="form-input" placeholder="Acme Corp Pvt Ltd" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Company Registration Number *</label><input class="form-input" placeholder="U12345MH2020PTC123456" /></div>
+          </div>
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload Registration Certificate *</label>
+            <div style="border:2px dashed #e5e7eb;border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:#f9fafb">
+              <div style="font-size:22px;margin-bottom:6px">☁️</div>
+              <div style="font-size:13px;font-weight:600;color:#374151">Click to upload or drag & drop</div>
+              <div style="font-size:11px;color:#9ca3af;margin-top:3px">PDF, JPG, PNG up to 10MB</div>
             </div>
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">GSTIN</label><input class="form-input" placeholder="22AAABB1234C1Z5" /></div>
+          </div>
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">GSTIN *</label>
+            <input class="form-input" placeholder="22AAABB1234C1Z5" />
           </div>
 
-          <div class="form-row form-col-2" style="margin-bottom:14px">
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Contact Number *</label><input class="form-input" placeholder="+91 98765 43210" /></div>
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Official Email *</label><input class="form-input" placeholder="legal@company.com" /></div>
+          <!-- Contact & Address -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:4px">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;white-space:nowrap">Contact &amp; Address</span>
+            <div style="flex:1;height:1px;background:#f3f4f6"></div>
           </div>
-
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Contact Number <span style="color:#9ca3af;font-weight:400">(optional)</span></label>
+            <input class="form-input" placeholder="+91 98765 43210" />
+          </div>
           <div class="form-field" style="margin-bottom:14px">
             <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Registered Address *</label>
-            <textarea class="form-input" rows="2"></textarea>
+            <textarea class="form-input" rows="2" placeholder="Full registered address..."></textarea>
+          </div>
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Pincode / ZIP *</label><input class="form-input" placeholder="400001" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">City</label><input class="form-input" placeholder="Mumbai" /></div>
+          </div>
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Mailing Address *</label>
+            <input class="form-input" placeholder="If different from registered address" />
           </div>
 
-          <div style="border-top:1.5px solid #f3f4f6;padding-top:16px;margin-top:4px;margin-bottom:14px">
-            <div style="font-size:12px;font-weight:700;color:#374151;margin-bottom:12px">Authorized Signatory</div>
-            <div class="form-row form-col-2" style="margin-bottom:12px">
-              <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Signatory Name *</label><input class="form-input" placeholder="Full name" /></div>
-              <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Designation *</label><input class="form-input" placeholder="CEO / Director" /></div>
-            </div>
-            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Signatory Email *</label><input class="form-input" placeholder="signatory@company.com" /></div>
+          <!-- Business -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:4px">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;white-space:nowrap">Business</span>
+            <div style="flex:1;height:1px;background:#f3f4f6"></div>
+          </div>
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Nature of Business *</label><input class="form-input" placeholder="e.g. Software / E-commerce" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Official Email Address *</label><input class="form-input" placeholder="legal@company.com" /></div>
           </div>
 
+          <!-- Authorized Signatory -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:4px">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;white-space:nowrap">Authorized Signatory</span>
+            <div style="flex:1;height:1px;background:#f3f4f6"></div>
+          </div>
+          <div class="form-row form-col-2" style="margin-bottom:14px">
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Name of Authorized Signatory *</label><input class="form-input" placeholder="Full name" /></div>
+            <div class="form-field"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Designation *</label><input class="form-input" placeholder="CEO / Director" /></div>
+          </div>
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Signatory Email *</label>
+            <input class="form-input" placeholder="signatory@company.com" />
+          </div>
+
+          <!-- Online Presence -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:4px">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;white-space:nowrap">Online Presence</span>
+            <div style="flex:1;height:1px;background:#f3f4f6"></div>
+          </div>
+          <div class="form-field" style="margin-bottom:14px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Website / Social Media *</label>
+            <textarea class="form-input" rows="3" placeholder="https://yourcompany.com&#10;Instagram: @yourhandle&#10;LinkedIn: linkedin.com/company/yourco"></textarea>
+          </div>
+
+          <!-- Documents -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:4px">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;white-space:nowrap">Documents</span>
+            <div style="flex:1;height:1px;background:#f3f4f6"></div>
+          </div>
           <div class="form-field" style="margin-bottom:24px">
-            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload Copyright Certificate (optional)</label>
-            <div style="border:2px dashed #e5e7eb;border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:#f9fafb">
-              <div style="font-size:18px;margin-bottom:4px">📎</div><div style="font-size:12px;color:#9ca3af">Optional — upload if available</div>
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Upload Copyright / Trademark Certificate <span style="color:#9ca3af;font-weight:400">(optional)</span></label>
+            <div style="border:2px dashed #e5e7eb;border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:#f9fafb">
+              <div style="font-size:22px;margin-bottom:6px">☁️</div>
+              <div style="font-size:13px;font-weight:600;color:#374151">Click to upload or drag & drop</div>
+              <div style="font-size:11px;color:#9ca3af;margin-top:3px">PDF, JPG, PNG — optional</div>
             </div>
           </div>
 
           <div style="display:flex;gap:12px">
-            <button style="flex:0 0 auto;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
-            <button class="save-btn">Continue →</button>
+            <button style="flex:1;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
+            <button style="flex:2;padding:12px;background:#FFA500;color:#111827;font-weight:800;font-size:14px;border:none;border-radius:10px;cursor:pointer">Continue →</button>
           </div>
         </div>
       </div>
@@ -1489,72 +1567,158 @@
       <div class="footer-bar"></div>
     </div>
 
-    <!-- State B: After "Know more →" clicked — modal overlay appears -->
-    <div style="margin-bottom:10px;font-weight:700;color:#374151;font-size:12px">B – After clicking "Know more →" — a centered modal popup appears over the grid (dark backdrop + scrollable card)</div>
-    <div style="position:relative;margin-bottom:28px;max-width:700px">
-      <!-- Backdrop dimming the screen behind -->
-      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);border-radius:16px;z-index:10"></div>
-      <!-- The modal card itself, centered -->
-      <div style="position:absolute;top:40px;left:50%;transform:translateX(-50%);width:90%;max-width:440px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.25);z-index:20">
-        <!-- Modal header -->
-        <div style="display:flex;align-items:flex-start;gap:14px;padding:22px 22px 16px;border-bottom:1px solid #f3f4f6">
-          <div style="width:44px;height:44px;border-radius:16px;background:#fff8e6;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px">🛡️</div>
-          <div style="flex:1">
-            <div style="font-weight:900;font-size:15px;color:#111827;margin-bottom:2px">Digital Piracy Protection</div>
-            <div style="font-size:11px;color:#9ca3af">Service Overview</div>
-          </div>
-          <div style="width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#9ca3af;cursor:pointer">×</div>
+    <!-- State B: Know More Modal -->
+    <div style="margin-bottom:10px;font-weight:700;color:#374151;font-size:12px">B – Modal overlay: "Know more →" clicked on Digital Piracy Protection</div>
+    <div class="screen" style="margin-bottom:28px;max-width:700px">
+      <div class="portal-header">
+        <div class="logo"><span>BYTES</span><span>CARE</span></div>
+        <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
+      </div>
+      <div style="padding:16px 24px 0">
+        <div style="height:5px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-bottom:4px">
+          <div style="height:100%;width:67%;background:linear-gradient(90deg,#FFA500,#7C3AED);border-radius:999px"></div>
         </div>
-        <!-- Modal body -->
-        <div style="padding:18px 22px;max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:16px">
-          <p style="font-size:13px;color:#374151;line-height:1.6">Protects your digital assets by detecting and removing unauthorized sharing, leaks, and illegal distributions across all major platforms.</p>
-          <!-- What We Cover -->
-          <div>
-            <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:10px">What We Cover</p>
-            <div style="display:flex;flex-direction:column;gap:6px">
-              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">Unauthorized Video Sharing</span></div>
-              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">Article Piracy</span></div>
-              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">Unauthorized Image Usage</span></div>
-              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">Social Media Piracy Posts</span></div>
-              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">Audio &amp; Music Piracy</span></div>
-              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px"><div style="width:16px;height:16px;background:#FFA500;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><span style="font-size:13px;font-weight:500;color:#374151">APK Piracy</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:#6b7280">Step 3 of 4</span><span style="font-size:12px;color:#6b7280">67% complete</span></div>
+      </div>
+      <div style="padding:20px 24px">
+        <h2 style="font-size:22px;font-weight:900;color:#111827;margin-bottom:2px">Select Services</h2>
+        <p style="font-size:13px;color:#6b7280;margin-bottom:4px">Choose the protection services you need. <span style="color:#FFA500;font-weight:700">Select at least one.</span></p>
+        <div style="height:1px;background:#f3f4f6;margin:14px 0"></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+
+          <!-- Digital Piracy — modal overlay shown on top -->
+          <div style="grid-column:1 / -1;position:relative">
+            <div style="background:#fff;border-radius:24px;box-shadow:0 8px 40px rgba(0,0,0,0.18);max-width:460px;margin:0 auto;overflow:hidden;border:1px solid #f3f4f6">
+              <!-- Modal header -->
+              <div style="display:flex;align-items:flex-start;gap:14px;padding:20px 20px 16px;border-bottom:1px solid #f3f4f6">
+                <div style="width:44px;height:44px;border-radius:12px;background:#fff8e6;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🛡️</div>
+                <div style="flex:1">
+                  <div style="font-size:15px;font-weight:900;color:#111827">Digital Piracy Protection</div>
+                  <div style="font-size:12px;color:#9ca3af;margin-top:2px">Service Overview</div>
+                </div>
+                <span style="font-size:16px;color:#9ca3af;cursor:pointer;line-height:1">×</span>
+              </div>
+              <!-- Modal body -->
+              <div style="padding:18px 20px;max-height:380px;overflow-y:auto">
+                <p style="font-size:13px;color:#4b5563;line-height:1.6;margin-bottom:16px">Protects your digital assets by detecting and removing unauthorized sharing, leaks, and illegal distributions across all major platforms.</p>
+                <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:10px">What We Cover</div>
+                <div class="coverage-row"><span style="color:#FFA500;font-weight:900">✓</span> Unauthorized Video Sharing</div>
+                <div class="coverage-row"><span style="color:#FFA500;font-weight:900">✓</span> Article Piracy</div>
+                <div class="coverage-row"><span style="color:#FFA500;font-weight:900">✓</span> Unauthorized Image Usage</div>
+                <div class="coverage-row"><span style="color:#FFA500;font-weight:900">✓</span> Social Media Piracy Posts</div>
+                <div class="coverage-row"><span style="color:#FFA500;font-weight:900">✓</span> Audio &amp; Music Piracy</div>
+                <div class="coverage-row"><span style="color:#FFA500;font-weight:900">✓</span> APK Piracy</div>
+                <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin:16px 0 10px">Key Benefits</div>
+                <div>
+                  <span class="benefit-pill">✦ Protects revenue</span>
+                  <span class="benefit-pill">✦ Secures digital assets</span>
+                  <span class="benefit-pill">✦ Preserves creator rights</span>
+                </div>
+              </div>
+              <!-- Modal footer -->
+              <div style="padding:14px 20px;border-top:1px solid #f3f4f6">
+                <button style="width:100%;padding:12px;background:#FFA500;color:#111827;font-weight:800;font-size:14px;border:none;border-radius:12px;cursor:pointer">Got it</button>
+              </div>
             </div>
           </div>
-          <!-- Key Benefits -->
-          <div>
-            <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:10px">Key Benefits</p>
-            <div style="display:flex;flex-wrap:wrap;gap:8px">
-              <span style="padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;background:rgba(255,165,0,0.1);color:#92400e;border:1.5px solid rgba(255,165,0,0.25)">✦ Protects revenue</span>
-              <span style="padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;background:rgba(255,165,0,0.1);color:#92400e;border:1.5px solid rgba(255,165,0,0.25)">✦ Secures digital assets</span>
-              <span style="padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;background:rgba(255,165,0,0.1);color:#92400e;border:1.5px solid rgba(255,165,0,0.25)">✦ Preserves creator rights</span>
+
+          <!-- Brand Protection -->
+          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">🔏</span><span style="font-weight:800;color:#111827;font-size:13px">Brand Protection</span></div>
+                <div style="font-size:12px;color:#6b7280;line-height:1.4">Safeguard your brand identity from misuse and impersonation.</div>
+              </div>
             </div>
+            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
           </div>
+
+          <!-- Threat Intelligence -->
+          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">👁️</span><span style="font-weight:800;color:#111827;font-size:13px">Threat Intelligence</span></div>
+                <div style="font-size:12px;color:#6b7280;line-height:1.4">Real-time cyber threat intelligence and actionable insights.</div>
+              </div>
+            </div>
+            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
+          </div>
+
+          <!-- Identity Theft -->
+          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">🪪</span><span style="font-weight:800;color:#111827;font-size:13px">Identity Theft Protection</span></div>
+                <div style="font-size:12px;color:#6b7280;line-height:1.4">Monitor and protect identities from theft and fraud.</div>
+              </div>
+            </div>
+            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
+          </div>
+
+          <!-- Business Intelligence -->
+          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">📊</span><span style="font-weight:800;color:#111827;font-size:13px">Business Intelligence</span></div>
+                <div style="font-size:12px;color:#6b7280;line-height:1.4">Data-driven insights to strengthen your competitive advantage.</div>
+              </div>
+            </div>
+            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
+          </div>
+
+          <!-- Counterfeit -->
+          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">🏷️</span><span style="font-weight:800;color:#111827;font-size:13px">Counterfeit Protection</span></div>
+                <div style="font-size:12px;color:#6b7280;line-height:1.4">Identify and eliminate counterfeit products affecting your brand.</div>
+              </div>
+            </div>
+            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
+          </div>
+
+          <!-- Reputation -->
+          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">⭐</span><span style="font-weight:800;color:#111827;font-size:13px">Reputation Management</span></div>
+                <div style="font-size:12px;color:#6b7280;line-height:1.4">Monitor and improve your online reputation across platforms.</div>
+              </div>
+            </div>
+            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
+          </div>
+
+          <!-- Legal -->
+          <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+              <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px">⚖️</span><span style="font-weight:800;color:#111827;font-size:13px">Legal Add-ons</span></div>
+                <div style="font-size:12px;color:#6b7280;line-height:1.4">Specialized legal support for IP disputes and enforcement.</div>
+              </div>
+            </div>
+            <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
+          </div>
+
         </div>
-        <!-- Modal footer -->
-        <div style="padding:14px 22px;border-top:1px solid #f3f4f6">
-          <button style="width:100%;padding:12px;background:#FFA500;color:#111827;font-weight:700;font-size:14px;border:none;border-radius:16px;cursor:pointer">Got it</button>
+
+        <div style="display:flex;gap:12px">
+          <button style="flex:0 0 auto;padding:13px 22px;border:1.5px solid #e5e7eb;border-radius:12px;background:#fff;color:#6b7280;font-weight:600;font-size:14px;cursor:pointer">← Back</button>
+          <button style="flex:1;padding:13px;background:#FFA500;color:#111827;font-weight:800;font-size:14px;border:none;border-radius:12px;cursor:pointer">Continue to Review →</button>
         </div>
       </div>
-      <!-- Background screen (dimmed) -->
-      <div class="screen" style="pointer-events:none;opacity:0.35">
-        <div class="portal-header">
-          <div class="logo"><span>BYTES</span><span>CARE</span></div>
-          <span style="font-size:13px;font-weight:500;color:#9ca3af">Customer Onboarding</span>
-        </div>
-        <div style="padding:20px 24px">
-          <h2 style="font-size:22px;font-weight:900;color:#111827;margin-bottom:2px">Select Services</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px">
-            <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff;height:90px"></div>
-            <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff;height:90px"></div>
-            <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff;height:90px"></div>
-            <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff;height:90px"></div>
-          </div>
-        </div>
-      </div>
+      <div class="footer-bar"></div>
     </div>
 
-    <!-- State C: Service selected — textarea appears INSIDE the card -->
-    <div style="margin-bottom:10px;font-weight:700;color:#374151;font-size:12px">C – After selecting a service: card turns orange with ✓, textarea appears inside the card below a divider (prompt text from svc.prompt)</div>
+    <!-- State C: Digital Piracy selected + Brand Protection also selected -->
+    <div style="margin-bottom:10px;font-weight:700;color:#374151;font-size:12px">C – After selecting services (card turns orange with ✓ checkbox, detail textarea appears below selected card spanning full width)</div>
     <div class="screen" style="max-width:700px">
       <div class="portal-header">
         <div class="logo"><span>BYTES</span><span>CARE</span></div>
@@ -1569,63 +1733,43 @@
       <div style="padding:20px 24px">
         <h2 style="font-size:22px;font-weight:900;color:#111827;margin-bottom:2px">Select Services</h2>
         <p style="font-size:13px;color:#6b7280;margin-bottom:4px">Choose the protection services you need. <span style="color:#FFA500;font-weight:700">Select at least one.</span></p>
-        <!-- "N services selected" bar -->
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:16px;background:rgba(255,165,0,0.08);border:1.5px solid rgba(255,165,0,0.2);margin:12px 0">
-          <span style="font-size:13px;font-weight:600;color:#92400e">2 services selected</span>
-          <span style="font-size:12px;color:#9ca3af;cursor:pointer">Clear all</span>
-        </div>
-        <div style="height:1px;background:#f3f4f6;margin:10px 0 14px"></div>
+        <div style="height:1px;background:#f3f4f6;margin:14px 0"></div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
 
-          <!-- Digital Piracy — SELECTED with textarea inside card -->
-          <div style="border:2px solid #FFA500;border-radius:16px;background:#fffbeb;box-shadow:0 0 0 4px rgba(255,165,0,0.1);overflow:hidden">
-            <button style="text-align:left;display:flex;align-items:flex-start;gap:10px;padding:14px 14px 8px;width:100%;background:none;border:none;cursor:pointer">
-              <div style="width:20px;height:20px;border-radius:6px;background:#FFA500;border:2px solid #FFA500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
-                <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="#111827" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          <!-- Digital Piracy — SELECTED -->
+          <div style="grid-column:1 / -1;border:2px solid #FFA500;border-radius:14px;padding:16px;background:#fffbeb;cursor:pointer;box-shadow:0 0 0 4px rgba(255,165,0,0.1)">
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+              <div style="width:20px;height:20px;border-radius:5px;background:#FFA500;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;flex-shrink:0;margin-top:2px">✓</div>
+              <div style="flex:1">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px;color:#FFA500">🛡️</span><span style="font-weight:800;color:#111827;font-size:13px">Digital Piracy Protection</span></div>
+                <div style="font-size:12px;color:#6b7280;line-height:1.4">Detect and remove unauthorized copies of your digital content.</div>
               </div>
-              <div style="flex:1;min-width:0">
-                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
-                  <span style="font-size:15px;color:#FFA500">🛡️</span>
-                  <span style="font-weight:700;font-size:13px;color:#111827">Digital Piracy Protection</span>
-                </div>
-                <p style="font-size:11px;color:#9ca3af;line-height:1.4">Detect and remove unauthorized copies of your digital content.</p>
-              </div>
-            </button>
-            <div style="padding:0 14px 6px"><span style="font-size:12px;font-weight:600;color:#FFA500;cursor:pointer">Know more →</span></div>
-            <!-- Textarea inside card, below divider -->
-            <div style="padding:0 14px 14px">
-              <div style="border-top:1px solid rgba(255,165,0,0.2);padding-top:10px">
-                <label style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#92400e;margin-bottom:6px">What content needs protection? (e.g. YouTube videos, Instagram reels, music, courses, eBooks)</label>
-                <textarea rows="3" placeholder="Describe what you need…" style="width:100%;padding:10px 12px;border:2px solid #e5e7eb;border-radius:12px;font-size:13px;color:#111827;resize:none;outline:none;background:#fff;box-sizing:border-box;font-family:inherit"></textarea>
-              </div>
+              <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
+            </div>
+            <div style="border-top:1px dashed #FFA500;padding-top:12px;margin-top:4px">
+              <label style="display:block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#FFA500;margin-bottom:6px">What content needs protection? (e.g. YouTube videos, Instagram reels, music, courses, eBooks)</label>
+              <textarea style="width:100%;border:1.5px solid #e5e7eb;border-radius:8px;padding:10px;font-size:13px;color:#374151;resize:none;font-family:inherit;outline:none;box-sizing:border-box" rows="3" placeholder="Describe what you need…"></textarea>
             </div>
           </div>
 
-          <!-- Brand Protection — SELECTED with textarea inside card -->
-          <div style="border:2px solid #FFA500;border-radius:16px;background:#fffbeb;box-shadow:0 0 0 4px rgba(255,165,0,0.1);overflow:hidden">
-            <button style="text-align:left;display:flex;align-items:flex-start;gap:10px;padding:14px 14px 8px;width:100%;background:none;border:none;cursor:pointer">
-              <div style="width:20px;height:20px;border-radius:6px;background:#FFA500;border:2px solid #FFA500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
-                <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="#111827" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          <!-- Brand Protection — SELECTED -->
+          <div style="border:2px solid #FFA500;border-radius:14px;padding:16px;background:#fffbeb;cursor:pointer;box-shadow:0 0 0 4px rgba(255,165,0,0.1)">
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+              <div style="width:20px;height:20px;border-radius:5px;background:#FFA500;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;flex-shrink:0;margin-top:2px">✓</div>
+              <div style="flex:1">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="font-size:16px;color:#FFA500">🔏</span><span style="font-weight:800;color:#111827;font-size:13px">Brand Protection</span></div>
+                <div style="font-size:12px;color:#6b7280;line-height:1.4">Safeguard your brand identity from misuse and impersonation.</div>
               </div>
-              <div style="flex:1;min-width:0">
-                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
-                  <span style="font-size:15px;color:#FFA500">🔏</span>
-                  <span style="font-weight:700;font-size:13px;color:#111827">Brand Protection</span>
-                </div>
-                <p style="font-size:11px;color:#9ca3af;line-height:1.4">Safeguard your brand identity from misuse and impersonation.</p>
-              </div>
-            </button>
-            <div style="padding:0 14px 6px"><span style="font-size:12px;font-weight:600;color:#FFA500;cursor:pointer">Know more →</span></div>
-            <div style="padding:0 14px 14px">
-              <div style="border-top:1px solid rgba(255,165,0,0.2);padding-top:10px">
-                <label style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#92400e;margin-bottom:6px">What brand issues are you facing? (e.g. fake accounts, counterfeit products, impersonation)</label>
-                <textarea rows="3" placeholder="Describe what you need…" style="width:100%;padding:10px 12px;border:2px solid #e5e7eb;border-radius:12px;font-size:13px;color:#111827;resize:none;outline:none;background:#fff;box-sizing:border-box;font-family:inherit"></textarea>
-              </div>
+              <div style="color:#FFA500;font-size:12px;font-weight:700">Know more →</div>
+            </div>
+            <div style="border-top:1px dashed #FFA500;padding-top:12px;margin-top:4px">
+              <label style="display:block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#FFA500;margin-bottom:6px">What needs brand protection? (e.g. logo, product names, social handles)</label>
+              <textarea style="width:100%;border:1.5px solid #e5e7eb;border-radius:8px;padding:10px;font-size:13px;color:#374151;resize:none;font-family:inherit;outline:none;box-sizing:border-box" rows="3" placeholder="Describe what you need…"></textarea>
             </div>
           </div>
 
-          <!-- Threat Intelligence — unselected -->
+          <!-- Threat Intelligence -->
           <div style="border:1.5px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff">
             <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
               <div style="width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;flex-shrink:0;margin-top:2px"></div>
@@ -1735,22 +1879,22 @@
               <button style="font-size:11px;color:#FFA500;font-weight:700;background:none;border:none;cursor:pointer">Edit</button>
             </div>
             <div style="padding:12px 16px;font-size:13px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
-              <div><span style="color:#9ca3af">Email: </span><span style="font-weight:600">priyanka@example.com</span></div>
-              <div><span style="color:#9ca3af">Type: </span><span style="font-weight:600">Individual</span></div>
+              <div><span style="color:#9ca3af">Email: </span><span style="font-weight:600">john@example.com</span></div>
+              <div><span style="color:#9ca3af">Type: </span><span style="font-weight:600">Company</span></div>
               <div><span style="color:#9ca3af">Country: </span><span style="font-weight:600">India</span></div>
             </div>
           </div>
 
           <div style="border:1.5px solid #f3f4f6;border-radius:14px;overflow:hidden;margin-bottom:12px">
             <div style="background:#f9fafb;padding:10px 16px;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center">
-              <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Your Details</span>
+              <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Company Details</span>
               <button style="font-size:11px;color:#FFA500;font-weight:700;background:none;border:none;cursor:pointer">Edit</button>
             </div>
             <div style="padding:12px 16px;font-size:13px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
-              <div><span style="color:#9ca3af">Name: </span><span style="font-weight:600">Priyanka Choudhary</span></div>
-              <div><span style="color:#9ca3af">Contact: </span><span style="font-weight:600">+91 98765 43210</span></div>
-              <div><span style="color:#9ca3af">Official Email: </span><span style="font-weight:600">work@example.com</span></div>
-              <div><span style="color:#9ca3af">ID Proof: </span><span style="font-weight:600">aadhar.pdf ✓</span></div>
+              <div><span style="color:#9ca3af">Company Name: </span><span style="font-weight:600">Acme Corp</span></div>
+              <div><span style="color:#9ca3af">Reg. Number: </span><span style="font-weight:600">U12345MH2020</span></div>
+              <div><span style="color:#9ca3af">Official Email: </span><span style="font-weight:600">john@example.com</span></div>
+              <div><span style="color:#9ca3af">GSTIN: </span><span style="font-weight:600">27AAPCA1234C1Z5</span></div>
             </div>
           </div>
 
@@ -1759,19 +1903,30 @@
               <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280">Services (2 selected)</span>
               <button style="font-size:11px;color:#FFA500;font-weight:700;background:none;border:none;cursor:pointer">Edit</button>
             </div>
-            <div style="padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap">
-              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600">Business Intelligence</span>
-              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600">Reputation Management</span>
+            <div style="padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600">Digital Piracy Protection</span>
+              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600">Brand Protection</span>
+            </div>
+            <div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:8px">
+              <div style="background:#f9fafb;border-radius:10px;padding:10px 14px;font-size:12px">
+                <div style="font-weight:700;color:#111827;margin-bottom:2px">Digital Piracy Protection</div>
+                <div style="color:#6b7280">YouTube videos, courses, eBooks distribution</div>
+              </div>
+              <div style="background:#f9fafb;border-radius:10px;padding:10px 14px;font-size:12px">
+                <div style="font-weight:700;color:#111827;margin-bottom:2px">Brand Protection</div>
+                <div style="color:#6b7280">Logo and brand name on social and e-commerce</div>
+              </div>
             </div>
           </div>
 
-          <div style="background:#fffbeb;border:1.5px solid rgba(255,165,0,0.3);border-radius:12px;padding:14px;margin-bottom:20px;font-size:12px;color:#92400e">
-            By submitting, you agree to our Terms of Service and Privacy Policy. Our sales team will contact you within 1 business day.
+          <div style="background:linear-gradient(135deg,#fff8e6,#fffdf5);border:1.5px solid rgba(255,165,0,0.4);border-radius:12px;padding:16px;margin-bottom:20px">
+            <div style="font-weight:800;color:#92400e;margin-bottom:4px;font-size:13px">Ready to submit</div>
+            <div style="font-size:12px;color:#92400e;line-height:1.5">By submitting, you agree to our Terms of Service and Privacy Policy. Our sales team will review and contact you within 1 business day.</div>
           </div>
 
           <div style="display:flex;gap:12px">
-            <button style="flex:0 0 auto;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
-            <button class="save-btn" style="background:#111827;color:#fff;font-size:15px">Submit Application →</button>
+            <button style="flex:1;padding:12px 20px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;cursor:pointer">← Back</button>
+            <button style="flex:2;padding:12px;background:#FFA500;color:#111827;font-weight:800;font-size:15px;border:none;border-radius:10px;cursor:pointer">Submit Application →</button>
           </div>
         </div>
       </div>
@@ -1796,11 +1951,11 @@
 
       <div class="ob-body">
         <div class="ob-info-row">
-          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2026-0001</div></div>
-          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">4 Jun 2026</div></div>
+          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2025-0042</div></div>
+          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">14 Jan 2025</div></div>
           <div class="ob-info-chip"><div class="label">Status</div><div class="value"><span class="badge badge-review">Under Review</span></div></div>
         </div>
-        <div class="ob-greeting"><h1>Hi, priyanka</h1><p>Here's the latest status of your application.</p></div>
+        <div class="ob-greeting"><h1>Hi, Acme Corp</h1><p>Here's the latest status of your application.</p></div>
         <div class="ob-card">
           <div class="banner banner-orange">
             <div class="banner-icon" style="background:#FFA500">🔒</div>
@@ -1839,11 +1994,11 @@
 
       <div class="ob-body">
         <div class="ob-info-row">
-          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2026-0001</div></div>
-          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">4 Jun 2026</div></div>
+          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2025-0042</div></div>
+          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">14 Jan 2025</div></div>
           <div class="ob-info-chip"><div class="label">Status</div><div class="value"><span class="badge badge-agreement">Action Required</span></div></div>
         </div>
-        <div class="ob-greeting"><h1>Hi, priyanka</h1><p>Here's the latest status of your application.</p></div>
+        <div class="ob-greeting"><h1>Hi, Acme Corp</h1><p>Here's the latest status of your application.</p></div>
         <div class="ob-card">
           <div class="banner banner-blue">
             <div class="banner-icon" style="background:#3b82f6">🔑</div>
@@ -1912,11 +2067,11 @@
 
       <div class="ob-body">
         <div class="ob-info-row">
-          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2026-0001</div></div>
-          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">4 Jun 2026</div></div>
+          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2025-0042</div></div>
+          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">14 Jan 2025</div></div>
           <div class="ob-info-chip"><div class="label">Status</div><div class="value"><span class="badge badge-payment">Payment Required</span></div></div>
         </div>
-        <div class="ob-greeting"><h1>Hi, priyanka</h1><p>Here's the latest status of your application.</p></div>
+        <div class="ob-greeting"><h1>Hi, Acme Corp</h1><p>Here's the latest status of your application.</p></div>
         <div class="ob-card">
           <div class="banner banner-orange">
             <div class="banner-icon" style="background:#FFA500">🔑</div>
@@ -1929,14 +2084,14 @@
           <div class="pill-done">✓ Agreement Complete</div>
 
           <div class="chip-row">
-            <div class="chip"><div class="chip-label">Amount</div><div class="chip-value">INR 5,000</div></div>
+            <div class="chip"><div class="chip-label">Plan</div><div class="chip-value">Professional</div></div>
+            <div class="chip"><div class="chip-label">Amount</div><div class="chip-value">INR 24,999</div></div>
             <div class="chip"><div class="chip-label">Frequency</div><div class="chip-value">Monthly</div></div>
-            <div class="chip"><div class="chip-label">Plan</div><div class="chip-value">Pro Protection</div></div>
-            <div class="chip"><div class="chip-label">Duration</div><div class="chip-value">1 Year</div></div>
+            <div class="chip"><div class="chip-label">Duration</div><div class="chip-value">12 months</div></div>
           </div>
 
           <div style="padding:20px;border:1.5px solid #f3f4f6;border-radius:16px">
-            <button class="pay-btn">Pay INR 5,000 →</button>
+            <button class="pay-btn">Pay INR 24,999 →</button>
             <div class="secure-note">🔒 Secured payment via Razorpay</div>
           </div>
 
@@ -1964,11 +2119,11 @@
 
       <div class="ob-body">
         <div class="ob-info-row">
-          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2026-0001</div></div>
-          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">4 Jun 2026</div></div>
+          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2025-0042</div></div>
+          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">14 Jan 2025</div></div>
           <div class="ob-info-chip"><div class="label">Status</div><div class="value"><span class="badge badge-ops">Setup in Progress</span></div></div>
         </div>
-        <div class="ob-greeting"><h1>Hi, priyanka</h1><p>Here's the latest status of your application.</p></div>
+        <div class="ob-greeting"><h1>Hi, Acme Corp</h1><p>Here's the latest status of your application.</p></div>
         <div class="ob-card">
           <div class="banner banner-teal">
             <div class="banner-icon" style="background:#0d9488">⚙️</div>
@@ -2007,11 +2162,11 @@
 
       <div class="ob-body">
         <div class="ob-info-row">
-          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2026-0001</div></div>
-          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">4 Jun 2026</div></div>
+          <div class="ob-info-chip"><div class="label">Application ID</div><div class="value" style="font-family:monospace">#BC-2025-0042</div></div>
+          <div class="ob-info-chip"><div class="label">Submitted On</div><div class="value">14 Jan 2025</div></div>
           <div class="ob-info-chip"><div class="label">Status</div><div class="value"><span class="badge badge-active">Active</span></div></div>
         </div>
-        <div class="ob-greeting"><h1>Hi, priyanka</h1><p>Here's the latest status of your application.</p></div>
+        <div class="ob-greeting"><h1>Hi, Acme Corp</h1><p>Here's the latest status of your application.</p></div>
         <div class="ob-card">
           <div class="banner banner-green">
             <div class="banner-icon" style="background:#16a34a">✓</div>
@@ -2024,8 +2179,8 @@
           <div style="padding:16px;border:1.5px solid #f3f4f6;border-radius:14px;margin-bottom:16px">
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#9ca3af;margin-bottom:10px">Services Enrolled</div>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:5px 14px;font-size:12px;font-weight:600">Business Intelligence</span>
-              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:5px 14px;font-size:12px;font-weight:600">Reputation Management</span>
+              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:5px 14px;font-size:12px;font-weight:600">Digital Piracy Protection</span>
+              <span style="background:#fff8e6;color:#92400e;border:1px solid rgba(255,165,0,0.3);border-radius:999px;padding:5px 14px;font-size:12px;font-weight:600">Brand Protection</span>
             </div>
           </div>
 
